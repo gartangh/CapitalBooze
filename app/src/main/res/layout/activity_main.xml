@@ -31,9 +31,18 @@
                     android:text="stella"
                     android:id="@+id/drink1"
                     android:layout_margin="2sp"
-                    android:textSize="32sp"
+                    android:textSize="24sp"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="(0)"
+                    android:id="@+id/count1last"
+                    android:layout_margin="2sp"
+                    android:textSize="24sp"
+                    android:layout_gravity="center_vertical" />
 
                 <Button
                     style="?android:attr/buttonStyleSmall"
@@ -50,7 +59,7 @@
                     android:text="0"
                     android:id="@+id/count1"
                     android:layout_margin="2sp"
-                    android:textSize="32sp"
+                    android:textSize="24sp"
                     android:layout_gravity="center_vertical" />
 
                 <Button
@@ -75,9 +84,18 @@
                     android:text="duvel"
                     android:id="@+id/drink2"
                     android:layout_margin="2sp"
-                    android:textSize="32sp"
+                    android:textSize="24sp"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="(0)"
+                    android:id="@+id/count2last"
+                    android:layout_margin="2sp"
+                    android:textSize="24sp"
+                    android:layout_gravity="center_vertical" />
 
                 <Button
                     style="?android:attr/buttonStyleSmall"
@@ -94,7 +112,7 @@
                     android:text="0"
                     android:id="@+id/count2"
                     android:layout_margin="2sp"
-                    android:textSize="32sp"
+                    android:textSize="24sp"
                     android:layout_gravity="center_vertical" />
 
                 <Button
@@ -119,9 +137,18 @@
                     android:text="leffe blond"
                     android:id="@+id/drink3"
                     android:layout_margin="2sp"
-                    android:textSize="32sp"
+                    android:textSize="24sp"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="(0)"
+                    android:id="@+id/count3last"
+                    android:layout_margin="2sp"
+                    android:textSize="24sp"
+                    android:layout_gravity="center_vertical" />
 
                 <Button
                     style="?android:attr/buttonStyleSmall"
@@ -138,7 +165,7 @@
                     android:text="0"
                     android:id="@+id/count3"
                     android:layout_margin="2sp"
-                    android:textSize="32sp"
+                    android:textSize="24sp"
                     android:layout_gravity="center_vertical" />
 
                 <Button
@@ -163,9 +190,18 @@
                     android:text="kriek"
                     android:id="@+id/drink4"
                     android:layout_margin="2sp"
-                    android:textSize="32sp"
+                    android:textSize="24sp"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="(0)"
+                    android:id="@+id/count4last"
+                    android:layout_margin="2sp"
+                    android:textSize="24sp"
+                    android:layout_gravity="center_vertical" />
 
                 <Button
                     style="?android:attr/buttonStyleSmall"
@@ -182,7 +218,7 @@
                     android:text="0"
                     android:id="@+id/count4"
                     android:layout_margin="2sp"
-                    android:textSize="32sp"
+                    android:textSize="24sp"
                     android:layout_gravity="center_vertical" />
 
                 <Button
@@ -207,9 +243,18 @@
                     android:text="vedett"
                     android:id="@+id/drink5"
                     android:layout_margin="2sp"
-                    android:textSize="32sp"
+                    android:textSize="24sp"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="(0)"
+                    android:id="@+id/count5last"
+                    android:layout_margin="2sp"
+                    android:textSize="24sp"
+                    android:layout_gravity="center_vertical" />
 
                 <Button
                     style="?android:attr/buttonStyleSmall"
@@ -226,7 +271,7 @@
                     android:text="0"
                     android:id="@+id/count5"
                     android:layout_margin="2sp"
-                    android:textSize="32sp"
+                    android:textSize="24sp"
                     android:layout_gravity="center_vertical" />
 
                 <Button
@@ -251,9 +296,18 @@
                     android:text="omer"
                     android:id="@+id/drink6"
                     android:layout_margin="2sp"
-                    android:textSize="32sp"
+                    android:textSize="24sp"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="(0)"
+                    android:id="@+id/count6last"
+                    android:layout_margin="2sp"
+                    android:textSize="24sp"
+                    android:layout_gravity="center_vertical" />
 
                 <Button
                     style="?android:attr/buttonStyleSmall"
@@ -270,7 +324,7 @@
                     android:text="0"
                     android:id="@+id/count6"
                     android:layout_margin="2sp"
-                    android:textSize="32sp"
+                    android:textSize="24sp"
                     android:layout_gravity="center_vertical" />
 
                 <Button
@@ -295,9 +349,18 @@
                     android:text="peerdevisscher"
                     android:id="@+id/drink7"
                     android:layout_margin="2sp"
-                    android:textSize="26sp"
+                    android:textSize="24sp"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="(0)"
+                    android:id="@+id/count7last"
+                    android:layout_margin="2sp"
+                    android:textSize="24sp"
+                    android:layout_gravity="center_vertical" />
 
                 <Button
                     style="?android:attr/buttonStyleSmall"
@@ -314,7 +377,7 @@
                     android:text="0"
                     android:id="@+id/count7"
                     android:layout_margin="2sp"
-                    android:textSize="32sp"
+                    android:textSize="24sp"
                     android:layout_gravity="center_vertical" />
 
                 <Button
@@ -339,9 +402,18 @@
                     android:text="plat"
                     android:id="@+id/drink8"
                     android:layout_margin="2sp"
-                    android:textSize="32sp"
+                    android:textSize="24sp"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="(0)"
+                    android:id="@+id/count8last"
+                    android:layout_margin="2sp"
+                    android:textSize="24sp"
+                    android:layout_gravity="center_vertical" />
 
                 <Button
                     style="?android:attr/buttonStyleSmall"
@@ -358,7 +430,7 @@
                     android:text="0"
                     android:id="@+id/count8"
                     android:layout_margin="2sp"
-                    android:textSize="32sp"
+                    android:textSize="24sp"
                     android:layout_gravity="center_vertical" />
 
                 <Button
@@ -383,9 +455,18 @@
                     android:text="spuit"
                     android:id="@+id/drink9"
                     android:layout_margin="2sp"
-                    android:textSize="32sp"
+                    android:textSize="24sp"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="(0)"
+                    android:id="@+id/count9last"
+                    android:layout_margin="2sp"
+                    android:textSize="24sp"
+                    android:layout_gravity="center_vertical" />
 
                 <Button
                     style="?android:attr/buttonStyleSmall"
@@ -402,7 +483,7 @@
                     android:text="0"
                     android:id="@+id/count9"
                     android:layout_margin="2sp"
-                    android:textSize="32sp"
+                    android:textSize="24sp"
                     android:layout_gravity="center_vertical" />
 
                 <Button
@@ -427,9 +508,18 @@
                     android:text="cola"
                     android:id="@+id/drink10"
                     android:layout_margin="2sp"
-                    android:textSize="32sp"
+                    android:textSize="24sp"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="(0)"
+                    android:id="@+id/count10last"
+                    android:layout_margin="2sp"
+                    android:textSize="24sp"
+                    android:layout_gravity="center_vertical" />
 
                 <Button
                     style="?android:attr/buttonStyleSmall"
@@ -446,7 +536,7 @@
                     android:text="0"
                     android:id="@+id/count10"
                     android:layout_margin="2sp"
-                    android:textSize="32sp"
+                    android:textSize="24sp"
                     android:layout_gravity="center_vertical" />
 
                 <Button
@@ -471,9 +561,18 @@
                     android:text="zero"
                     android:id="@+id/drink11"
                     android:layout_margin="2sp"
-                    android:textSize="32sp"
+                    android:textSize="24sp"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="(0)"
+                    android:id="@+id/count11last"
+                    android:layout_margin="2sp"
+                    android:textSize="24sp"
+                    android:layout_gravity="center_vertical" />
 
                 <Button
                     style="?android:attr/buttonStyleSmall"
@@ -490,7 +589,7 @@
                     android:text="0"
                     android:id="@+id/count11"
                     android:layout_margin="2sp"
-                    android:textSize="32sp"
+                    android:textSize="24sp"
                     android:layout_gravity="center_vertical" />
 
                 <Button
@@ -515,9 +614,18 @@
                     android:text="somersby"
                     android:id="@+id/drink12"
                     android:layout_margin="2sp"
-                    android:textSize="32sp"
+                    android:textSize="24sp"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="(0)"
+                    android:id="@+id/count12last"
+                    android:layout_margin="2sp"
+                    android:textSize="24sp"
+                    android:layout_gravity="center_vertical" />
 
                 <Button
                     style="?android:attr/buttonStyleSmall"
@@ -534,7 +642,7 @@
                     android:text="0"
                     android:id="@+id/count12"
                     android:layout_margin="2sp"
-                    android:textSize="32sp"
+                    android:textSize="24sp"
                     android:layout_gravity="center_vertical" />
 
                 <Button
@@ -551,21 +659,40 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:id="@+id/LinearLayoutTotal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="totaal"
-                    android:id="@+id/totaal"
-                    android:textSize="32sp" />
+                    android:text="Total"
+                    android:id="@+id/total"
+                    android:textSize="24sp"
+                    android:layout_weight="1"
+                    android:layout_margin="2sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="(0)"
+                    android:id="@+id/countTotalLast"
+                    android:textSize="24sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="2sp"
+                    android:layout_marginTop="2sp"
+                    android:layout_marginRight="54sp"
+                    android:layout_marginBottom="2sp" />
 
                 <TextView
                     android:layout_width="64sp"
                     android:layout_height="wrap_content"
                     android:text="0"
-                    android:id="@+id/countTotaal"
-                    android:textSize="32sp" />
+                    android:id="@+id/countTotal"
+                    android:textSize="24sp"
+                    android:layout_marginRight="54sp"
+                    android:layout_marginLeft="2sp"
+                    android:layout_marginTop="2sp"
+                    android:layout_marginBottom="2sp" />
             </LinearLayout>
 
         </LinearLayout>

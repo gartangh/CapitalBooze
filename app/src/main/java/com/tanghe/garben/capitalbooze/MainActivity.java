@@ -1,16 +1,12 @@
 package com.tanghe.garben.capitalbooze;
 
 import android.os.Vibrator;
-import android.support.annotation.UiThread;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.TextView;
-
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -28,27 +24,25 @@ public class MainActivity extends AppCompatActivity {
     protected int drink10count = 0;
     protected int drink11count = 0;
     protected int drink12count = 0;
-    protected int drinkTotaalCount = 0;
+    protected int drinkTotalCount = 0;
 
-    protected final int INTERVAL = 10;
     protected final long[] pattern = {0,100,100,50};
 
-    protected final int numberOfDrinks = 12;
+    protected final int NUMBER_OF_DRINKS = 12;
+    //protected final int INTERVAL = 10;
 
-    protected ArrayList<Integer> last = new ArrayList<>(numberOfDrinks);
-    protected ArrayList<Integer> secondLast;
-    protected int secondLastTotaal;
-    protected int lastTotaal = 0;
+    protected ArrayList<Integer> last = new ArrayList<>(NUMBER_OF_DRINKS);
+    protected ArrayList<Integer> secondLast = new ArrayList<>(NUMBER_OF_DRINKS);
+    protected int secondLastTotal = 0;
+    protected int lastTotal = 0;
     protected boolean firstTime = true;
     protected int difference;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        /*
         final TextView drink1 = (TextView) findViewById(R.id.drink1);
         final TextView drink2 = (TextView) findViewById(R.id.drink2);
         final TextView drink3 = (TextView) findViewById(R.id.drink3);
@@ -61,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         final TextView drink10 = (TextView) findViewById(R.id.drink10);
         final TextView drink11 = (TextView) findViewById(R.id.drink11);
         final TextView drink12 = (TextView) findViewById(R.id.drink12);
-        */
+        final TextView total = (TextView) findViewById(R.id.total);
 
         final Button drink1green = (Button) findViewById(R.id.button1green);
         final Button drink2green = (Button) findViewById(R.id.button2green);
@@ -101,7 +95,21 @@ public class MainActivity extends AppCompatActivity {
         final TextView count10 = (TextView) findViewById(R.id.count10);
         final TextView count11 = (TextView) findViewById(R.id.count11);
         final TextView count12 = (TextView) findViewById(R.id.count12);
-        final TextView countTotaal = (TextView) findViewById(R.id.countTotaal);
+        final TextView countTotal = (TextView) findViewById(R.id.countTotal);
+
+        final TextView count1last = (TextView) findViewById(R.id.count1last);
+        final TextView count2last = (TextView) findViewById(R.id.count2last);
+        final TextView count3last = (TextView) findViewById(R.id.count3last);
+        final TextView count4last = (TextView) findViewById(R.id.count4last);
+        final TextView count5last = (TextView) findViewById(R.id.count5last);
+        final TextView count6last = (TextView) findViewById(R.id.count6last);
+        final TextView count7last = (TextView) findViewById(R.id.count7last);
+        final TextView count8last = (TextView) findViewById(R.id.count8last);
+        final TextView count9last = (TextView) findViewById(R.id.count9last);
+        final TextView count10last = (TextView) findViewById(R.id.count10last);
+        final TextView count11last = (TextView) findViewById(R.id.count11last);
+        final TextView count12last = (TextView) findViewById(R.id.count12last);
+        final TextView countTotalLast = (TextView) findViewById(R.id.countTotalLast);
 
         Timer timer = new Timer();
         TimerTask timerTask = new TimerTask() {
@@ -115,28 +123,41 @@ public class MainActivity extends AppCompatActivity {
 
                         if (firstTime) {
                             last.add(drink1count);
+                            count1last.setText("(" + Integer.toString(drink1count) + ")");
                             last.add(drink2count);
+                            count2last.setText("(" + Integer.toString(drink2count) + ")");
                             last.add(drink3count);
+                            count3last.setText("(" + Integer.toString(drink3count) + ")");
                             last.add(drink4count);
+                            count4last.setText("(" + Integer.toString(drink4count) + ")");
                             last.add(drink5count);
+                            count5last.setText("(" + Integer.toString(drink5count) + ")");
                             last.add(drink6count);
+                            count6last.setText("(" + Integer.toString(drink6count) + ")");
                             last.add(drink7count);
+                            count7last.setText("(" + Integer.toString(drink7count) + ")");
                             last.add(drink8count);
+                            count8last.setText("(" + Integer.toString(drink8count) + ")");
                             last.add(drink9count);
+                            count9last.setText("(" + Integer.toString(drink9count) + ")");
                             last.add(drink10count);
+                            count10last.setText("(" + Integer.toString(drink10count) + ")");
                             last.add(drink11count);
+                            count11last.setText("(" + Integer.toString(drink11count) + ")");
                             last.add(drink12count);
+                            count12last.setText("(" + Integer.toString(drink12count) + ")");
+                            countTotalLast.setText("(" + Integer.toString(drinkTotalCount) + ")");
 
                             firstTime = false;
                         } else {
-                            secondLast = new ArrayList<>(numberOfDrinks);
-                            secondLastTotaal = lastTotaal;
-                            lastTotaal = 0;
+                            secondLast = new ArrayList<>(NUMBER_OF_DRINKS);
+                            secondLastTotal = lastTotal;
+                            lastTotal = 0;
                             for (int i:last) {
                                 secondLast.add(i);
                             }
 
-                            last = new ArrayList<>(numberOfDrinks);
+                            last = new ArrayList<>(NUMBER_OF_DRINKS);
                             last.add(drink1count);
                             last.add(drink2count);
                             last.add(drink3count);
@@ -151,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
                             last.add(drink12count);
                         }
 
-                        lastTotaal = drinkTotaalCount;
+                        lastTotal = drinkTotalCount;
 
                         setCountersToZero();
 
@@ -167,9 +188,9 @@ public class MainActivity extends AppCompatActivity {
                         count10.setText("0");
                         count11.setText("0");
                         count12.setText("0");
-                        countTotaal.setText("0");
+                        countTotal.setText("0");
 
-                        difference = lastTotaal-secondLastTotaal;
+                        difference = lastTotal-secondLastTotal;
 
                         Log.d("debug", "Timertask executed");
                     }
@@ -186,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 count1.setText(Integer.toString(++drink1count));
-                countTotaal.setText(Integer.toString(++drinkTotaalCount));
+                countTotal.setText(Integer.toString(++drinkTotalCount));
             }
         });
 
@@ -195,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (drink1count > 0) {
                     count1.setText(Integer.toString(--drink1count));
-                    countTotaal.setText(Integer.toString(--drinkTotaalCount));
+                    countTotal.setText(Integer.toString(--drinkTotalCount));
                 }
             }
         });
@@ -204,7 +225,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 count2.setText(Integer.toString(++drink2count));
-                countTotaal.setText(Integer.toString(++drinkTotaalCount));
+                countTotal.setText(Integer.toString(++drinkTotalCount));
             }
         });
 
@@ -213,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (drink2count > 0) {
                     count2.setText(Integer.toString(--drink2count));
-                    countTotaal.setText(Integer.toString(--drinkTotaalCount));
+                    countTotal.setText(Integer.toString(--drinkTotalCount));
                 }
             }
         });
@@ -222,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 count3.setText(Integer.toString(++drink3count));
-                countTotaal.setText(Integer.toString(++drinkTotaalCount));
+                countTotal.setText(Integer.toString(++drinkTotalCount));
             }
         });
 
@@ -231,7 +252,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (drink3count > 0) {
                     count3.setText(Integer.toString(--drink3count));
-                    countTotaal.setText(Integer.toString(--drinkTotaalCount));
+                    countTotal.setText(Integer.toString(--drinkTotalCount));
                 }
             }
         });
@@ -240,7 +261,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 count4.setText(Integer.toString(++drink4count));
-                countTotaal.setText(Integer.toString(++drinkTotaalCount));
+                countTotal.setText(Integer.toString(++drinkTotalCount));
             }
         });
 
@@ -249,7 +270,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (drink4count > 0) {
                     count4.setText(Integer.toString(--drink4count));
-                    countTotaal.setText(Integer.toString(--drinkTotaalCount));
+                    countTotal.setText(Integer.toString(--drinkTotalCount));
                 }
             }
         });
@@ -258,7 +279,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 count5.setText(Integer.toString(++drink5count));
-                countTotaal.setText(Integer.toString(++drinkTotaalCount));
+                countTotal.setText(Integer.toString(++drinkTotalCount));
             }
         });
 
@@ -267,7 +288,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (drink5count > 0) {
                     count5.setText(Integer.toString(--drink5count));
-                    countTotaal.setText(Integer.toString(--drinkTotaalCount));
+                    countTotal.setText(Integer.toString(--drinkTotalCount));
                 }
             }
         });
@@ -276,7 +297,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 count6.setText(Integer.toString(++drink6count));
-                countTotaal.setText(Integer.toString(++drinkTotaalCount));
+                countTotal.setText(Integer.toString(++drinkTotalCount));
             }
         });
 
@@ -285,7 +306,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (drink6count > 0) {
                     count6.setText(Integer.toString(--drink6count));
-                    countTotaal.setText(Integer.toString(--drinkTotaalCount));
+                    countTotal.setText(Integer.toString(--drinkTotalCount));
                 }
             }
         });
@@ -294,7 +315,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 count7.setText(Integer.toString(++drink7count));
-                countTotaal.setText(Integer.toString(++drinkTotaalCount));
+                countTotal.setText(Integer.toString(++drinkTotalCount));
             }
         });
 
@@ -303,7 +324,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (drink7count > 0) {
                     count7.setText(Integer.toString(--drink7count));
-                    countTotaal.setText(Integer.toString(--drinkTotaalCount));
+                    countTotal.setText(Integer.toString(--drinkTotalCount));
                 }
             }
         });
@@ -312,7 +333,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 count8.setText(Integer.toString(++drink8count));
-                countTotaal.setText(Integer.toString(++drinkTotaalCount));
+                countTotal.setText(Integer.toString(++drinkTotalCount));
             }
         });
 
@@ -321,7 +342,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (drink8count > 0) {
                     count8.setText(Integer.toString(--drink8count));
-                    countTotaal.setText(Integer.toString(--drinkTotaalCount));
+                    countTotal.setText(Integer.toString(--drinkTotalCount));
                 }
             }
         });
@@ -330,7 +351,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 count9.setText(Integer.toString(++drink9count));
-                countTotaal.setText(Integer.toString(++drinkTotaalCount));
+                countTotal.setText(Integer.toString(++drinkTotalCount));
             }
         });
 
@@ -339,7 +360,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (drink9count > 0) {
                     count9.setText(Integer.toString(--drink9count));
-                    countTotaal.setText(Integer.toString(--drinkTotaalCount));
+                    countTotal.setText(Integer.toString(--drinkTotalCount));
                 }
             }
         });
@@ -348,7 +369,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 count10.setText(Integer.toString(++drink10count));
-                countTotaal.setText(Integer.toString(++drinkTotaalCount));
+                countTotal.setText(Integer.toString(++drinkTotalCount));
             }
         });
 
@@ -357,7 +378,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (drink10count > 0) {
                     count10.setText(Integer.toString(--drink10count));
-                    countTotaal.setText(Integer.toString(--drinkTotaalCount));
+                    countTotal.setText(Integer.toString(--drinkTotalCount));
                 }
             }
         });
@@ -366,7 +387,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 count11.setText(Integer.toString(++drink11count));
-                countTotaal.setText(Integer.toString(++drinkTotaalCount));
+                countTotal.setText(Integer.toString(++drinkTotalCount));
             }
         });
 
@@ -375,7 +396,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (drink11count > 0) {
                     count11.setText(Integer.toString(--drink11count));
-                    countTotaal.setText(Integer.toString(--drinkTotaalCount));
+                    countTotal.setText(Integer.toString(--drinkTotalCount));
                 }
             }
         });
@@ -384,7 +405,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 count12.setText(Integer.toString(++drink12count));
-                countTotaal.setText(Integer.toString(++drinkTotaalCount));
+                countTotal.setText(Integer.toString(++drinkTotalCount));
             }
         });
 
@@ -393,7 +414,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (drink12count > 0) {
                     count12.setText(Integer.toString(--drink12count));
-                    countTotaal.setText(Integer.toString(--drinkTotaalCount));
+                    countTotal.setText(Integer.toString(--drinkTotalCount));
                 }
             }
         });
@@ -412,6 +433,6 @@ public class MainActivity extends AppCompatActivity {
         drink10count = 0;
         drink11count = 0;
         drink12count = 0;
-        drinkTotaalCount = 0;
+        drinkTotalCount = 0;
     }
 }
