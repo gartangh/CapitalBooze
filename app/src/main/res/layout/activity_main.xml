@@ -17,7 +17,8 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="false">
+            android:layout_alignParentStart="false"
+            android:id="@+id/LinearLayoutDrinks">
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -28,7 +29,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="stella"
                     android:id="@+id/drink1"
                     android:layout_margin="2sp"
                     android:textSize="24sp"
@@ -81,7 +81,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="duvel"
                     android:id="@+id/drink2"
                     android:layout_margin="2sp"
                     android:textSize="24sp"
