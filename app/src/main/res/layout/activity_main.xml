@@ -133,7 +133,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="leffe blond"
                     android:id="@+id/drink3"
                     android:layout_margin="2sp"
                     android:textSize="24sp"
@@ -186,7 +185,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="kriek"
                     android:id="@+id/drink4"
                     android:layout_margin="2sp"
                     android:textSize="24sp"
@@ -239,7 +237,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="vedett"
                     android:id="@+id/drink5"
                     android:layout_margin="2sp"
                     android:textSize="24sp"
@@ -292,7 +289,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="omer"
                     android:id="@+id/drink6"
                     android:layout_margin="2sp"
                     android:textSize="24sp"
@@ -345,7 +341,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="peerdevisscher"
                     android:id="@+id/drink7"
                     android:layout_margin="2sp"
                     android:textSize="24sp"
@@ -398,7 +393,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="plat"
                     android:id="@+id/drink8"
                     android:layout_margin="2sp"
                     android:textSize="24sp"
@@ -451,7 +445,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="spuit"
                     android:id="@+id/drink9"
                     android:layout_margin="2sp"
                     android:textSize="24sp"
@@ -504,7 +497,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="cola"
                     android:id="@+id/drink10"
                     android:layout_margin="2sp"
                     android:textSize="24sp"
@@ -557,7 +549,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="zero"
                     android:id="@+id/drink11"
                     android:layout_margin="2sp"
                     android:textSize="24sp"
@@ -610,7 +601,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="somersby"
                     android:id="@+id/drink12"
                     android:layout_margin="2sp"
                     android:textSize="24sp"

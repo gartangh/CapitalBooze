@@ -141,33 +141,33 @@ public class MainActivity extends AppCompatActivity  {
                         Vibrator v = (Vibrator) getSystemService(VIBRATOR_SERVICE);
                         v.vibrate(PATTERN,-1);
 
-                        count1last.setText("(" + Integer.toString(drink1.getCount()) + ")");
-                        count2last.setText("(" + Integer.toString(drink2.getCount()) + ")");
-                        count3last.setText("(" + Integer.toString(drink3.getCount()) + ")");
-                        count4last.setText("(" + Integer.toString(drink4.getCount()) + ")");
-                        count5last.setText("(" + Integer.toString(drink5.getCount()) + ")");
-                        count6last.setText("(" + Integer.toString(drink6.getCount()) + ")");
-                        count7last.setText("(" + Integer.toString(drink7.getCount()) + ")");
-                        count8last.setText("(" + Integer.toString(drink8.getCount()) + ")");
-                        count9last.setText("(" + Integer.toString(drink9.getCount()) + ")");
-                        count10last.setText("(" + Integer.toString(drink10.getCount()) + ")");
-                        count11last.setText("(" + Integer.toString(drink11.getCount()) + ")");
-                        count12last.setText("(" + Integer.toString(drink12.getCount()) + ")");
-                        countTotalLast.setText("(" + Integer.toString(Drink.getCountTotal()) + ")");
+                        count1last.setText(String.format("(%1$d)",drink1.getCount()));
+                        count2last.setText(String.format("(%1$d)",drink2.getCount()));
+                        count3last.setText(String.format("(%1$d)",drink3.getCount()));
+                        count4last.setText(String.format("(%1$d)",drink4.getCount()));
+                        count5last.setText(String.format("(%1$d)",drink5.getCount()));
+                        count6last.setText(String.format("(%1$d)",drink6.getCount()));
+                        count7last.setText(String.format("(%1$d)",drink7.getCount()));
+                        count8last.setText(String.format("(%1$d)",drink8.getCount()));
+                        count9last.setText(String.format("(%1$d)",drink9.getCount()));
+                        count10last.setText(String.format("(%1$d)",drink10.getCount()));
+                        count11last.setText(String.format("(%1$d)",drink11.getCount()));
+                        count12last.setText(String.format("(%1$d)",drink12.getCount()));
+                        countTotalLast.setText(String.format("(%1$d)",Drink.countTotal));
 
-                        count1.setText("0");
-                        count2.setText("0");
-                        count3.setText("0");
-                        count4.setText("0");
-                        count5.setText("0");
-                        count6.setText("0");
-                        count7.setText("0");
-                        count8.setText("0");
-                        count9.setText("0");
-                        count10.setText("0");
-                        count11.setText("0");
-                        count12.setText("0");
-                        countTotal.setText("0");
+                        count1.setText(String.format("%1$d",0));
+                        count2.setText(String.format("%1$d",0));
+                        count3.setText(String.format("%1$d",0));
+                        count4.setText(String.format("%1$d",0));
+                        count5.setText(String.format("%1$d",0));
+                        count6.setText(String.format("%1$d",0));
+                        count7.setText(String.format("%1$d",0));
+                        count8.setText(String.format("%1$d",0));
+                        count9.setText(String.format("%1$d",0));
+                        count10.setText(String.format("%1$d",0));
+                        count11.setText(String.format("%1$d",0));
+                        count12.setText(String.format("%1$d",0));
+                        countTotal.setText(String.format("%1$d",0));
 
                         Drink.task();
 
@@ -177,7 +177,6 @@ public class MainActivity extends AppCompatActivity  {
             }
         };
 
-        Log.d("debug","TimerTask set!");
         timer.schedule(timerTask,INTERVAL,INTERVAL);
 
         drink1green.setOnClickListener(new View.OnClickListener() {
