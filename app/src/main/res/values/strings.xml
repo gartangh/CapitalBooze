@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Capital Booze</string>
+    <string name="drawer_open">Open fragment navigation drawer</string>
+    <string name="drawer_close">Close fragment navigation drawer</string>
 </resources>
