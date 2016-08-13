@@ -8,7 +8,7 @@ import java.util.ArrayList;
 /**
  * Created by Gebruiker on 10/08/2016.
  */
-public class Drink extends MainActivity {
+public class Drink {
     protected static ArrayList<Drink> drinks = new ArrayList<>();
     protected final static double GS = 1.3;
     protected final static double GD = 0.7;

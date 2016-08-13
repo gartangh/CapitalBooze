@@ -1,11 +1,13 @@
 package com.tanghe.garben.capitalbooze;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.res.Configuration;
-import android.os.Vibrator;
-import android.support.v4.widget.DrawerLayout;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v4.app.Fragment;
+import android.os.Vibrator;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -13,94 +15,47 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
-
-import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MainActivity extends AppCompatActivity  {
-    private String[] mPlanetTitles;
-    private DrawerLayout mDrawerLayout;
-    private ListView mDrawerList;
-    private ActionBarDrawerToggle mDrawerToggle;
-    private CharSequence mDrawerTitle;
-    private CharSequence mTitle;
+public class MainActivity extends AppCompatActivity {
+    private DrawerLayout mDrawer;
+    private Toolbar toolbar;
+    private NavigationView nvDrawer;
+    private ActionBarDrawerToggle drawerToggle;
 
     //Times 60 for minutes in stead of seconds!
-    protected final long INTERVAL = 10*1000L;
+    protected final long INTERVAL = 15*1000L;
 
     protected final long[] PATTERN = {0,100,100,50};
-
-    protected Drink drink1;
-    protected Drink drink2;
-    protected Drink drink3;
-    protected Drink drink4;
-    protected Drink drink5;
-    protected Drink drink6;
-    protected Drink drink7;
-    protected Drink drink8;
-    protected Drink drink9;
-    protected Drink drink10;
-    protected Drink drink11;
-    protected Drink drink12;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        setSupportActionBar(myToolbar);
+        Fragment fragment = new CountersFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.container,fragment).commit();
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
+        // Set a Toolbar to replace the ActionBar.
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        // Find our drawer view
+        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
+        // Find our drawer view
+        nvDrawer = (NavigationView) findViewById(R.id.nvView);
+        // Setup drawer view
+        setupDrawerContent(nvDrawer);
+        drawerToggle = setupDrawerToggle();
 
-        //mPlanetTitles = getResources().getStringArray(R.array.planets_array);
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerList = (ListView) findViewById(R.id.left_drawer);
-
-        // Set the adapter for the list view
-        mDrawerList.setAdapter(new ArrayAdapter<String>(this,
-                R.layout.drawer_list_item, mPlanetTitles));
-        // Set the list's click listener
-        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-
-        mTitle = mDrawerTitle = getTitle();
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
-                myToolbar, R.string.drawer_open, R.string.drawer_close) {
-
-            /** Called when a drawer has settled in a completely closed state. */
-            public void onDrawerClosed(View view) {
-                super.onDrawerClosed(view);
-                getActionBar().setTitle(mTitle);
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-            }
-
-            /** Called when a drawer has settled in a completely open state. */
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                getActionBar().setTitle(mDrawerTitle);
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-            }
-        };
-
-        // Set the drawer toggle as the DrawerListener
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
-
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setHomeButtonEnabled(true);
+        // Tie DrawerLayout events to the ActionBarToggle
+        mDrawer.addDrawerListener(drawerToggle);
 
         final TextView drink1name = (TextView) findViewById(R.id.drink1);
         final TextView drink2name = (TextView) findViewById(R.id.drink2);
@@ -114,7 +69,6 @@ public class MainActivity extends AppCompatActivity  {
         final TextView drink10name = (TextView) findViewById(R.id.drink10);
         final TextView drink11name = (TextView) findViewById(R.id.drink11);
         final TextView drink12name = (TextView) findViewById(R.id.drink12);
-        final TextView total = (TextView) findViewById(R.id.total);
 
         final Button drink1green = (Button) findViewById(R.id.button1green);
         final Button drink2green = (Button) findViewById(R.id.button2green);
@@ -170,18 +124,18 @@ public class MainActivity extends AppCompatActivity  {
         final TextView count12last = (TextView) findViewById(R.id.count12last);
         final TextView countTotalLast = (TextView) findViewById(R.id.countTotalLast);
 
-        drink1 = new Drink("Stella",1.4,1.3,1.7);
-        drink2 = new Drink("Duvel",1.4,1.3,1.7);
-        drink3 = new Drink("Leffe Blond",1.4,1.3,1.7);
-        drink4 = new Drink("Kriek",1.4,1.3,1.7);
-        drink5 = new Drink("Vedett",1.4,1.3,1.7);
-        drink6 = new Drink("Peerdevisscher",1.4,1.3,1.7);
-        drink7 = new Drink("Omer",1.4,1.3,1.7);
-        drink8 = new Drink("Plat",1.4,1.3,1.7);
-        drink9 = new Drink("Spuit",1.4,1.3,1.7);
-        drink10 = new Drink("Cola",1.4,1.3,1.7);
-        drink11 = new Drink("Zero",1.4,1.3,1.7);
-        drink12 = new Drink("Somersby",1.4,1.3,1.7);
+        final Drink drink1 = new Drink("Stella",1.4,1.3,1.7);
+        final Drink drink2 = new Drink("Duvel",1.4,1.3,1.7);
+        final Drink drink3 = new Drink("Leffe Blond",1.4,1.3,1.7);
+        final Drink drink4 = new Drink("Kriek",1.4,1.3,1.7);
+        final Drink drink5 = new Drink("Vedett",1.4,1.3,1.7);
+        final Drink drink6 = new Drink("Peerdevisscher",1.4,1.3,1.7);
+        final Drink drink7 = new Drink("Omer",1.4,1.3,1.7);
+        final Drink drink8 = new Drink("Plat",1.4,1.3,1.7);
+        final Drink drink9 = new Drink("Spuit",1.4,1.3,1.7);
+        final Drink drink10 = new Drink("Cola",1.4,1.3,1.7);
+        final Drink drink11 = new Drink("Zero",1.4,1.3,1.7);
+        final Drink drink12 = new Drink("Somersby",1.4,1.3,1.7);
 
         drink1name.setText(drink1.getName());
         drink2name.setText(drink2.getName());
@@ -206,33 +160,33 @@ public class MainActivity extends AppCompatActivity  {
                         Vibrator v = (Vibrator) getSystemService(VIBRATOR_SERVICE);
                         v.vibrate(PATTERN,-1);
 
-                        count1last.setText(String.format("(%1$d)",drink1.getCount()));
-                        count2last.setText(String.format("(%1$d)",drink2.getCount()));
-                        count3last.setText(String.format("(%1$d)",drink3.getCount()));
-                        count4last.setText(String.format("(%1$d)",drink4.getCount()));
-                        count5last.setText(String.format("(%1$d)",drink5.getCount()));
-                        count6last.setText(String.format("(%1$d)",drink6.getCount()));
-                        count7last.setText(String.format("(%1$d)",drink7.getCount()));
-                        count8last.setText(String.format("(%1$d)",drink8.getCount()));
-                        count9last.setText(String.format("(%1$d)",drink9.getCount()));
-                        count10last.setText(String.format("(%1$d)",drink10.getCount()));
-                        count11last.setText(String.format("(%1$d)",drink11.getCount()));
-                        count12last.setText(String.format("(%1$d)",drink12.getCount()));
-                        countTotalLast.setText(String.format("(%1$d)",Drink.countTotal));
+                        count1last.setText(String.format(Locale.getDefault(),"(%1$d)",drink1.getCount()));
+                        count2last.setText(String.format(Locale.getDefault(),"(%1$d)",drink2.getCount()));
+                        count3last.setText(String.format(Locale.getDefault(),"(%1$d)",drink3.getCount()));
+                        count4last.setText(String.format(Locale.getDefault(),"(%1$d)",drink4.getCount()));
+                        count5last.setText(String.format(Locale.getDefault(),"(%1$d)",drink5.getCount()));
+                        count6last.setText(String.format(Locale.getDefault(),"(%1$d)",drink6.getCount()));
+                        count7last.setText(String.format(Locale.getDefault(),"(%1$d)",drink7.getCount()));
+                        count8last.setText(String.format(Locale.getDefault(),"(%1$d)",drink8.getCount()));
+                        count9last.setText(String.format(Locale.getDefault(),"(%1$d)",drink9.getCount()));
+                        count10last.setText(String.format(Locale.getDefault(),"(%1$d)",drink10.getCount()));
+                        count11last.setText(String.format(Locale.getDefault(),"(%1$d)",drink11.getCount()));
+                        count12last.setText(String.format(Locale.getDefault(),"(%1$d)",drink12.getCount()));
+                        countTotalLast.setText(String.format(Locale.getDefault(),"(%1$d)",Drink.countTotal));
 
-                        count1.setText(String.format("%1$d",0));
-                        count2.setText(String.format("%1$d",0));
-                        count3.setText(String.format("%1$d",0));
-                        count4.setText(String.format("%1$d",0));
-                        count5.setText(String.format("%1$d",0));
-                        count6.setText(String.format("%1$d",0));
-                        count7.setText(String.format("%1$d",0));
-                        count8.setText(String.format("%1$d",0));
-                        count9.setText(String.format("%1$d",0));
-                        count10.setText(String.format("%1$d",0));
-                        count11.setText(String.format("%1$d",0));
-                        count12.setText(String.format("%1$d",0));
-                        countTotal.setText(String.format("%1$d",0));
+                        count1.setText(String.format(Locale.getDefault(),"%1$d",0));
+                        count2.setText(String.format(Locale.getDefault(),"%1$d",0));
+                        count3.setText(String.format(Locale.getDefault(),"%1$d",0));
+                        count4.setText(String.format(Locale.getDefault(),"%1$d",0));
+                        count5.setText(String.format(Locale.getDefault(),"%1$d",0));
+                        count6.setText(String.format(Locale.getDefault(),"%1$d",0));
+                        count7.setText(String.format(Locale.getDefault(),"%1$d",0));
+                        count8.setText(String.format(Locale.getDefault(),"%1$d",0));
+                        count9.setText(String.format(Locale.getDefault(),"%1$d",0));
+                        count10.setText(String.format(Locale.getDefault(),"%1$d",0));
+                        count11.setText(String.format(Locale.getDefault(),"%1$d",0));
+                        count12.setText(String.format(Locale.getDefault(),"%1$d",0));
+                        countTotal.setText(String.format(Locale.getDefault(),"%1$d",0));
 
                         Drink.task();
 
@@ -243,6 +197,19 @@ public class MainActivity extends AppCompatActivity  {
         };
 
         timer.schedule(timerTask,INTERVAL,INTERVAL);
+
+
+        /*Menu menu = nvDrawer.getMenu();
+        MenuItem menuItem = menu.findItem(R.id.nav_switch);
+        final View actionView = MenuItemCompat.getActionView(menuItem);
+        actionView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // what to do when clicked
+
+            }
+        });*/
+
 
         drink1green.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -461,67 +428,78 @@ public class MainActivity extends AppCompatActivity  {
         });
     }
 
-    /* Called whenever we call invalidateOptionsMenu() */
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        // If the nav drawer is open, hide action items related to the content view
-        boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
-        //menu.findItem(R.id.action_websearch).setVisible(!drawerOpen);
-        return super.onPrepareOptionsMenu(menu);
+    private void setupDrawerContent(NavigationView navigationView) {
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        selectDrawerItem(menuItem);
+                        return true;
+                    }
+                });
     }
+
+    public void selectDrawerItem(MenuItem menuItem) {
+        // Create a new fragment and specify the fragment to show based on nav item clicked
+        Fragment fragment = null;
+        Class fragmentClass;
+        switch(menuItem.getItemId()) {
+            case R.id.nav_counters_fragment:
+                fragmentClass = CountersFragment.class;
+                break;
+            case R.id.nav_switch:
+                fragmentClass = CountersFragment.class;
+                break;
+            case R.id.nav_third_fragment:
+                fragmentClass = CountersFragment.class;
+                break;
+            default:
+                fragmentClass = CountersFragment.class;
+        }
+
+        try {
+            fragment = (Fragment) fragmentClass.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // Insert the fragment by replacing any existing fragment
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
+
+        // Highlight the selected item has been done by NavigationView
+        menuItem.setChecked(true);
+        // Set action bar title
+        setTitle(menuItem.getTitle());
+        // Close the navigation drawer
+        mDrawer.closeDrawers();
+    }
+
+    private ActionBarDrawerToggle setupDrawerToggle() {
+        return new ActionBarDrawerToggle(this, mDrawer, R.string.drawer_open,  R.string.drawer_close);
+    }
+
+    // `onPostCreate` called when activity start-up is complete after `onStart()`
+    // NOTE! Make sure to override the method with only a single `Bundle` argument
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         // Sync the toggle state after onRestoreInstanceState has occurred.
-        mDrawerToggle.syncState();
+        drawerToggle.syncState();
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        mDrawerToggle.onConfigurationChanged(newConfig);
+        // Pass any configuration change to the drawer toggles
+        drawerToggle.onConfigurationChanged(newConfig);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Pass the event to ActionBarDrawerToggle, if it returns
-        // true, then it has handled the app icon touch event
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
+        if (drawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
-        // Handle your other action bar items...
-
         return super.onOptionsItemSelected(item);
-    }
-    private class DrawerItemClickListener implements ListView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView parent, View view, int position, long id) {
-            selectItem(position);
-        }
-
-        /** Swaps fragments in the main content view */
-        private void selectItem(int position) {
-            // Create a new fragment and specify the planet to show based on position
-            Fragment fragment = new PlanetFragment();
-            Bundle args = new Bundle();
-            args.putInt(PlanetFragment.ARG_PLANET_NUMBER, position);
-            fragment.setArguments(args);
-
-            // Insert the fragment by replacing any existing fragment
-            FragmentManager fragmentManager = getFragmentManager();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.content_frame, fragment)
-                    .commit();
-
-            // Highlight the selected item, update the title, and close the drawer
-            mDrawerList.setItemChecked(position, true);
-            setTitle(mPlanetTitles[position]);
-            mDrawerLayout.closeDrawer(mDrawerList);
-        }
-
-        public void setTitle(CharSequence title) {
-            mTitle = title;
-            getActionBar().setTitle(mTitle);
-        }
     }
 }
