@@ -1,5 +1,7 @@
 package com.tanghe.garben.capitalbooze;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 
 /**
@@ -29,7 +31,6 @@ public class Drink {
     protected int countSecondLast;
     protected int countDifference;
 
-
     public Drink(String name,double price, double min, double max) {
         this.name = name;
         this.price = price;
@@ -38,9 +39,8 @@ public class Drink {
         drinks.add(this);
     }
 
-
     public String[] green() {
-        return new String[]{Integer.toString(++count),Integer.toString(++countTotal)};
+        return new String[]{Integer.toString(++this.count),Integer.toString(++this.countTotal)};
     }
 
     public String[] red() {
@@ -118,7 +118,6 @@ public class Drink {
     public double getMAX() {
         return MAX;
     }
-
 
     public static void task() {
         for (Drink i :

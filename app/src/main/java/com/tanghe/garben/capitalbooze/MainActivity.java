@@ -4,27 +4,14 @@ import android.content.res.Configuration;
 import android.support.design.widget.NavigationView;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
-import android.os.Vibrator;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
-import java.util.Locale;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
-
-    //Times 60 for minutes in stead of seconds!
-    protected final long INTERVAL = 15*1000L;
-
-    protected final long[] PATTERN = {0,100,100,50};
 
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
@@ -36,19 +23,22 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Fragment fragment = new CountersFragment();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
+        CountersFragment.setArguments(this);
 
         // Set a Toolbar to replace the ActionBar.
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
 
         // Find our drawer view
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         // Find our drawer view
         nvDrawer = (NavigationView) findViewById(R.id.nvView);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+
         // Setup drawer view
         setupDrawerContent(nvDrawer);
         drawerToggle = setupDrawerToggle();
@@ -66,26 +56,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });*/
-
-        Timer timer = new Timer();
-        TimerTask timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Vibrator v = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-                        v.vibrate(PATTERN, -1);
-
-                        Drink.task();
-
-                        Log.d("debug", "Timertask executed");
-                    }
-                });
-            }
-        };
-
-        timer.schedule(timerTask,INTERVAL,INTERVAL);
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
