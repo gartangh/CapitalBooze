@@ -1,8 +1,5 @@
 package com.tanghe.garben.capitalbooze;
 
-import android.os.Bundle;
-import android.widget.LinearLayout;
-
 import java.util.ArrayList;
 
 /**
@@ -87,7 +84,6 @@ public class Drink {
     }
 
     public int getCountLast() {
-
         return countLast;
     }
 
@@ -137,7 +133,6 @@ public class Drink {
         countTotalLast = countTotal;
         countTotal = 0;
         countTotalDifference = countTotalLast - countTotalSecondLast;
-
 
         calcPrises();
     }
