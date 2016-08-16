@@ -3,23 +3,24 @@
 
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/nav_party_fragment"
+            android:title="Party"
+            android:icon="@android:drawable/ic_menu_add"/>
+        <item
             android:id="@+id/nav_counters_fragment"
-            android:title="@string/nav_counters" />
-        <item
-            android:id="@+id/nav_switch"
-            android:actionLayout="@layout/action_view_switch"
-            android:title="@string/switch_on_off" />
-        <item
-            android:id="@+id/nav_third_fragment"
-            android:title="Third" />
+            android:title="@string/nav_counters"
+            android:checked="true"
+            android:icon="@android:drawable/ic_menu_add"/>
     </group>
-    <item android:title="Sub items">
+    <item android:title="App">
         <menu>
             <group android:checkableBehavior="single">
                 <item
-                    android:title="Sub item 1" />
+                    android:title="About"
+                    android:icon="@android:drawable/ic_menu_info_details"/>
                 <item
-                    android:title="Sub item 2" />
+                    android:title="Exit"
+                    android:icon="@android:drawable/ic_menu_close_clear_cancel"/>
             </group>
         </menu>
     </item>

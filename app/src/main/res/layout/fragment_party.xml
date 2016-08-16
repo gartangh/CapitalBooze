@@ -1,0 +1,44 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.tanghe.garben.capitalbooze.PartyFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollView2" >
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <DatePicker
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/datePicker"
+                android:layout_margin="2sp" />
+
+            <TimePicker
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/timePicker"
+                android:layout_margin="2sp" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ENTER"
+                android:id="@+id/enter"
+                android:textSize="14dp"
+                android:elevation="2dp"
+                android:background="@color/colorPrimary"
+                android:textColor="#FFFFFF"
+                android:paddingLeft="16sp"
+                android:paddingRight="16sp"
+                android:layout_gravity="right"
+                android:layout_margin="2sp" />
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>

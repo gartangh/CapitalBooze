@@ -9,9 +9,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements PartyFragment.OnPartyFragmentInteractionListener {
 
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
@@ -77,11 +78,8 @@ public class MainActivity extends AppCompatActivity {
             case R.id.nav_counters_fragment:
                 fragmentClass = CountersFragment.class;
                 break;
-            case R.id.nav_switch:
-                fragmentClass = CountersFragment.class;
-                break;
-            case R.id.nav_third_fragment:
-                fragmentClass = CountersFragment.class;
+            case R.id.nav_party_fragment:
+                fragmentClass = PartyFragment.class;
                 break;
             default:
                 fragmentClass = CountersFragment.class;
@@ -132,4 +130,19 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onEnterPressed() {
+        Log.d("debug", "Enter button pressed");
+    }
+
+    @Override
+    public void onTimeChanged(int i, int i1) {
+        Log.d("debug", "Time changed");
+    }
+
+    public void onDateChanged() {
+        Log.d("debug", "Date changed");
+    }
+
 }
