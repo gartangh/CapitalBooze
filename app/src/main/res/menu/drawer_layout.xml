@@ -4,7 +4,7 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_party_fragment"
-            android:title="Party"
+            android:title="@string/nav_party"
             android:icon="@android:drawable/ic_menu_add"/>
         <item
             android:id="@+id/nav_counters_fragment"
@@ -16,10 +16,12 @@
         <menu>
             <group android:checkableBehavior="single">
                 <item
-                    android:title="About"
+                    android:id="@+id/nav_about_fragment"
+                    android:title="@string/nav_about"
                     android:icon="@android:drawable/ic_menu_info_details"/>
                 <item
-                    android:title="Exit"
+                    android:id="@+id/nav_exit"
+                    android:title="@string/nav_exit"
                     android:icon="@android:drawable/ic_menu_close_clear_cancel"/>
             </group>
         </menu>

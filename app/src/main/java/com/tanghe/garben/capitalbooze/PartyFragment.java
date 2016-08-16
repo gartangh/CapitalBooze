@@ -1,16 +1,19 @@
 package com.tanghe.garben.capitalbooze;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.TimePicker;
+
+import java.util.Calendar;
 
 
 /**
@@ -33,6 +36,7 @@ public class PartyFragment extends Fragment {
 
     private DatePicker datePicker;
     private TimePicker timePicker;
+    private EditText interval;
     private Button enter;
 
     private OnPartyFragmentInteractionListener mListener;
@@ -69,27 +73,63 @@ public class PartyFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_party, container, false);
 
-        datePicker = (DatePicker) getActivity().findViewById(R.id.datePicker);
-        datePicker.setOnClickListener(new View.OnClickListener() {
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        datePicker = (DatePicker) view.findViewById(R.id.datePicker);
+        datePicker.init(year, month, day, new DatePicker.OnDateChangedListener() {
             @Override
-            public void onClick(View view) {
-                mListener.onDateChanged();
+            public void onDateChanged(DatePicker view, int year, int month, int day) {
+                mListener.onDateChanged(year, month, day);
             }
         });
-        timePicker = (TimePicker) getActivity().findViewById(R.id.timePicker);
+
+        timePicker = (TimePicker) view.findViewById(R.id.timePicker);
         timePicker.setIs24HourView(true);
         timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
             @Override
-            public void onTimeChanged(TimePicker timePicker, int i, int i1) {
-                Log.d("debug","Time changed");
-                mListener.onTimeChanged(i,i1);
+            public void onTimeChanged(TimePicker timePicker, int hour, int minute) {
+                mListener.onTimeChanged(hour, minute);
             }
         });
+
+        interval = (EditText) view.findViewById(R.id.interval);
+        interval.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                interval.setText("");
+            }
+        });
+
+        interval.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                try {
+                    int INTERVAL = Integer.parseInt(interval.getText().toString());
+                    if (INTERVAL >= 5 && INTERVAL <= 30) {
+                        mListener.onIntervalSet(INTERVAL);
+                        interval.setHint(Integer.toString(INTERVAL) + " MIN");
+                        interval.setText("");
+                    }
+                    else {
+                        interval.setHint("5-30 MINUTES");
+                        interval.setText("");
+                    }
+                }
+                catch (NumberFormatException nfe) {
+                    interval.setText("");
+                    interval.setText("INVALID");
+                }
+
+                return false;
+            }
+        });
+
         enter = (Button) view.findViewById(R.id.enter);
         enter.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,10 +146,9 @@ public class PartyFragment extends Fragment {
         super.onAttach(context);
         if (context instanceof OnPartyFragmentInteractionListener) {
             mListener = (OnPartyFragmentInteractionListener) context;
-
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+        }
+        else {
+            throw new RuntimeException(context.toString() + " must implement OnFragmentInteractionListener");
         }
     }
 
@@ -130,9 +169,9 @@ public class PartyFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnPartyFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onDateChanged();
-        public void onTimeChanged(int i, int i1);
-        public void onEnterPressed();
+        void onDateChanged(int year,int month,int day);
+        void onTimeChanged(int hour, int min);
+        void onIntervalSet(int interval);
+        void onEnterPressed();
     }
 }

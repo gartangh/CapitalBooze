@@ -26,6 +26,12 @@ public class MainActivity extends AppCompatActivity implements PartyFragment.OnP
 
         CountersFragment.setArguments(this);
 
+        Fragment fragment = AboutFragment.newInstance("par1", "par2");
+
+        // Insert the fragment by replacing any existing fragment
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
+
         // Set a Toolbar to replace the ActionBar.
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -81,6 +87,11 @@ public class MainActivity extends AppCompatActivity implements PartyFragment.OnP
             case R.id.nav_party_fragment:
                 fragmentClass = PartyFragment.class;
                 break;
+            case R.id.nav_about_fragment:
+                fragmentClass = AboutFragment.class;
+                break;
+            case R.id.nav_exit:
+                finish();
             default:
                 fragmentClass = CountersFragment.class;
         }
@@ -137,12 +148,16 @@ public class MainActivity extends AppCompatActivity implements PartyFragment.OnP
     }
 
     @Override
-    public void onTimeChanged(int i, int i1) {
+    public void onTimeChanged(int hour, int min) {
         Log.d("debug", "Time changed");
     }
 
-    public void onDateChanged() {
+    public void onDateChanged(int year,int month,int day) {
         Log.d("debug", "Date changed");
+    }
+
+    public void onIntervalSet(int INTEGER) {
+        Log.d("debug", "Interval set to " + INTEGER + " minutes");
     }
 
 }

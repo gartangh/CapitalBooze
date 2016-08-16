@@ -154,7 +154,7 @@ public class CountersFragment extends Fragment {
                         Vibrator v = (Vibrator) mActivity.getSystemService(Context.VIBRATOR_SERVICE);
                         v.vibrate(PATTERN, -1);
 
-                        count1last.setText(Integer.toString(drink1.getCount()));
+                        count1last.setText(String.format(Locale.getDefault(), "(%1$d)", drink1.getCount()));
                         count2last.setText(String.format(Locale.getDefault(), "(%1$d)", drink2.getCount()));
                         count3last.setText(String.format(Locale.getDefault(), "(%1$d)", drink3.getCount()));
                         count4last.setText(String.format(Locale.getDefault(), "(%1$d)", drink4.getCount()));
