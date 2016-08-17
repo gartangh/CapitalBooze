@@ -13,8 +13,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
-
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -37,7 +35,8 @@ public class PartyFragment extends Fragment {
     protected static int day = calendar.get(Calendar.DAY_OF_MONTH);
     protected static int hour = calendar.get(Calendar.HOUR_OF_DAY);
     protected static int min = calendar.get(Calendar.MINUTE);
-    protected static long TIME = calendar.getTimeInMillis();
+    protected static int sec = 0;
+    protected static Date date = new Date(year, month, day, hour, min, sec);
     protected static long INTERVAL = 15;
 
     private OnPartyFragmentInteractionListener mListener;
@@ -49,13 +48,11 @@ public class PartyFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("debug", "date = " + year + " " + month + " " + day + ", time=" + hour +  " " + min);
+        Log.d("debug", "Date = " + date);
     }
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.d("debug", "OnCreateView() called from PartyFragment");
-
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_party, container, false);
 
@@ -64,7 +61,9 @@ public class PartyFragment extends Fragment {
         datePicker.init(year, month, day, new DatePicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(DatePicker view, int year, int month, int day) {
-                PartyFragment.calendar.set(year, month, day, hour, min);
+                Log.d("debug", "Date = " + date);
+                PartyFragment.calendar.set(year, month, day, hour, min, 0);
+                date = new Date(year, month, day, hour, min, sec);
                 PartyFragment.year = year;
                 PartyFragment.month = month;
                 PartyFragment.day = day;
@@ -73,12 +72,12 @@ public class PartyFragment extends Fragment {
 
         timePicker = (TimePicker) view.findViewById(R.id.timePicker);
         timePicker.setIs24HourView(true);
-        timePicker.setHour(hour);
-        timePicker.setMinute(min);
         timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
             @Override
             public void onTimeChanged(TimePicker timePicker, int hour, int min) {
-                PartyFragment.calendar.set(year, month, day, hour, min);
+                Log.d("debug", "Date = " + date);
+                PartyFragment.calendar.set(year, month, day, hour, min, 0);
+                date = new Date(year, month, day, hour, min, sec);
                 PartyFragment.hour = hour;
                 PartyFragment.min = min;
             }
@@ -117,7 +116,8 @@ public class PartyFragment extends Fragment {
         enter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mListener.onEnterPressed(TIME, INTERVAL*60*1000L);
+                Log.d("debug", "Date = " + date);
+                mListener.onEnterPressed(date, INTERVAL*60*1000L);
             }
         });
 
@@ -152,6 +152,6 @@ public class PartyFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnPartyFragmentInteractionListener {
-        void onEnterPressed(long time, long INTERVAL);
+        void onEnterPressed(Date date, long INTERVAL);
     }
 }

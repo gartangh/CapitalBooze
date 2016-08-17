@@ -12,6 +12,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 
+import java.util.Date;
+
 public class MainActivity extends AppCompatActivity implements PartyFragment.OnPartyFragmentInteractionListener {
 
     private DrawerLayout mDrawer;
@@ -135,10 +137,9 @@ public class MainActivity extends AppCompatActivity implements PartyFragment.OnP
     }
 
     @Override
-    public void onEnterPressed(long TIME, long INTERVAL) {
+    public void onEnterPressed(Date date, long INTERVAL) {
         Log.d("debug", "Enter button pressed");
-        CountersFragment.setTime(TIME);
+        CountersFragment.setDate(date);
         CountersFragment.setInterval(INTERVAL);
-
     }
 }

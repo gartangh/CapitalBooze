@@ -86,12 +86,20 @@ public class Drink {
         return new String[] {Integer.toString(count),Integer.toString(countTotal)};
     }
 
+    public void setCount(int count) {
+        this.count = count;
+    }
+
     public String getName() {
         return name;
     }
 
     public int getCount() {
         return count;
+    }
+
+    public static void setCountTotal(int countTotal) {
+        Drink.countTotal = countTotal;
     }
 
     public static void task() {

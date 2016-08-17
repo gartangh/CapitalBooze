@@ -2,6 +2,7 @@ package com.tanghe.garben.capitalbooze;
 
 import android.content.Context;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.os.Vibrator;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -12,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -23,7 +24,7 @@ import java.util.TimerTask;
 public class CountersFragment extends Fragment {
 
     protected static Context context;
-    protected static long TIME;
+    protected static Date date = new Date(System.currentTimeMillis());
     protected static long INTERVAL = 0L;
     protected static final long[] PATTERN = {0L,100L,100L,50L};
     protected static LinearLayout verticalLayout;
@@ -36,8 +37,6 @@ public class CountersFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Log.d("debug", "OnCreate() called in CountersFragment");
     }
 
     @Override
@@ -150,6 +149,8 @@ public class CountersFragment extends Fragment {
                     public void run() {
                         Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
                         if (!partyStarted) {
+                            CountersFragment.partyStarted = true;
+                            Log.d("debug", "Party started");
                             v.vibrate(PATTERN, -1);
 
                             count1.setText(String.format(Locale.getDefault(), "%1$d", 0));
@@ -166,6 +167,20 @@ public class CountersFragment extends Fragment {
                             count12.setText(String.format(Locale.getDefault(), "%1$d", 0));
                             countTotal.setText(String.format(Locale.getDefault(), "%1$d", 0));
 
+                            drink1.setCount(0);
+                            drink2.setCount(0);
+                            drink3.setCount(0);
+                            drink4.setCount(0);
+                            drink5.setCount(0);
+                            drink6.setCount(0);
+                            drink7.setCount(0);
+                            drink8.setCount(0);
+                            drink9.setCount(0);
+                            drink10.setCount(0);
+                            drink11.setCount(0);
+                            drink12.setCount(0);
+                            Drink.setCountTotal(0);
+
                             count1last.setText(String.format(Locale.getDefault(), "(%1$d)", drink1.getCount()));
                             count2last.setText(String.format(Locale.getDefault(), "(%1$d)", drink2.getCount()));
                             count3last.setText(String.format(Locale.getDefault(), "(%1$d)", drink3.getCount()));
@@ -179,8 +194,6 @@ public class CountersFragment extends Fragment {
                             count11last.setText(String.format(Locale.getDefault(), "(%1$d)", drink11.getCount()));
                             count12last.setText(String.format(Locale.getDefault(), "(%1$d)", drink12.getCount()));
                             countTotalLast.setText(String.format(Locale.getDefault(), "(%1$d)", Drink.countTotal));
-
-                            partyStarted = true;
                         }
                         else {
                             v.vibrate(PATTERN, -1);
@@ -224,16 +237,16 @@ public class CountersFragment extends Fragment {
                 });
             }
         };
-        final Timer timer = new Timer();
-        final TimerTask timerTask = new TimerTask() {
+        Timer timer = new Timer();
+        TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
                 startTaskThread(runnable);
             }
         };
-        if (TIME >= System.currentTimeMillis() && INTERVAL > 0L) {
-            Log.d("debug","TimerTask set");
-            timer.schedule(timerTask, TIME, INTERVAL);
+        if (INTERVAL > 0L) {
+            Log.d("debug","TimerTaskset, date set for " + date + " and interval set for " + INTERVAL);
+            timer.schedule(timerTask, date, INTERVAL);
         }
 
         drink1green.setOnClickListener(new View.OnClickListener() {
@@ -460,11 +473,13 @@ public class CountersFragment extends Fragment {
     }
 
     public static void setInterval(long INTERVAL) {
+        Log.d("debug", "Interval set for " + INTERVAL);
         CountersFragment.INTERVAL = INTERVAL;
     }
 
-    public static void setTime(long TIME) {
-        CountersFragment.TIME = TIME;
+    public static void setDate(Date date) {
+        Log.d("debug", "Date set for " + date);
+        CountersFragment.date = date;
     }
 
     public void send() {
