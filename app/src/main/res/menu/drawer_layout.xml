@@ -7,17 +7,26 @@
             android:title="@string/nav_party"
             android:icon="@android:drawable/ic_menu_add"/>
         <item
+            android:id="@+id/nav_drink_fragment"
+            android:title="@string/nav_drink"
+            android:icon="@android:drawable/ic_menu_add" />
+        <item
             android:id="@+id/nav_counters_fragment"
             android:title="@string/nav_counters"
-            android:checked="true"
             android:icon="@android:drawable/ic_menu_add"/>
+        <item
+            android:id="@+id/nav_prices_fragment"
+            android:title="@string/nav_prices"
+            android:icon="@android:drawable/btn_dialog" />
     </group>
+
     <item android:title="App">
         <menu>
             <group android:checkableBehavior="single">
                 <item
                     android:id="@+id/nav_about_fragment"
                     android:title="@string/nav_about"
+                    android:checked="true"
                     android:icon="@android:drawable/ic_menu_info_details"/>
                 <item
                     android:id="@+id/nav_exit"

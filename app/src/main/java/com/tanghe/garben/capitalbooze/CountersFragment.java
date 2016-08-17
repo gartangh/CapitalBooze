@@ -1,6 +1,5 @@
 package com.tanghe.garben.capitalbooze;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Vibrator;
@@ -11,9 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.Switch;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import java.util.Calendar;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -22,18 +21,16 @@ import java.util.TimerTask;
  * Created by Gebruiker on 13/08/2016.
  */
 public class CountersFragment extends Fragment {
-    protected static Activity mActivity;
 
-    //Times 60 for minutes in stead of seconds!
-    protected final long INTERVAL = 15*1000L;
-    protected final long[] PATTERN = {0,100,100,50};
+    protected static Context context;
+    protected static long TIME;
+    protected static long INTERVAL = 0L;
+    protected static final long[] PATTERN = {0L,100L,100L,50L};
+    protected static LinearLayout verticalLayout;
+    protected static boolean partyStarted = false;
 
     public CountersFragment() {
         // Required empty public constructor
-    }
-
-    public static void setArguments(Activity activity) {
-        mActivity = activity;
     }
 
     @Override
@@ -51,7 +48,7 @@ public class CountersFragment extends Fragment {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.counters_fragment, container, false);
 
-        final Switch counterSwitch = (Switch) view.findViewById(R.id.counterSwitch);
+        verticalLayout = (LinearLayout) view.findViewById(R.id.LinearLayoutDrinks);
 
         final TextView drink1name = (TextView) view.findViewById(R.id.drink1);
         final TextView drink2name = (TextView) view.findViewById(R.id.drink2);
@@ -151,62 +148,93 @@ public class CountersFragment extends Fragment {
             public void run() {
                 handler.post(new Runnable() {
                     public void run() {
-                        Vibrator v = (Vibrator) mActivity.getSystemService(Context.VIBRATOR_SERVICE);
-                        v.vibrate(PATTERN, -1);
+                        Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+                        if (!partyStarted) {
+                            v.vibrate(PATTERN, -1);
 
-                        count1last.setText(String.format(Locale.getDefault(), "(%1$d)", drink1.getCount()));
-                        count2last.setText(String.format(Locale.getDefault(), "(%1$d)", drink2.getCount()));
-                        count3last.setText(String.format(Locale.getDefault(), "(%1$d)", drink3.getCount()));
-                        count4last.setText(String.format(Locale.getDefault(), "(%1$d)", drink4.getCount()));
-                        count5last.setText(String.format(Locale.getDefault(), "(%1$d)", drink5.getCount()));
-                        count6last.setText(String.format(Locale.getDefault(), "(%1$d)", drink6.getCount()));
-                        count7last.setText(String.format(Locale.getDefault(), "(%1$d)", drink7.getCount()));
-                        count8last.setText(String.format(Locale.getDefault(), "(%1$d)", drink8.getCount()));
-                        count9last.setText(String.format(Locale.getDefault(), "(%1$d)", drink9.getCount()));
-                        count10last.setText(String.format(Locale.getDefault(), "(%1$d)", drink10.getCount()));
-                        count11last.setText(String.format(Locale.getDefault(), "(%1$d)", drink11.getCount()));
-                        count12last.setText(String.format(Locale.getDefault(), "(%1$d)", drink12.getCount()));
-                        countTotalLast.setText(String.format(Locale.getDefault(), "(%1$d)", Drink.countTotal));
+                            count1.setText(String.format(Locale.getDefault(), "%1$d", 0));
+                            count2.setText(String.format(Locale.getDefault(), "%1$d", 0));
+                            count3.setText(String.format(Locale.getDefault(), "%1$d", 0));
+                            count4.setText(String.format(Locale.getDefault(), "%1$d", 0));
+                            count5.setText(String.format(Locale.getDefault(), "%1$d", 0));
+                            count6.setText(String.format(Locale.getDefault(), "%1$d", 0));
+                            count7.setText(String.format(Locale.getDefault(), "%1$d", 0));
+                            count8.setText(String.format(Locale.getDefault(), "%1$d", 0));
+                            count9.setText(String.format(Locale.getDefault(), "%1$d", 0));
+                            count10.setText(String.format(Locale.getDefault(), "%1$d", 0));
+                            count11.setText(String.format(Locale.getDefault(), "%1$d", 0));
+                            count12.setText(String.format(Locale.getDefault(), "%1$d", 0));
+                            countTotal.setText(String.format(Locale.getDefault(), "%1$d", 0));
 
-                        count1.setText(String.format(Locale.getDefault(), "%1$d", 0));
-                        count2.setText(String.format(Locale.getDefault(), "%1$d", 0));
-                        count3.setText(String.format(Locale.getDefault(), "%1$d", 0));
-                        count4.setText(String.format(Locale.getDefault(), "%1$d", 0));
-                        count5.setText(String.format(Locale.getDefault(), "%1$d", 0));
-                        count6.setText(String.format(Locale.getDefault(), "%1$d", 0));
-                        count7.setText(String.format(Locale.getDefault(), "%1$d", 0));
-                        count8.setText(String.format(Locale.getDefault(), "%1$d", 0));
-                        count9.setText(String.format(Locale.getDefault(), "%1$d", 0));
-                        count10.setText(String.format(Locale.getDefault(), "%1$d", 0));
-                        count11.setText(String.format(Locale.getDefault(), "%1$d", 0));
-                        count12.setText(String.format(Locale.getDefault(), "%1$d", 0));
-                        countTotal.setText(String.format(Locale.getDefault(), "%1$d", 0));
+                            count1last.setText(String.format(Locale.getDefault(), "(%1$d)", drink1.getCount()));
+                            count2last.setText(String.format(Locale.getDefault(), "(%1$d)", drink2.getCount()));
+                            count3last.setText(String.format(Locale.getDefault(), "(%1$d)", drink3.getCount()));
+                            count4last.setText(String.format(Locale.getDefault(), "(%1$d)", drink4.getCount()));
+                            count5last.setText(String.format(Locale.getDefault(), "(%1$d)", drink5.getCount()));
+                            count6last.setText(String.format(Locale.getDefault(), "(%1$d)", drink6.getCount()));
+                            count7last.setText(String.format(Locale.getDefault(), "(%1$d)", drink7.getCount()));
+                            count8last.setText(String.format(Locale.getDefault(), "(%1$d)", drink8.getCount()));
+                            count9last.setText(String.format(Locale.getDefault(), "(%1$d)", drink9.getCount()));
+                            count10last.setText(String.format(Locale.getDefault(), "(%1$d)", drink10.getCount()));
+                            count11last.setText(String.format(Locale.getDefault(), "(%1$d)", drink11.getCount()));
+                            count12last.setText(String.format(Locale.getDefault(), "(%1$d)", drink12.getCount()));
+                            countTotalLast.setText(String.format(Locale.getDefault(), "(%1$d)", Drink.countTotal));
 
-                        Drink.task();
+                            partyStarted = true;
+                        }
+                        else {
+                            v.vibrate(PATTERN, -1);
 
-                        Log.d("debug", "Thread task executed");
+                            Log.d("debug", "Send");
+                            send();
+
+                            count1last.setText(String.format(Locale.getDefault(), "(%1$d)", drink1.getCount()));
+                            count2last.setText(String.format(Locale.getDefault(), "(%1$d)", drink2.getCount()));
+                            count3last.setText(String.format(Locale.getDefault(), "(%1$d)", drink3.getCount()));
+                            count4last.setText(String.format(Locale.getDefault(), "(%1$d)", drink4.getCount()));
+                            count5last.setText(String.format(Locale.getDefault(), "(%1$d)", drink5.getCount()));
+                            count6last.setText(String.format(Locale.getDefault(), "(%1$d)", drink6.getCount()));
+                            count7last.setText(String.format(Locale.getDefault(), "(%1$d)", drink7.getCount()));
+                            count8last.setText(String.format(Locale.getDefault(), "(%1$d)", drink8.getCount()));
+                            count9last.setText(String.format(Locale.getDefault(), "(%1$d)", drink9.getCount()));
+                            count10last.setText(String.format(Locale.getDefault(), "(%1$d)", drink10.getCount()));
+                            count11last.setText(String.format(Locale.getDefault(), "(%1$d)", drink11.getCount()));
+                            count12last.setText(String.format(Locale.getDefault(), "(%1$d)", drink12.getCount()));
+                            countTotalLast.setText(String.format(Locale.getDefault(), "(%1$d)", Drink.countTotal));
+
+                            count1.setText(String.format(Locale.getDefault(), "%1$d", 0));
+                            count2.setText(String.format(Locale.getDefault(), "%1$d", 0));
+                            count3.setText(String.format(Locale.getDefault(), "%1$d", 0));
+                            count4.setText(String.format(Locale.getDefault(), "%1$d", 0));
+                            count5.setText(String.format(Locale.getDefault(), "%1$d", 0));
+                            count6.setText(String.format(Locale.getDefault(), "%1$d", 0));
+                            count7.setText(String.format(Locale.getDefault(), "%1$d", 0));
+                            count8.setText(String.format(Locale.getDefault(), "%1$d", 0));
+                            count9.setText(String.format(Locale.getDefault(), "%1$d", 0));
+                            count10.setText(String.format(Locale.getDefault(), "%1$d", 0));
+                            count11.setText(String.format(Locale.getDefault(), "%1$d", 0));
+                            count12.setText(String.format(Locale.getDefault(), "%1$d", 0));
+                            countTotal.setText(String.format(Locale.getDefault(), "%1$d", 0));
+
+                            Drink.task();
+
+                            Log.d("debug", "Thread task executed");
+                        }
                     }
                 });
             }
         };
         final Timer timer = new Timer();
-        Log.d("debug","Timer set");
         final TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
                 startTaskThread(runnable);
             }
         };
-        Log.d("debug","TimerTask set");
-
-        counterSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (counterSwitch.isChecked()) {
-                    timer.schedule(timerTask,INTERVAL,INTERVAL);
-                }
-            }
-        });
+        if (TIME >= System.currentTimeMillis() && INTERVAL > 0L) {
+            Log.d("debug","TimerTask set");
+            timer.schedule(timerTask, TIME, INTERVAL);
+        }
 
         drink1green.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -429,5 +457,21 @@ public class CountersFragment extends Fragment {
 
     private void startTaskThread(Runnable runnable) {
         new Thread(runnable).start();
+    }
+
+    public static void setInterval(long INTERVAL) {
+        CountersFragment.INTERVAL = INTERVAL;
+    }
+
+    public static void setTime(long TIME) {
+        CountersFragment.TIME = TIME;
+    }
+
+    public void send() {
+        //new Create_Part().execute();
+    }
+
+    public static void setArgument(Context context) {
+        CountersFragment.context = context;
     }
 }

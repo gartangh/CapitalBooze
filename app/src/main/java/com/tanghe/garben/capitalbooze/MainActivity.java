@@ -24,18 +24,22 @@ public class MainActivity extends AppCompatActivity implements PartyFragment.OnP
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        CountersFragment.setArguments(this);
+        Create_Part.setArgument(MainActivity.this);
+        Drink.setArgument(MainActivity.this);
+        CountersFragment.setArgument(MainActivity.this);
 
-        Fragment fragment = AboutFragment.newInstance("par1", "par2");
-
-        // Insert the fragment by replacing any existing fragment
+        // Default fragment
+        Fragment fragment = new AboutFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
 
         // Set a Toolbar to replace the ActionBar.
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        // Set action bar title
+        setTitle(R.string.nav_about);
 
         // Find our drawer view
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -43,26 +47,12 @@ public class MainActivity extends AppCompatActivity implements PartyFragment.OnP
         // Find our drawer view
         nvDrawer = (NavigationView) findViewById(R.id.nvView);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-
         // Setup drawer view
         setupDrawerContent(nvDrawer);
-        drawerToggle = setupDrawerToggle();
+        drawerToggle = new ActionBarDrawerToggle(this, mDrawer, R.string.drawer_open,  R.string.drawer_close);
 
         // Tie DrawerLayout events to the ActionBarToggle
         mDrawer.addDrawerListener(drawerToggle);
-
-        /*Menu menu = nvDrawer.getMenu();
-        MenuItem menuItem = menu.findItem(R.id.nav_switch);
-        final View actionView = MenuItemCompat.getActionView(menuItem);
-        actionView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // what to do when clicked
-
-            }
-        });*/
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
@@ -84,8 +74,14 @@ public class MainActivity extends AppCompatActivity implements PartyFragment.OnP
             case R.id.nav_counters_fragment:
                 fragmentClass = CountersFragment.class;
                 break;
+            case R.id.nav_drink_fragment:
+                fragmentClass = DrinkFragment.class;
+                break;
             case R.id.nav_party_fragment:
                 fragmentClass = PartyFragment.class;
+                break;
+            case R.id.nav_prices_fragment:
+                fragmentClass = PricesFragment.class;
                 break;
             case R.id.nav_about_fragment:
                 fragmentClass = AboutFragment.class;
@@ -114,10 +110,6 @@ public class MainActivity extends AppCompatActivity implements PartyFragment.OnP
         mDrawer.closeDrawers();
     }
 
-    private ActionBarDrawerToggle setupDrawerToggle() {
-        return new ActionBarDrawerToggle(this, mDrawer, R.string.drawer_open,  R.string.drawer_close);
-    }
-
     // `onPostCreate` called when activity start-up is complete after `onStart()`
     // NOTE! Make sure to override the method with only a single `Bundle` argument
     @Override
@@ -143,21 +135,10 @@ public class MainActivity extends AppCompatActivity implements PartyFragment.OnP
     }
 
     @Override
-    public void onEnterPressed() {
+    public void onEnterPressed(long TIME, long INTERVAL) {
         Log.d("debug", "Enter button pressed");
-    }
+        CountersFragment.setTime(TIME);
+        CountersFragment.setInterval(INTERVAL);
 
-    @Override
-    public void onTimeChanged(int hour, int min) {
-        Log.d("debug", "Time changed");
     }
-
-    public void onDateChanged(int year,int month,int day) {
-        Log.d("debug", "Date changed");
-    }
-
-    public void onIntervalSet(int INTEGER) {
-        Log.d("debug", "Interval set to " + INTEGER + " minutes");
-    }
-
 }

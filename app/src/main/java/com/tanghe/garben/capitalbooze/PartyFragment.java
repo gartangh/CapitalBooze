@@ -3,6 +3,7 @@ package com.tanghe.garben.capitalbooze;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,31 +14,31 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 
-/**
+/*
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
  * {@link PartyFragment.OnPartyFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link PartyFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+*/
 public class PartyFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     private DatePicker datePicker;
     private TimePicker timePicker;
     private EditText interval;
     private Button enter;
+
+    protected static final Calendar calendar = Calendar.getInstance();
+    protected static int year = calendar.get(Calendar.YEAR);
+    protected static int month = calendar.get(Calendar.MONTH);
+    protected static int day = calendar.get(Calendar.DAY_OF_MONTH);
+    protected static int hour = calendar.get(Calendar.HOUR_OF_DAY);
+    protected static int min = calendar.get(Calendar.MINUTE);
+    protected static long TIME = calendar.getTimeInMillis();
+    protected static long INTERVAL = 15;
 
     private OnPartyFragmentInteractionListener mListener;
 
@@ -45,56 +46,41 @@ public class PartyFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment PartyFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static PartyFragment newInstance(String param1, String param2) {
-        PartyFragment fragment = new PartyFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        Log.d("debug", "date = " + year + " " + month + " " + day + ", time=" + hour +  " " + min);
     }
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.d("debug", "OnCreateView() called from PartyFragment");
+
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_party, container, false);
 
-        Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
         datePicker = (DatePicker) view.findViewById(R.id.datePicker);
+        datePicker.setMinDate(System.currentTimeMillis());
         datePicker.init(year, month, day, new DatePicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(DatePicker view, int year, int month, int day) {
-                mListener.onDateChanged(year, month, day);
+                PartyFragment.calendar.set(year, month, day, hour, min);
+                PartyFragment.year = year;
+                PartyFragment.month = month;
+                PartyFragment.day = day;
             }
         });
 
         timePicker = (TimePicker) view.findViewById(R.id.timePicker);
         timePicker.setIs24HourView(true);
+        timePicker.setHour(hour);
+        timePicker.setMinute(min);
         timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
             @Override
-            public void onTimeChanged(TimePicker timePicker, int hour, int minute) {
-                mListener.onTimeChanged(hour, minute);
+            public void onTimeChanged(TimePicker timePicker, int hour, int min) {
+                PartyFragment.calendar.set(year, month, day, hour, min);
+                PartyFragment.hour = hour;
+                PartyFragment.min = min;
             }
         });
 
@@ -105,15 +91,13 @@ public class PartyFragment extends Fragment {
                 interval.setText("");
             }
         });
-
         interval.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 try {
-                    int INTERVAL = Integer.parseInt(interval.getText().toString());
-                    if (INTERVAL >= 5 && INTERVAL <= 30) {
-                        mListener.onIntervalSet(INTERVAL);
-                        interval.setHint(Integer.toString(INTERVAL) + " MIN");
+                    INTERVAL = Long.parseLong(interval.getText().toString());
+                    if (INTERVAL >= 1 && INTERVAL <= 30) {
+                        interval.setHint(Long.toString(INTERVAL) + " MIN");
                         interval.setText("");
                     }
                     else {
@@ -122,10 +106,9 @@ public class PartyFragment extends Fragment {
                     }
                 }
                 catch (NumberFormatException nfe) {
+                    interval.setHint("INVALID");
                     interval.setText("");
-                    interval.setText("INVALID");
                 }
-
                 return false;
             }
         });
@@ -134,7 +117,7 @@ public class PartyFragment extends Fragment {
         enter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mListener.onEnterPressed();
+                mListener.onEnterPressed(TIME, INTERVAL*60*1000L);
             }
         });
 
@@ -169,9 +152,6 @@ public class PartyFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnPartyFragmentInteractionListener {
-        void onDateChanged(int year,int month,int day);
-        void onTimeChanged(int hour, int min);
-        void onIntervalSet(int interval);
-        void onEnterPressed();
+        void onEnterPressed(long time, long INTERVAL);
     }
 }

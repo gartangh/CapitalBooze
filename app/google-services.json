@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "305330370121",
+    "firebase_url": "https://capital-booze.firebaseio.com",
+    "project_id": "capital-booze",
+    "storage_bucket": "capital-booze.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:305330370121:android:09ef9ca7b74457e0",
+        "android_client_info": {
+          "package_name": "com.tanghe.garben.capitalbooze"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "305330370121-2007n1e7hdirfcu07lhtm2aa1im8uhrm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD30TGT5RgkOd6ilmKiXpn_j0LnsoqB8Wk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
