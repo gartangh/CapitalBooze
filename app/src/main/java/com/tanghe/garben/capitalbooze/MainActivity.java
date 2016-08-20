@@ -14,26 +14,33 @@ import android.view.MenuItem;
 
 import java.util.Date;
 
-public class MainActivity extends AppCompatActivity implements PartyFragment.OnPartyFragmentInteractionListener {
+public class MainActivity
+        extends
+        AppCompatActivity
+        implements
+        AboutFragment.OnAboutFragmentInteractionListener,
+        CountersFragment.OnCountersFragmentInteractionListener,
+        DrinkFragment.OnDrinkFragmentInteractionListener,
+        PartyFragment.OnPartyFragmentInteractionListener,
+        PricesFragment.OnPricesFragmentInteractionListener {
 
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
     private NavigationView nvDrawer;
     private ActionBarDrawerToggle drawerToggle;
+    FragmentManager fragmentManager = getSupportFragmentManager();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Create_Part.setArgument(MainActivity.this);
         Drink.setArgument(MainActivity.this);
         CountersFragment.setArgument(MainActivity.this);
+        PricesFragment.setArgument(MainActivity.this);
 
         // Default fragment
-        Fragment fragment = new AboutFragment();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.container, new AboutFragment()).commit();
 
         // Set a Toolbar to replace the ActionBar.
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -101,7 +108,6 @@ public class MainActivity extends AppCompatActivity implements PartyFragment.OnP
         }
 
         // Insert the fragment by replacing any existing fragment
-        FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
 
         // Highlight the selected item has been done by NavigationView
@@ -137,9 +143,53 @@ public class MainActivity extends AppCompatActivity implements PartyFragment.OnP
     }
 
     @Override
-    public void onEnterPressed(Date date, long INTERVAL) {
-        Log.d("debug", "Enter button pressed");
+    public void onAboutNextPressed() {
+        fragmentManager.beginTransaction().replace(R.id.container, new PartyFragment()).commit();
+        setTitle("Party");
+    }
+
+    @Override
+    public void onCountersBackPressed() {
+        fragmentManager.beginTransaction().replace(R.id.container, new DrinkFragment()).commit();
+        setTitle("Drinks");
+    }
+
+    @Override
+    public void onCountersPricesPressed() {
+        fragmentManager.beginTransaction().replace(R.id.container, new PricesFragment()).commit();
+        setTitle("Prices");
+    }
+
+    @Override
+    public void onDrinkBackPressed() {
+        fragmentManager.beginTransaction().replace(R.id.container, new PartyFragment()).commit();
+        setTitle("Party");
+    }
+
+    @Override
+    public void onDrinkNextPressed() {
+        fragmentManager.beginTransaction().replace(R.id.container, new CountersFragment()).commit();
+        setTitle("Counters");
+    }
+
+    @Override
+    public void onPartyBackPressed() {
+        fragmentManager.beginTransaction().replace(R.id.container, new AboutFragment()).commit();
+        setTitle("About");
+    }
+
+    @Override
+    public void onPartyNextPressed(Date date, long INTERVAL) {
+        Log.d("debug", "Next button pressed");
         CountersFragment.setDate(date);
         CountersFragment.setInterval(INTERVAL);
+        fragmentManager.beginTransaction().replace(R.id.container, new DrinkFragment()).commit();
+        setTitle("Drinks");
+    }
+
+    @Override
+    public void onPricesCountersPressed() {
+        fragmentManager.beginTransaction().replace(R.id.container, new CountersFragment()).commit();
+        setTitle("Counters");
     }
 }

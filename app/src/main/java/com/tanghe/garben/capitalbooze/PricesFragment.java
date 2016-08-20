@@ -1,51 +1,64 @@
 package com.tanghe.garben.capitalbooze;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
+
+import java.util.ArrayList;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link PricesFragment.OnFragmentInteractionListener} interface
+ * {@link PricesFragment.OnPricesFragmentInteractionListener} interface
  * to handle interaction events.
  */
 public class PricesFragment extends Fragment {
+    protected static Context context;
 
-    private OnFragmentInteractionListener mListener;
+    private OnPricesFragmentInteractionListener mListener;
 
     public PricesFragment() {
         // Required empty public constructor
     }
 
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_prices, container, false);
-    }
+        final View view = inflater.inflate(R.layout.fragment_prices, container, false);
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+
+        final ScrollView scrollViewDrinks = (ScrollView) view.findViewById(R.id.scrollViewPrices);
+        for (Drink i : Drink.drinks) {
+            scrollViewDrinks.addView(i.horizontalLayout);
         }
+
+        final Button counters = (Button) view.findViewById(R.id.prices_counters);
+        counters.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mListener.onPricesCountersPressed();
+            }
+        });
+
+
+        return view;
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof OnPricesFragmentInteractionListener) {
+            mListener = (OnPricesFragmentInteractionListener) context;
         } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+            throw new RuntimeException(context.toString() + " must implement OnPricesFragmentInteractionListener");
         }
     }
 
@@ -65,8 +78,11 @@ public class PricesFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+    public interface OnPricesFragmentInteractionListener {
+        void onPricesCountersPressed();
+    }
+
+    public static void setArgument(Context context) {
+        PricesFragment.context = context;
     }
 }

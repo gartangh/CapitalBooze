@@ -2,7 +2,6 @@ package com.tanghe.garben.capitalbooze;
 
 import android.content.Context;
 import android.os.Handler;
-import android.os.SystemClock;
 import android.os.Vibrator;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -18,15 +17,13 @@ import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
-/**
- * Created by Gebruiker on 13/08/2016.
- */
 public class CountersFragment extends Fragment {
+    private OnCountersFragmentInteractionListener mListener;
 
     protected static Context context;
     protected static Date date = new Date(System.currentTimeMillis());
     protected static long INTERVAL = 0L;
-    protected static final long[] PATTERN = {0L,100L,100L,50L};
+    protected static final long[] PATTERN = {0L, 100L, 100L, 50L};
     protected static LinearLayout verticalLayout;
     protected static boolean partyStarted = false;
 
@@ -49,6 +46,7 @@ public class CountersFragment extends Fragment {
 
         verticalLayout = (LinearLayout) view.findViewById(R.id.LinearLayoutDrinks);
 
+        /*
         final TextView drink1name = (TextView) view.findViewById(R.id.drink1);
         final TextView drink2name = (TextView) view.findViewById(R.id.drink2);
         final TextView drink3name = (TextView) view.findViewById(R.id.drink3);
@@ -115,32 +113,7 @@ public class CountersFragment extends Fragment {
         final TextView count11last = (TextView) view.findViewById(R.id.count11last);
         final TextView count12last = (TextView) view.findViewById(R.id.count12last);
         final TextView countTotalLast = (TextView) view.findViewById(R.id.countTotalLast);
-
-        final Drink drink1 = new Drink("Stella",1.4,1.3,1.7);
-        final Drink drink2 = new Drink("Duvel",1.4,1.3,1.7);
-        final Drink drink3 = new Drink("Leffe Blond",1.4,1.3,1.7);
-        final Drink drink4 = new Drink("Kriek",1.4,1.3,1.7);
-        final Drink drink5 = new Drink("Vedett",1.4,1.3,1.7);
-        final Drink drink6 = new Drink("Peerdevisscher",1.4,1.3,1.7);
-        final Drink drink7 = new Drink("Omer",1.4,1.3,1.7);
-        final Drink drink8 = new Drink("Plat",1.4,1.3,1.7);
-        final Drink drink9 = new Drink("Spuit",1.4,1.3,1.7);
-        final Drink drink10 = new Drink("Cola",1.4,1.3,1.7);
-        final Drink drink11 = new Drink("Zero",1.4,1.3,1.7);
-        final Drink drink12 = new Drink("Somersby",1.4,1.3,1.7);
-
-        drink1name.setText(drink1.getName());
-        drink2name.setText(drink2.getName());
-        drink3name.setText(drink3.getName());
-        drink4name.setText(drink4.getName());
-        drink5name.setText(drink5.getName());
-        drink6name.setText(drink6.getName());
-        drink7name.setText(drink7.getName());
-        drink8name.setText(drink8.getName());
-        drink9name.setText(drink9.getName());
-        drink10name.setText(drink10.getName());
-        drink11name.setText(drink11.getName());
-        drink12name.setText(drink12.getName());
+        */
 
         final Handler handler = new Handler();
         final Runnable runnable = new Runnable() {
@@ -153,6 +126,7 @@ public class CountersFragment extends Fragment {
                             Log.d("debug", "Party started");
                             v.vibrate(PATTERN, -1);
 
+                            /*
                             count1.setText(String.format(Locale.getDefault(), "%1$d", 0));
                             count2.setText(String.format(Locale.getDefault(), "%1$d", 0));
                             count3.setText(String.format(Locale.getDefault(), "%1$d", 0));
@@ -194,6 +168,7 @@ public class CountersFragment extends Fragment {
                             count11last.setText(String.format(Locale.getDefault(), "(%1$d)", drink11.getCount()));
                             count12last.setText(String.format(Locale.getDefault(), "(%1$d)", drink12.getCount()));
                             countTotalLast.setText(String.format(Locale.getDefault(), "(%1$d)", Drink.countTotal));
+                            */
                         }
                         else {
                             v.vibrate(PATTERN, -1);
@@ -201,6 +176,7 @@ public class CountersFragment extends Fragment {
                             Log.d("debug", "Send");
                             send();
 
+                            /*
                             count1last.setText(String.format(Locale.getDefault(), "(%1$d)", drink1.getCount()));
                             count2last.setText(String.format(Locale.getDefault(), "(%1$d)", drink2.getCount()));
                             count3last.setText(String.format(Locale.getDefault(), "(%1$d)", drink3.getCount()));
@@ -227,7 +203,7 @@ public class CountersFragment extends Fragment {
                             count10.setText(String.format(Locale.getDefault(), "%1$d", 0));
                             count11.setText(String.format(Locale.getDefault(), "%1$d", 0));
                             count12.setText(String.format(Locale.getDefault(), "%1$d", 0));
-                            countTotal.setText(String.format(Locale.getDefault(), "%1$d", 0));
+                            countTotal.setText(String.format(Locale.getDefault(), "%1$d", 0));*/
 
                             Drink.task();
 
@@ -249,6 +225,22 @@ public class CountersFragment extends Fragment {
             timer.schedule(timerTask, date, INTERVAL);
         }
 
+        final Button back = (Button) view.findViewById(R.id.counters_back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mListener.onCountersBackPressed();
+            }
+        });
+        final Button prices = (Button) view.findViewById(R.id.counters_prices);
+        prices.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mListener.onCountersPricesPressed();
+            }
+        });
+
+        /*
         drink1green.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -464,6 +456,7 @@ public class CountersFragment extends Fragment {
                 countTotal.setText(array[1]);
             }
         });
+        */
 
         return view;
     }
@@ -484,6 +477,28 @@ public class CountersFragment extends Fragment {
 
     public void send() {
         //new Create_Part().execute();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnCountersFragmentInteractionListener) {
+            mListener = (OnCountersFragmentInteractionListener) context;
+        }
+        else {
+            throw new RuntimeException(context.toString() + " must implement OnCountersFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    public interface OnCountersFragmentInteractionListener {
+        void onCountersBackPressed();
+        void onCountersPricesPressed();
     }
 
     public static void setArgument(Context context) {

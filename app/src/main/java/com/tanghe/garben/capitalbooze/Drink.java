@@ -2,6 +2,9 @@ package com.tanghe.garben.capitalbooze;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -17,8 +20,6 @@ public class Drink {
     protected final static double GD = 0.7;
     protected final static double KS = 1.15;
     protected final static double KD = 0.85;
-
-    protected final LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
     protected static Context context;
     protected static int countTotal = 0;
@@ -42,14 +43,13 @@ public class Drink {
     protected int partyCount = 0;
     protected double partyRevenue = 0.0;
 
-    /*
     protected LinearLayout horizontalLayout;
+    protected LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
     protected TextView drinkName;
     protected TextView drinkCountLast;
     protected Button green;
     protected TextView drinkCount;
     protected Button red;
-    */
 
     public Drink(String name,double price, double min, double max) {
         this.name = name;
@@ -57,20 +57,34 @@ public class Drink {
         this.MIN = min;
         this.MAX = max;
 
-        /*horizontalLayout = new LinearLayout(context);
+        horizontalLayout = new LinearLayout(context);
         horizontalLayout.setOrientation(LinearLayout.HORIZONTAL);
-        this.drinkName = new TextView(context);
-        drinkName.setText(name);
-        horizontalLayout.addView(drinkName);
-        drinkCountLast = new TextView(context);
-        horizontalLayout.addView(drinkCountLast);
-        green = new Button(context);
-        horizontalLayout.addView(green);
-        drinkCount = new TextView(context);
-        horizontalLayout.addView(drinkCount);
-        red = new Button(context);
-        horizontalLayout.addView(red);*/
+        horizontalLayout.setLayoutParams(params);
 
+        drinkName = new TextView(context);
+        drinkName.setText(this.name);
+
+        drinkCountLast = new TextView(context);
+        drinkCountLast.setGravity(Gravity.RIGHT);
+        drinkCountLast.setText("(0)");
+
+        red = new Button(context);
+        red.setGravity(Gravity.RIGHT);
+        red.setText("-");
+
+        drinkCount = new TextView(context);
+        drinkCount.setGravity(Gravity.RIGHT);
+        drinkCount.setText("0");
+
+        green = new Button(context);
+        green.setGravity(Gravity.RIGHT);
+        green.setText("+");
+
+        horizontalLayout.addView(drinkName);
+        horizontalLayout.addView(drinkCountLast);
+        horizontalLayout.addView(red);
+        horizontalLayout.addView(drinkCount);
+        horizontalLayout.addView(green);
         drinks.add(this);
     }
 
@@ -103,8 +117,7 @@ public class Drink {
     }
 
     public static void task() {
-        for (Drink i :
-                drinks) {
+        for (Drink i : drinks) {
             i.partyCount += i.count;
             partyCountTotal += i.count;
             i.partyRevenue += i.count*i.price;
@@ -128,8 +141,7 @@ public class Drink {
     }
 
     protected static void calcPrises() throws IllegalArgumentException {
-        for (Drink i :
-                drinks) {
+        for (Drink i : drinks) {
             try {
                 double rate = i.countLast*1.0/countTotalLast - i.countSecondLast*1.0/countTotalSecondLast;
 
@@ -168,6 +180,10 @@ public class Drink {
         else {
             price = testPrice;
         }
+    }
+
+    public static double round2decimals(double d) {
+        return Math.round(d*100)/100.0;
     }
 
     public static void setArgument(Context context) {

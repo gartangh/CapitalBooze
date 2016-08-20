@@ -5,14 +5,19 @@
     <string name="drawer_close">Close fragment navigation drawer</string>
 
     <string name="nav_counters">Counters</string>
-    <string name="nav_drink">Drink</string>
+    <string name="nav_drink">Drinks</string>
     <string name="nav_party">Party</string>
     <string name="nav_prices">Prices</string>
     <string name="nav_about">About</string>
     <string name="nav_exit">Exit</string>
+    <string name="nav_next">NEXT</string>
+    <string name="nav_back">BACK</string>
+    <string name="nav_price">VALUES</string>
+    <string name="nav_count">COUNTERS</string>
+    <string name="add">ADD</string>
 
     <string name="about">Capital Booze\nis a\nMoeder Peerdevisscher\ninitative</string>
-    <string name="developer">Developper\ng-tanghe\ngarben.tanghe@gmail.com</string>
+    <string name="developer">Developer\ng-tanghe\ngarben.tanghe@gmail.com</string>
 
     <string name="url">http://192.168.0.156/db_create.php</string>
 

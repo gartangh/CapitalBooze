@@ -24,22 +24,19 @@ import java.util.Date;
  * to handle interaction events.
 */
 public class PartyFragment extends Fragment {
-    private DatePicker datePicker;
-    private TimePicker timePicker;
-    private EditText interval;
-    private Button enter;
+    private OnPartyFragmentInteractionListener mListener;
 
-    protected static final Calendar calendar = Calendar.getInstance();
+    protected final static  Calendar calendar = Calendar.getInstance();
     protected static int year = calendar.get(Calendar.YEAR);
     protected static int month = calendar.get(Calendar.MONTH);
     protected static int day = calendar.get(Calendar.DAY_OF_MONTH);
     protected static int hour = calendar.get(Calendar.HOUR_OF_DAY);
     protected static int min = calendar.get(Calendar.MINUTE);
-    protected static int sec = 0;
-    protected static Date date = new Date(year, month, day, hour, min, sec);
-    protected static long INTERVAL = 15;
+    protected final static int sec = 0;
+    protected static Long time;
+    protected static Date date;
 
-    private OnPartyFragmentInteractionListener mListener;
+    protected static long INTERVAL = 1L;
 
     public PartyFragment() {
         // Required empty public constructor
@@ -48,6 +45,9 @@ public class PartyFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        calendar.set(Calendar.SECOND, sec);
+        time = calendar.getTimeInMillis();
+        date = new Date(time);
         Log.d("debug", "Date = " + date);
     }
 
@@ -56,34 +56,36 @@ public class PartyFragment extends Fragment {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_party, container, false);
 
-        datePicker = (DatePicker) view.findViewById(R.id.datePicker);
-        datePicker.setMinDate(System.currentTimeMillis());
+        final DatePicker datePicker = (DatePicker) view.findViewById(R.id.datePicker);
+        datePicker.setMinDate(time);
         datePicker.init(year, month, day, new DatePicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(DatePicker view, int year, int month, int day) {
-                Log.d("debug", "Date = " + date);
-                PartyFragment.calendar.set(year, month, day, hour, min, 0);
-                date = new Date(year, month, day, hour, min, sec);
+                calendar.set(year, month, day, hour, min);
+                time = calendar.getTimeInMillis();
+                date = new Date(time);
+                Log.d("debug", "date = " + date + " year = " + year);
                 PartyFragment.year = year;
                 PartyFragment.month = month;
                 PartyFragment.day = day;
             }
         });
 
-        timePicker = (TimePicker) view.findViewById(R.id.timePicker);
+        final TimePicker timePicker = (TimePicker) view.findViewById(R.id.timePicker);
         timePicker.setIs24HourView(true);
         timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
             @Override
             public void onTimeChanged(TimePicker timePicker, int hour, int min) {
-                Log.d("debug", "Date = " + date);
-                PartyFragment.calendar.set(year, month, day, hour, min, 0);
-                date = new Date(year, month, day, hour, min, sec);
+                calendar.set(year, month, day, hour, min);
+                time = calendar.getTimeInMillis();
+                date = new Date(time);
+                Log.d("debug", "date = " + date + " year = " + year);
                 PartyFragment.hour = hour;
                 PartyFragment.min = min;
             }
         });
 
-        interval = (EditText) view.findViewById(R.id.interval);
+        final EditText interval = (EditText) view.findViewById(R.id.interval);
         interval.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -112,12 +114,19 @@ public class PartyFragment extends Fragment {
             }
         });
 
-        enter = (Button) view.findViewById(R.id.enter);
-        enter.setOnClickListener(new View.OnClickListener() {
+        final Button back = (Button) view.findViewById(R.id.party_back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mListener.onPartyBackPressed();
+            }
+        });
+        final Button next = (Button) view.findViewById(R.id.party_next);
+        next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.d("debug", "Date = " + date);
-                mListener.onEnterPressed(date, INTERVAL*60*1000L);
+                mListener.onPartyNextPressed(date, INTERVAL*60*1000L);
             }
         });
 
@@ -131,7 +140,7 @@ public class PartyFragment extends Fragment {
             mListener = (OnPartyFragmentInteractionListener) context;
         }
         else {
-            throw new RuntimeException(context.toString() + " must implement OnFragmentInteractionListener");
+            throw new RuntimeException(context.toString() + " must implement OnPartyFragmentInteractionListener");
         }
     }
 
@@ -152,6 +161,7 @@ public class PartyFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnPartyFragmentInteractionListener {
-        void onEnterPressed(Date date, long INTERVAL);
+        void onPartyBackPressed();
+        void onPartyNextPressed(Date date, long INTERVAL);
     }
 }
