@@ -1,6 +1,7 @@
 package com.tanghe.garben.capitalbooze;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -23,11 +24,14 @@ public class Drink {
 
     protected static Context context;
     protected static int countTotal = 0;
+
     protected static int countTotalLast;
     protected static int countTotalSecondLast;
     protected static int countTotalDifference;
     protected static int partyCountTotal;
     protected static double partyRevenueTotal;
+
+    protected static TextView drinkCountTotal;
 
     protected final double MIN;
     protected final double MAX;
@@ -57,6 +61,8 @@ public class Drink {
         this.MIN = min;
         this.MAX = max;
 
+        drinkCountTotal = new TextView(context);
+
         horizontalLayout = new LinearLayout(context);
         horizontalLayout.setOrientation(LinearLayout.HORIZONTAL);
         horizontalLayout.setLayoutParams(params);
@@ -68,17 +74,35 @@ public class Drink {
         drinkCountLast.setGravity(Gravity.RIGHT);
         drinkCountLast.setText("(0)");
 
-        red = new Button(context);
-        red.setGravity(Gravity.RIGHT);
-        red.setText("-");
-
         drinkCount = new TextView(context);
         drinkCount.setGravity(Gravity.RIGHT);
         drinkCount.setText("0");
 
+        red = new Button(context);
+        red.setGravity(Gravity.RIGHT);
+        red.setText("-");
+        red.setBackgroundColor(context.getResources().getColor(R.color.red));
+        red.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (count > 0) {
+                    drinkCount.setText(--count);
+                    drinkCountTotal.setText(--countTotal);
+                }
+            }
+        });
+
         green = new Button(context);
         green.setGravity(Gravity.RIGHT);
         green.setText("+");
+        green.setBackgroundColor(context.getResources().getColor(R.color.green));
+        green.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drinkCount.setText(++count);
+                drinkCountTotal.setText(++countTotal);
+            }
+        });
 
         horizontalLayout.addView(drinkName);
         horizontalLayout.addView(drinkCountLast);
@@ -88,32 +112,8 @@ public class Drink {
         drinks.add(this);
     }
 
-    public String[] green() {
-        return new String[]{Integer.toString(++this.count),Integer.toString(++this.countTotal)};
-    }
-
-    public String[] red() {
-        if (count > 0) {
-            countTotal--;
-            count--;
-        }
-        return new String[] {Integer.toString(count),Integer.toString(countTotal)};
-    }
-
-    public void setCount(int count) {
-        this.count = count;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public int getCount() {
-        return count;
-    }
-
-    public static void setCountTotal(int countTotal) {
-        Drink.countTotal = countTotal;
     }
 
     public static void task() {

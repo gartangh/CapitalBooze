@@ -1,5 +1,6 @@
 package com.tanghe.garben.capitalbooze;
 
+import android.app.ProgressDialog;
 import android.content.res.Configuration;
 import android.support.design.widget.NavigationView;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -22,7 +23,8 @@ public class MainActivity
         CountersFragment.OnCountersFragmentInteractionListener,
         DrinkFragment.OnDrinkFragmentInteractionListener,
         PartyFragment.OnPartyFragmentInteractionListener,
-        PricesFragment.OnPricesFragmentInteractionListener {
+        PricesFragment.OnPricesFragmentInteractionListener,
+        OrderFragment.OnOrderFragmentInteractionListener{
 
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
@@ -38,6 +40,7 @@ public class MainActivity
         Drink.setArgument(MainActivity.this);
         CountersFragment.setArgument(MainActivity.this);
         PricesFragment.setArgument(MainActivity.this);
+        OrderFragment.setArgument(MainActivity.this);
 
         // Default fragment
         fragmentManager.beginTransaction().replace(R.id.container, new AboutFragment()).commit();
@@ -191,5 +194,10 @@ public class MainActivity
     public void onPricesCountersPressed() {
         fragmentManager.beginTransaction().replace(R.id.container, new CountersFragment()).commit();
         setTitle("Counters");
+    }
+
+    @Override
+    public void onOrder() {
+
     }
 }
