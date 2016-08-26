@@ -734,7 +734,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/counters_prices"
-            android:text="@string/nav_price" />
+            android:text="@string/nav_prices" />
     </LinearLayout>
 
 </LinearLayout>

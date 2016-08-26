@@ -1,6 +1,5 @@
 package com.tanghe.garben.capitalbooze;
 
-import android.app.ProgressDialog;
 import android.content.res.Configuration;
 import android.support.design.widget.NavigationView;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -24,7 +23,8 @@ public class MainActivity
         DrinkFragment.OnDrinkFragmentInteractionListener,
         PartyFragment.OnPartyFragmentInteractionListener,
         PricesFragment.OnPricesFragmentInteractionListener,
-        OrderFragment.OnOrderFragmentInteractionListener{
+        OrderFragment.OnOrderFragmentInteractionListener,
+        LogInFragment.OnLogInFragmentInteractionListener {
 
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
@@ -37,13 +37,11 @@ public class MainActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        LogInFragment.setArgument(MainActivity.this);
         Drink.setArgument(MainActivity.this);
         CountersFragment.setArgument(MainActivity.this);
         PricesFragment.setArgument(MainActivity.this);
         OrderFragment.setArgument(MainActivity.this);
-
-        // Default fragment
-        fragmentManager.beginTransaction().replace(R.id.container, new AboutFragment()).commit();
 
         // Set a Toolbar to replace the ActionBar.
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -51,20 +49,20 @@ public class MainActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         // Set action bar title
-        setTitle(R.string.nav_about);
+        setTitle("Log in/out");
 
         // Find our drawer view
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-
         // Find our drawer view
         nvDrawer = (NavigationView) findViewById(R.id.nvView);
-
         // Setup drawer view
         setupDrawerContent(nvDrawer);
         drawerToggle = new ActionBarDrawerToggle(this, mDrawer, R.string.drawer_open,  R.string.drawer_close);
-
         // Tie DrawerLayout events to the ActionBarToggle
         mDrawer.addDrawerListener(drawerToggle);
+
+        // Default fragment
+        fragmentManager.beginTransaction().replace(R.id.container, new LogInFragment()).commit();
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
@@ -83,14 +81,17 @@ public class MainActivity
         Fragment fragment = null;
         Class fragmentClass;
         switch(menuItem.getItemId()) {
-            case R.id.nav_counters_fragment:
-                fragmentClass = CountersFragment.class;
+            case R.id.nav_party_fragment:
+                fragmentClass = PartyFragment.class;
                 break;
             case R.id.nav_drink_fragment:
                 fragmentClass = DrinkFragment.class;
                 break;
-            case R.id.nav_party_fragment:
-                fragmentClass = PartyFragment.class;
+            case R.id.nav_order_fragment:
+                fragmentClass = OrderFragment.class;
+                break;
+            case R.id.nav_counters_fragment:
+                fragmentClass = CountersFragment.class;
                 break;
             case R.id.nav_prices_fragment:
                 fragmentClass = PricesFragment.class;
@@ -98,10 +99,14 @@ public class MainActivity
             case R.id.nav_about_fragment:
                 fragmentClass = AboutFragment.class;
                 break;
+            case R.id.nav_log_in_fragment:
+                fragmentClass = LogInFragment.class;
+                break;
             case R.id.nav_exit:
                 finish();
+                System.exit(0);
             default:
-                fragmentClass = CountersFragment.class;
+                fragmentClass = AboutFragment.class;
         }
 
         try {

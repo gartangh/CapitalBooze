@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/prices_counters"
-            android:text="@string/nav_count" />
+            android:text="@string/nav_counters" />
 
         <RelativeLayout
             android:layout_width="match_parent"
