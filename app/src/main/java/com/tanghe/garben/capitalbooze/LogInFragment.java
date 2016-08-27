@@ -126,6 +126,23 @@ public class LogInFragment extends Fragment {
             }
         });
 
+
+        final Button back = (Button) view.findViewById(R.id.log_in_back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mListener.onLogInBackPressed();
+            }
+        });
+        final Button next = (Button) view.findViewById(R.id.log_in_next);
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mListener.onLogInNextPressed();
+            }
+        });
+
+
         return view;
     }
 
@@ -150,13 +167,14 @@ public class LogInFragment extends Fragment {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p/>
+     * <p>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnLogInFragmentInteractionListener {
-
+        void onLogInBackPressed();
+        void onLogInNextPressed();
     }
 
     private void createAccount(String email, String password) {

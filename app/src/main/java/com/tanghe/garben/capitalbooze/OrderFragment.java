@@ -1,18 +1,18 @@
 package com.tanghe.garben.capitalbooze;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link OrderFragment.OnFragmentInteractionListener} interface
+ * {@link OrderFragment.OnOrderFragmentInteractionListener} interface
  * to handle interaction events.
  */
 public class OrderFragment extends Fragment {
@@ -29,10 +29,32 @@ public class OrderFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_order, container, false);
+
+        final Button order = (Button) view.findViewById(R.id.order);
+        order.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mListener.onOrder();
+            }
+        });
+
+        final Button back = (Button) view.findViewById(R.id.order_back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mListener.onOrderBackPressed();
+            }
+        });
+        final Button next = (Button) view.findViewById(R.id.order_next);
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mListener.onOrderNextPressed();
+            }
+        });
 
         return view;
     }
@@ -65,6 +87,8 @@ public class OrderFragment extends Fragment {
      */
     public interface OnOrderFragmentInteractionListener {
         void onOrder();
+        void onOrderBackPressed();
+        void onOrderNextPressed();
     }
 
     public static void setArgument(Context context) {

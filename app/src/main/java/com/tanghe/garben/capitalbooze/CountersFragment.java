@@ -11,18 +11,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TextView;
+
 import java.util.Date;
-import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class CountersFragment extends Fragment {
+
     private OnCountersFragmentInteractionListener mListener;
 
     protected static Context context;
     protected static Date date = new Date(System.currentTimeMillis());
-    protected static long INTERVAL = 0L;
+    protected static long INTERVAL = 1*60*1000L;
     protected static final long[] PATTERN = {0L, 100L, 100L, 50L};
     protected static LinearLayout verticalLayout;
     protected static boolean partyStarted = false;
@@ -42,7 +42,7 @@ public class CountersFragment extends Fragment {
         Log.d("debug","OnCreateView() called in CountersFragment");
 
         // Inflate the layout for this fragment
-        final View view = inflater.inflate(R.layout.counters_fragment, container, false);
+        final View view = inflater.inflate(R.layout.fragment_counters, container, false);
 
         verticalLayout = (LinearLayout) view.findViewById(R.id.LinearLayoutDrinks);
 
@@ -217,10 +217,8 @@ public class CountersFragment extends Fragment {
                 startTaskThread(runnable);
             }
         };
-        if (INTERVAL > 0L) {
-            Log.d("debug","TimerTaskset, date set for " + date + " and interval set for " + INTERVAL);
-            timer.schedule(timerTask, date, INTERVAL);
-        }
+        Log.d("debug","TimerTaskset, date set for " + date + " and interval set for " + INTERVAL);
+        timer.schedule(timerTask, date, INTERVAL);
 
         final Button back = (Button) view.findViewById(R.id.counters_back);
         back.setOnClickListener(new View.OnClickListener() {
@@ -229,11 +227,11 @@ public class CountersFragment extends Fragment {
                 mListener.onCountersBackPressed();
             }
         });
-        final Button prices = (Button) view.findViewById(R.id.counters_prices);
+        final Button prices = (Button) view.findViewById(R.id.counters_next);
         prices.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mListener.onCountersPricesPressed();
+                mListener.onCountersNextPressed();
             }
         });
 
@@ -242,16 +240,6 @@ public class CountersFragment extends Fragment {
 
     private void startTaskThread(Runnable runnable) {
         new Thread(runnable).start();
-    }
-
-    public static void setInterval(long INTERVAL) {
-        Log.d("debug", "Interval set for " + INTERVAL);
-        CountersFragment.INTERVAL = INTERVAL;
-    }
-
-    public static void setDate(Date date) {
-        Log.d("debug", "Date set for " + date);
-        CountersFragment.date = date;
     }
 
     @Override
@@ -273,7 +261,7 @@ public class CountersFragment extends Fragment {
 
     public interface OnCountersFragmentInteractionListener {
         void onCountersBackPressed();
-        void onCountersPricesPressed();
+        void onCountersNextPressed();
     }
 
     public static void setArgument(Context context) {

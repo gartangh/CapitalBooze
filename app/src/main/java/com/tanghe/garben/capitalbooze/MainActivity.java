@@ -9,22 +9,16 @@ import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 
-import java.util.Date;
-
-public class MainActivity
-        extends
-        AppCompatActivity
-        implements
+public class MainActivity extends AppCompatActivity implements
         AboutFragment.OnAboutFragmentInteractionListener,
-        CountersFragment.OnCountersFragmentInteractionListener,
+        LogInFragment.OnLogInFragmentInteractionListener,
         DrinkFragment.OnDrinkFragmentInteractionListener,
-        PartyFragment.OnPartyFragmentInteractionListener,
-        PricesFragment.OnPricesFragmentInteractionListener,
         OrderFragment.OnOrderFragmentInteractionListener,
-        LogInFragment.OnLogInFragmentInteractionListener {
+        CountersFragment.OnCountersFragmentInteractionListener,
+        PricesFragment.OnPricesFragmentInteractionListener {
+
 
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
@@ -48,8 +42,6 @@ public class MainActivity
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-        // Set action bar title
-        setTitle("Log in/out");
 
         // Find our drawer view
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -62,7 +54,8 @@ public class MainActivity
         mDrawer.addDrawerListener(drawerToggle);
 
         // Default fragment
-        fragmentManager.beginTransaction().replace(R.id.container, new LogInFragment()).commit();
+        fragmentManager.beginTransaction().replace(R.id.container, new AboutFragment()).commit();
+        setTitle(getString(R.string.nav_about));
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
@@ -76,14 +69,11 @@ public class MainActivity
                 });
     }
 
-    public void selectDrawerItem(MenuItem menuItem) {
+    private void selectDrawerItem(MenuItem menuItem) {
         // Create a new fragment and specify the fragment to show based on nav item clicked
         Fragment fragment = null;
         Class fragmentClass;
         switch(menuItem.getItemId()) {
-            case R.id.nav_party_fragment:
-                fragmentClass = PartyFragment.class;
-                break;
             case R.id.nav_drink_fragment:
                 fragmentClass = DrinkFragment.class;
                 break;
@@ -152,53 +142,62 @@ public class MainActivity
 
     @Override
     public void onAboutNextPressed() {
-        fragmentManager.beginTransaction().replace(R.id.container, new PartyFragment()).commit();
-        setTitle("Party");
+        fragmentManager.beginTransaction().replace(R.id.container, new LogInFragment()).commit();
+        setTitle(getString(R.string.nav_log_in));
     }
 
     @Override
-    public void onCountersBackPressed() {
+    public void onLogInBackPressed() {
+        fragmentManager.beginTransaction().replace(R.id.container, new AboutFragment()).commit();
+        setTitle(getString(R.string.nav_about));
+    }
+
+    @Override
+    public void onLogInNextPressed() {
         fragmentManager.beginTransaction().replace(R.id.container, new DrinkFragment()).commit();
-        setTitle("Drinks");
-    }
-
-    @Override
-    public void onCountersPricesPressed() {
-        fragmentManager.beginTransaction().replace(R.id.container, new PricesFragment()).commit();
-        setTitle("Prices");
+        setTitle(getString(R.string.nav_drink));
     }
 
     @Override
     public void onDrinkBackPressed() {
-        fragmentManager.beginTransaction().replace(R.id.container, new PartyFragment()).commit();
-        setTitle("Party");
+        fragmentManager.beginTransaction().replace(R.id.container, new LogInFragment()).commit();
+        setTitle(getString(R.string.nav_log_in));
     }
 
     @Override
     public void onDrinkNextPressed() {
-        fragmentManager.beginTransaction().replace(R.id.container, new CountersFragment()).commit();
-        setTitle("Counters");
+        fragmentManager.beginTransaction().replace(R.id.container, new OrderFragment()).commit();
+        setTitle(getString(R.string.nav_order));
     }
 
     @Override
-    public void onPartyBackPressed() {
-        fragmentManager.beginTransaction().replace(R.id.container, new AboutFragment()).commit();
-        setTitle("About");
-    }
-
-    @Override
-    public void onPartyNextPressed(Date date, long INTERVAL) {
-        Log.d("debug", "Next button pressed");
-        CountersFragment.setDate(date);
-        CountersFragment.setInterval(INTERVAL);
+    public void onOrderBackPressed() {
         fragmentManager.beginTransaction().replace(R.id.container, new DrinkFragment()).commit();
-        setTitle("Drinks");
+        setTitle(getString(R.string.nav_drink));
     }
 
     @Override
-    public void onPricesCountersPressed() {
+    public void onOrderNextPressed() {
         fragmentManager.beginTransaction().replace(R.id.container, new CountersFragment()).commit();
-        setTitle("Counters");
+        setTitle(getString(R.string.nav_counters));
+    }
+
+    @Override
+    public void onCountersBackPressed() {
+        fragmentManager.beginTransaction().replace(R.id.container, new OrderFragment()).commit();
+        setTitle(getString(R.string.nav_order));
+    }
+
+    @Override
+    public void onCountersNextPressed() {
+        fragmentManager.beginTransaction().replace(R.id.container, new PricesFragment()).commit();
+        setTitle(getString(R.string.nav_prices));
+    }
+
+    @Override
+    public void onPricesBackPressed() {
+        fragmentManager.beginTransaction().replace(R.id.container, new CountersFragment()).commit();
+        setTitle(getString(R.string.nav_counters));
     }
 
     @Override

@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.tanghe.garben.capitalbooze.CountersFragment">
+    tools:context=".CountersFragment">
 
     <LinearLayout
         android:orientation="horizontal"
@@ -733,8 +733,8 @@
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/counters_prices"
-            android:text="@string/nav_prices" />
+            android:id="@+id/counters_next"
+            android:text="@string/nav_next" />
     </LinearLayout>
 
 </LinearLayout>

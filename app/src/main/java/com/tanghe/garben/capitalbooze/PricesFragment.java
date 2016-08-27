@@ -35,19 +35,18 @@ public class PricesFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_prices, container, false);
 
 
-        final ScrollView scrollViewDrinks = (ScrollView) view.findViewById(R.id.scrollViewPrices);
+        final LinearLayout linearLayoutPrices = (LinearLayout) view.findViewById(R.id.LinearLayoutPrices);
         for (Drink i : Drink.drinks) {
-            scrollViewDrinks.addView(i.horizontalLayout);
+            linearLayoutPrices.addView(i.horizontalLayout);
         }
 
-        final Button counters = (Button) view.findViewById(R.id.prices_counters);
-        counters.setOnClickListener(new View.OnClickListener() {
+        final Button back = (Button) view.findViewById(R.id.prices_back);
+        back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mListener.onPricesCountersPressed();
+                mListener.onPricesBackPressed();
             }
         });
-
 
         return view;
     }
@@ -79,7 +78,7 @@ public class PricesFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnPricesFragmentInteractionListener {
-        void onPricesCountersPressed();
+        void onPricesBackPressed();
     }
 
     public static void setArgument(Context context) {

@@ -19,6 +19,7 @@ import android.widget.TextView;
  * to handle interaction events.
  */
 public class DrinkFragment extends Fragment {
+
     private OnDrinkFragmentInteractionListener mListener;
 
     private String name = "";
