@@ -202,7 +202,7 @@ public class CountersFragment extends Fragment {
                             count12.setText(String.format(Locale.getDefault(), "%1$d", 0));
                             countTotal.setText(String.format(Locale.getDefault(), "%1$d", 0));*/
 
-                            Drink.task();
+                            DrinkUI.task();
 
                             Log.d("debug", "Thread task executed");
                         }

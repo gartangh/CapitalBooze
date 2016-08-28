@@ -110,7 +110,7 @@ public class DrinkFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (!name.equals("") && price > 0.0 && min > 0.0 && max > 0.0) {
-                    new Drink(name, price, min, max);
+                    new DrinkUI(name, price, min, max);
                     name = "";
                     price = 0.0;
                     min = 0.0;

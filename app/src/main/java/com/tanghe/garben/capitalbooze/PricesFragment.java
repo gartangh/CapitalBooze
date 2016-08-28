@@ -36,7 +36,7 @@ public class PricesFragment extends Fragment {
 
 
         final LinearLayout linearLayoutPrices = (LinearLayout) view.findViewById(R.id.LinearLayoutPrices);
-        for (Drink i : Drink.drinks) {
+        for (DrinkUI i : DrinkUI.uidrinks) {
             linearLayoutPrices.addView(i.horizontalLayout);
         }
 
