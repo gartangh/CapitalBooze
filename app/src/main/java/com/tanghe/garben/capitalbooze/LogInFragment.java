@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.app.ProgressDialog;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
@@ -16,7 +15,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import com.firebase.client.Firebase;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -34,6 +33,8 @@ public class LogInFragment extends Fragment {
     private OnLogInFragmentInteractionListener mListener;
 
     protected static Context context;
+
+    protected final static Firebase ref2 = new Firebase("https://capital-booze.firebaseio.com");
 
     private static final String TAG = "Log In";
 
@@ -82,7 +83,7 @@ public class LogInFragment extends Fragment {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     // User is signed in
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid() + ": "+ user.getEmail());
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
@@ -126,7 +127,6 @@ public class LogInFragment extends Fragment {
             }
         });
 
-
         final Button back = (Button) view.findViewById(R.id.log_in_back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,7 +141,6 @@ public class LogInFragment extends Fragment {
                 mListener.onLogInNextPressed();
             }
         });
-
 
         return view;
     }
@@ -197,6 +196,11 @@ public class LogInFragment extends Fragment {
                 if (!task.isSuccessful()) {
                     Toast.makeText(getActivity(), R.string.auth_failed, Toast.LENGTH_SHORT).show();
                 }
+
+                FirebaseUser user = mAuth.getCurrentUser();
+                ref2.child("Users").child(user.getUid()).setValue(user);
+                Log.d("Log in", "Wrote " + user.getEmail() + ": "+ user.getUid() + " to database");
+
                 //hideProgressDialog();
             }
         });
@@ -259,7 +263,9 @@ public class LogInFragment extends Fragment {
     }
 
     private void updateUI(FirebaseUser user) {
-        hideProgressDialog();
+
+        //hideProgressDialog();
+
         if (user != null) {
             status.setText(getString(R.string.emailpassword_status_fmt, user.getEmail()));
             detail.setText(getString(R.string.firebase_status_fmt, user.getUid()));

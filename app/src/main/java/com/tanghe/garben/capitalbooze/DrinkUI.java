@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.MutableData;
@@ -28,12 +27,12 @@ public class DrinkUI extends Drink {
     protected TextView drinkCount;
     protected Button red;
 
-    public DrinkUI(String name, double price, double MIN, double MAX) {
-        super(name,price,MIN,MAX);
-        makeUIElements(name, price, MIN, MAX);
+    public DrinkUI(String name, double price, double min, double max) {
+        super(name,price,min,max);
+        makeUIElements(name, price, min, max);
     }
 
-    private void makeUIElements(String name,double price, double MIN, double MAX) {
+    private void makeUIElements(String name,double price, double min, double max) {
         drinkCountTotal = new TextView(context);
 
         horizontalLayout = new LinearLayout(context);
@@ -180,11 +179,11 @@ public class DrinkUI extends Drink {
     }
 
     protected void testPrice(double testPrice) {
-        if (testPrice > MAX) {
-            price = MAX;
+        if (testPrice > max) {
+            price = max;
         }
-        else if (testPrice < MIN){
-            price = MIN;
+        else if (testPrice < min){
+            price = min;
         }
         else {
             price = Drink.round2decimals(testPrice);

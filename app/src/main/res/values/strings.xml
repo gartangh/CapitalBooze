@@ -21,6 +21,17 @@
     <string name="about">Capital Booze\nis a\nMoeder Peerdevisscher\ninitiative</string>
     <string name="developer">Developer\ng-tanghe\ngarben.tanghe@gmail.com</string>
 
+    <string name="name">Name</string>
+    <string name="price">Price</string>
+    <string name="min">Min</string>
+    <string name="max">Max</string>
+    <string name="invalid_length">Min 2 letters</string>
+    <string name="already_used">Already in use</string>
+    <string name="invalid_min_price">Min 1.00</string>
+    <string name="invalid_min">Min smaller than price</string>
+    <string name="invalid_max_price">Max 60.00</string>
+    <string name="invalid_max">Max greater than price</string>
+
     <!-- Strings related to login -->
     <string name="signed_out">Signed out</string>
     <string name="loading">Loading...</string>

@@ -23,9 +23,9 @@ public class DrinkFragment extends Fragment {
     private OnDrinkFragmentInteractionListener mListener;
 
     private String name = "";
-    private double price = 0.0;
-    private double min = 0.0;
-    private double max = 0.0;
+    private double price = 0.00;
+    private double min = 0.00;
+    private double max = 0.00;
 
     public DrinkFragment() {
         // Required empty public constructor
@@ -46,8 +46,28 @@ public class DrinkFragment extends Fragment {
         nametext.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                if (!nametext.getText().toString().equals("")) {
-                    name = nametext.getText().toString();
+                String s = nametext.getText().toString();
+                s = s.substring(0,1).toUpperCase() + s.substring(1).toLowerCase();
+                if (s.length() > 1) {
+                    boolean geldig = true;
+                    for (DrinkUI uidrink : DrinkUI.uidrinks) {
+                        if (uidrink.getName().equals(s)) {
+                            geldig = false;
+                        }
+                    }
+                    if (geldig) {
+                        name = s;
+                        nametext.setText(name);
+                        nametext.setHint(getString(R.string.name));
+                    }
+                    else {
+                        nametext.setText("");
+                        nametext.setHint(getString(R.string.already_used));
+                    }
+                }
+                else {
+                    nametext.setText("");
+                    nametext.setHint(getString(R.string.invalid_length));
                 }
                 return false;
             }
@@ -62,14 +82,30 @@ public class DrinkFragment extends Fragment {
         pricenr.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                price = Drink.round2decimals(Double.parseDouble(pricenr.getText().toString()));
-                if (price > 5.0 || price < 1 ) {
-                    price = 0.0;
+                try {
+                    Double d = Drink.round2decimals(Double.parseDouble(pricenr.getText().toString()));
+                    if (d > 60.00) {
+                        pricenr.setText("");
+                        pricenr.setHint(getString(R.string.invalid_max_price));
+                    }
+                    else if (d < 1.00) {
+                        pricenr.setText("");
+                        pricenr.setHint(getString(R.string.invalid_min_price));
+                    }
+                    else {
+                        price = d;
+                        pricenr.setText(Double.toString(d));
+                        pricenr.setHint(getString(R.string.price));
+                    }
                 }
+                catch (NumberFormatException e) {
+                    pricenr.setText("");
+                    pricenr.setHint(getString(R.string.invalid_min_price));
+                }
+
                 return false;
             }
         });
-        // Not completely without mistakes!
         final EditText minnr = (EditText) view.findViewById(R.id.min);
         minnr.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,9 +116,25 @@ public class DrinkFragment extends Fragment {
         minnr.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                min = Drink.round2decimals(Double.parseDouble(minnr.getText().toString()));
-                if (min > price || min < 1.0) {
-                    min = 0.0;
+                try {
+                    Double d = Drink.round2decimals(Double.parseDouble(minnr.getText().toString()));
+                    if (d < 1.00) {
+                        minnr.setText("");
+                        minnr.setHint(getString(R.string.invalid_min_price));
+                    }
+                    else if (d > price) {
+                        minnr.setText("");
+                        minnr.setHint(getString(R.string.invalid_min_price));
+                    }
+                    else {
+                        min = d;
+                        minnr.setText(Double.toString(d));
+                        minnr.setHint(getString(R.string.min));
+                    }
+                }
+                catch (NumberFormatException e) {
+                    minnr.setText("");
+                    minnr.setHint(getString(R.string.invalid_min_price));
                 }
                 return false;
 
@@ -98,9 +150,25 @@ public class DrinkFragment extends Fragment {
         maxnr.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                max = Drink.round2decimals(Double.parseDouble(maxnr.getText().toString()));
-                if (max < price || max > 60.0) {
-                    max = 0.0;
+                try {
+                    Double d = Drink.round2decimals(Double.parseDouble(maxnr.getText().toString()));
+                    if (d > 60.00) {
+                        maxnr.setText("");
+                        maxnr.setHint(getString(R.string.invalid_max));
+                    }
+                    else if (d < price) {
+                        maxnr.setText("");
+                        maxnr.setHint(getString(R.string.invalid_max_price));
+                    }
+                    else {
+                        max = d;
+                        maxnr.setText(Double.toString(d));
+                        maxnr.setHint(getString(R.string.max));
+                    }
+                }
+                catch (NumberFormatException e) {
+                    maxnr.setText("");
+                    maxnr.setHint(getString(R.string.invalid_min_price));
                 }
                 return false;
             }
@@ -109,12 +177,12 @@ public class DrinkFragment extends Fragment {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!name.equals("") && price > 0.0 && min > 0.0 && max > 0.0) {
+                if (!name.equals("") && price >= 1.00 && min >= 1.00 && max >= price && min <= price) {
                     new DrinkUI(name, price, min, max);
                     name = "";
-                    price = 0.0;
-                    min = 0.0;
-                    max = 0.0;
+                    price = 0.00;
+                    min = 0.00;
+                    max = 0.00;
                     nametext.setText("");
                     pricenr.setText("");
                     minnr.setText("");
