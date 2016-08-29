@@ -83,7 +83,7 @@ public class DrinkFragment extends Fragment {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 try {
-                    Double d = Drink.round2decimals(Double.parseDouble(pricenr.getText().toString()));
+                    Double d = Drink.round1decimal(Double.parseDouble(pricenr.getText().toString()));
                     if (d > 60.00) {
                         pricenr.setText("");
                         pricenr.setHint(getString(R.string.invalid_max_price));
@@ -94,7 +94,7 @@ public class DrinkFragment extends Fragment {
                     }
                     else {
                         price = d;
-                        pricenr.setText(Double.toString(d));
+                        pricenr.setText(String.format("%.2f",d));
                         pricenr.setHint(getString(R.string.price));
                     }
                 }
@@ -117,7 +117,7 @@ public class DrinkFragment extends Fragment {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 try {
-                    Double d = Drink.round2decimals(Double.parseDouble(minnr.getText().toString()));
+                    Double d = Drink.round1decimal(Double.parseDouble(minnr.getText().toString()));
                     if (d < 1.00) {
                         minnr.setText("");
                         minnr.setHint(getString(R.string.invalid_min_price));
@@ -128,7 +128,7 @@ public class DrinkFragment extends Fragment {
                     }
                     else {
                         min = d;
-                        minnr.setText(Double.toString(d));
+                        minnr.setText(String.format("%.2f",d));
                         minnr.setHint(getString(R.string.min));
                     }
                 }
@@ -151,7 +151,7 @@ public class DrinkFragment extends Fragment {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 try {
-                    Double d = Drink.round2decimals(Double.parseDouble(maxnr.getText().toString()));
+                    Double d = Drink.round1decimal(Double.parseDouble(maxnr.getText().toString()));
                     if (d > 60.00) {
                         maxnr.setText("");
                         maxnr.setHint(getString(R.string.invalid_max));
@@ -162,7 +162,7 @@ public class DrinkFragment extends Fragment {
                     }
                     else {
                         max = d;
-                        maxnr.setText(Double.toString(d));
+                        maxnr.setText(String.format("%.2f",d));
                         maxnr.setHint(getString(R.string.max));
                     }
                 }

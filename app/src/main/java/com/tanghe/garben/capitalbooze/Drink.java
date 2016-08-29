@@ -9,7 +9,7 @@ import com.google.firebase.database.FirebaseDatabase;
 public class Drink {
 
     protected final static DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-    protected final static Firebase ref2 = new Firebase("https://capital-booze.firebaseio.com");
+    protected final static Firebase ref2 = new Firebase("https://capital-booze.firebaseio.com/");
 
     protected final static double GS = 1.3;
     protected final static double GD = 0.7;
@@ -48,7 +48,7 @@ public class Drink {
         this.min = min;
         this.max = max;
 
-        ref2.child("Drinks").child(this.name).setValue(Drink.this);
+        ref2.child("Drinks").child(name).setValue(this);
         Log.d("Drink", "Wrote " + this.name + " to database");
     }
 
@@ -56,8 +56,8 @@ public class Drink {
         return name;
     }
 
-    public static double round2decimals(double d) {
-        return Math.round(d*100)/100.0;
+    public static double round1decimal(double d) {
+        return Math.round(d*10)/10.00;
     }
 
     public static void setArgument(Context context) {

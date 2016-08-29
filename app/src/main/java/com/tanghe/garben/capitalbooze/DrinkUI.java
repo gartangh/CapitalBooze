@@ -186,7 +186,7 @@ public class DrinkUI extends Drink {
             price = min;
         }
         else {
-            price = Drink.round2decimals(testPrice);
+            price = Drink.round1decimal(testPrice);
         }
     }
 }
