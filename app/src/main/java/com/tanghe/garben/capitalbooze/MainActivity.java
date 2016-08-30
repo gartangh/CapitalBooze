@@ -11,12 +11,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity implements
         AboutFragment.OnAboutFragmentInteractionListener,
@@ -26,13 +26,15 @@ public class MainActivity extends AppCompatActivity implements
         CountersFragment.OnCountersFragmentInteractionListener,
         PricesFragment.OnPricesFragmentInteractionListener {
 
-    public boolean isAdmin = false;
-
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
     private NavigationView nvDrawer;
     private ActionBarDrawerToggle drawerToggle;
     FragmentManager fragmentManager = getSupportFragmentManager();
+
+    public static boolean isAdmin = false;
+    protected static Firebase ref2;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,19 +42,6 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
 
         Firebase.setAndroidContext(this);
-        // Get a reference to our posts
-        Firebase ref = new Firebase("");
-        // Attach an listener to read the data at our posts reference
-        ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                Log.d("FireBase", "Data changed");
-            }
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-                Log.d("Firebas", "The read failed: " + firebaseError.getMessage());
-            }
-        });
 
         LogInFragment.setArgument(MainActivity.this);
         Drink.setArgument(MainActivity.this);
@@ -68,10 +57,6 @@ public class MainActivity extends AppCompatActivity implements
 
         // Find our drawer view
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (isAdmin) {
-            findViewById(R.id.nav_counters_fragment).setVisibility(View.VISIBLE);
-            findViewById(R.id.nav_drink_fragment).setVisibility(View.VISIBLE);
-        }
         // Find our drawer view
         nvDrawer = (NavigationView) findViewById(R.id.nvView);
         // Setup drawer view
@@ -83,6 +68,25 @@ public class MainActivity extends AppCompatActivity implements
         // Default fragment
         fragmentManager.beginTransaction().replace(R.id.container, new AboutFragment()).commit();
         setTitle(getString(R.string.nav_about));
+
+        ref2 = new Firebase("https://capital-booze.firebaseio.com");
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        ref2.child("Users").child(user.getUid()).child("isAdmin").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                if ((Boolean) snapshot.getValue()) {
+                    MainActivity.isAdmin = true;
+                } else {
+                    MainActivity.isAdmin = false;
+                }
+                Log.d("FireBase", "Data changed: set isAdmin to " + MainActivity.isAdmin);
+            }
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                Log.d("Firebas", "The read failed: " + firebaseError.getMessage());
+            }
+        });
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
@@ -120,6 +124,7 @@ public class MainActivity extends AppCompatActivity implements
                 fragmentClass = LogInFragment.class;
                 break;
             case R.id.nav_exit:
+                isAdmin = false;
                 finish();
                 System.exit(0);
             default:
@@ -127,6 +132,9 @@ public class MainActivity extends AppCompatActivity implements
         }
 
         try {
+            if (!isAdmin && (fragmentClass == DrinkFragment.class || fragmentClass == OrderFragment.class || fragmentClass == CountersFragment.class)) {
+                fragmentClass = AboutFragment.class;
+            }
             fragment = (Fragment) fragmentClass.newInstance();
         } catch (Exception e) {
             e.printStackTrace();

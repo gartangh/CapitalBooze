@@ -3,6 +3,7 @@ package com.tanghe.garben.capitalbooze;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NotificationCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +16,11 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -123,7 +128,7 @@ public class LogInFragment extends Fragment {
         sign_out.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                signOut();
+                mAuth.signOut();
             }
         });
 
@@ -197,9 +202,25 @@ public class LogInFragment extends Fragment {
                     Toast.makeText(getActivity(), R.string.auth_failed, Toast.LENGTH_SHORT).show();
                 }
 
-                FirebaseUser user = mAuth.getCurrentUser();
-                ref2.child("Users").child(user.getEmail()).setValue(user);
-                ref2.child("Users").child(user.getEmail()).child("isAdmin").setValue(false);
+                final FirebaseUser user = mAuth.getCurrentUser();
+                ref2.child("Users").child(user.getUid()).setValue(user);
+                ref2.child("Users").child(user.getUid()).child("isAdmin").setValue(false);
+                ref2.child("Users").child(user.getUid()).child("isAdmin").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot snapshot) {
+                        if ((Boolean) snapshot.getValue()) {
+                            MainActivity.isAdmin = true;
+                        } else {
+                            MainActivity.isAdmin = false;
+                        }
+                        updateUI(user);
+                        Log.d("FireBase", "Data changed: set isAdmin to " + MainActivity.isAdmin);
+                    }
+                    @Override
+                    public void onCancelled(FirebaseError firebaseError) {
+                        Log.d("Firebas", "The read failed: " + firebaseError.getMessage());
+                    }
+                });
                 Log.d("Log in", "Wrote " + user.getEmail() + ": "+ user.getUid() + " to database");
 
                 //hideProgressDialog();
@@ -226,19 +247,30 @@ public class LogInFragment extends Fragment {
                 if (!task.isSuccessful()) {
                     Log.w(TAG, "signInWithEmail:failed", task.getException());
                     Toast.makeText(getActivity(), R.string.auth_failed, Toast.LENGTH_SHORT).show();
-                }
-                if (!task.isSuccessful()) {
                     status.setText(R.string.auth_failed);
                 }
+
+                final FirebaseUser user = mAuth.getCurrentUser();
+                ref2.child("Users").child(user.getUid()).child("isAdmin").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot snapshot) {
+                        if ((Boolean) snapshot.getValue()) {
+                            MainActivity.isAdmin = true;
+                        } else {
+                            MainActivity.isAdmin = false;
+                        }
+                        updateUI(user);
+                        Log.d("FireBase", "Data changed: set isAdmin to " + MainActivity.isAdmin);
+                    }
+                    @Override
+                    public void onCancelled(FirebaseError firebaseError) {
+                        Log.d("Firebas", "The read failed: " + firebaseError.getMessage());
+                    }
+                });
 
                 //hideProgressDialog();
             }
         });
-    }
-
-    private void signOut() {
-        mAuth.signOut();
-        updateUI(null);
     }
 
     private boolean validateForm() {
@@ -274,7 +306,8 @@ public class LogInFragment extends Fragment {
             buttons.setVisibility(View.GONE);
             fields.setVisibility(View.GONE);
             sign_out.setVisibility(View.VISIBLE);
-        } else {
+        }
+        else {
             status.setText(R.string.signed_out);
             detail.setText(null);
 
