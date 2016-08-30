@@ -9,9 +9,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity implements
         AboutFragment.OnAboutFragmentInteractionListener,
@@ -21,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements
         CountersFragment.OnCountersFragmentInteractionListener,
         PricesFragment.OnPricesFragmentInteractionListener {
 
+    public boolean isAdmin = false;
 
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
@@ -34,6 +40,19 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
 
         Firebase.setAndroidContext(this);
+        // Get a reference to our posts
+        Firebase ref = new Firebase("");
+        // Attach an listener to read the data at our posts reference
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                Log.d("FireBase", "Data changed");
+            }
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                Log.d("Firebas", "The read failed: " + firebaseError.getMessage());
+            }
+        });
 
         LogInFragment.setArgument(MainActivity.this);
         Drink.setArgument(MainActivity.this);
@@ -49,6 +68,10 @@ public class MainActivity extends AppCompatActivity implements
 
         // Find our drawer view
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (isAdmin) {
+            findViewById(R.id.nav_counters_fragment).setVisibility(View.VISIBLE);
+            findViewById(R.id.nav_drink_fragment).setVisibility(View.VISIBLE);
+        }
         // Find our drawer view
         nvDrawer = (NavigationView) findViewById(R.id.nvView);
         // Setup drawer view
@@ -158,8 +181,13 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onLogInNextPressed() {
-        fragmentManager.beginTransaction().replace(R.id.container, new DrinkFragment()).commit();
-        setTitle(getString(R.string.nav_drink));
+        if (isAdmin) {
+            fragmentManager.beginTransaction().replace(R.id.container, new DrinkFragment()).commit();
+            setTitle(getString(R.string.nav_drink));
+        } else {
+            fragmentManager.beginTransaction().replace(R.id.container, new PricesFragment()).commit();
+            setTitle(getString(R.string.nav_prices));
+        }
     }
 
     @Override
@@ -200,12 +228,18 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onPricesBackPressed() {
-        fragmentManager.beginTransaction().replace(R.id.container, new CountersFragment()).commit();
-        setTitle(getString(R.string.nav_counters));
+        if (isAdmin) {
+            fragmentManager.beginTransaction().replace(R.id.container, new CountersFragment()).commit();
+            setTitle(getString(R.string.nav_counters));
+        }
+        else {
+            fragmentManager.beginTransaction().replace(R.id.container, new LogInFragment()).commit();
+            setTitle(getString(R.string.nav_log_in));
+        }
     }
 
     @Override
     public void onOrder() {
-
+        Log.d("debug", "Order set");
     }
 }

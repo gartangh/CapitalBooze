@@ -198,7 +198,8 @@ public class LogInFragment extends Fragment {
                 }
 
                 FirebaseUser user = mAuth.getCurrentUser();
-                ref2.child("Users").child(user.getUid()).setValue(user);
+                ref2.child("Users").child(user.getEmail()).setValue(user);
+                ref2.child("Users").child(user.getEmail()).child("isAdmin").setValue(false);
                 Log.d("Log in", "Wrote " + user.getEmail() + ": "+ user.getUid() + " to database");
 
                 //hideProgressDialog();
