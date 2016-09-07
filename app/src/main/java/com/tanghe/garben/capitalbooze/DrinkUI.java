@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -43,7 +42,7 @@ public class DrinkUI extends Drink {
     protected TextView mPriceDifference;
 
     public DrinkUI(String name, double price, double min, double max) {
-        super(name,price,min,max);
+        super(name, price, min, max);
         makeUIElements();
     }
 

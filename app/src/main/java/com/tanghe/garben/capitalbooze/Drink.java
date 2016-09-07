@@ -47,7 +47,7 @@ public class Drink {
         this.min = min;
         this.max = max;
 
-        MainActivity.ref2.child("Drinks").child(this.name).setValue(Drink.this);
+        MainActivity.ref2.child("Drinks").child(name).setValue(this);
         Log.d("Drink", "Wrote " + name + " to database");
     }
 

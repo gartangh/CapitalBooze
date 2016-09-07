@@ -6,7 +6,6 @@
     <!-- Navigation (drawer and toolbar)-->
     <string name="drawer_open">Open fragment navigation drawer</string>
     <string name="drawer_close">Close fragment navigation drawer</string>
-
     <string name="nav_drink">Drinks</string>
     <string name="nav_order">Orders</string>
     <string name="nav_counters">Counters</string>
@@ -24,7 +23,7 @@
     <string name="developer">Developer\ng-tanghe\ngarben.tanghe@gmail.com</string>
 
     <!-- Firebase-->
-    <string name="url">https://capital-booze.firebaseio.com</string>
+    <string name="url">https://capital-booze.firebaseio.com/</string>
 
     <!-- fragment_log_in-->
     <string name="signed_out">Signed out</string>
