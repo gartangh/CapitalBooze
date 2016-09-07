@@ -1,38 +1,32 @@
 <resources>
+    <!-- App-->
     <string name="app_name" translatable="false">Capital Booze</string>
+    <string name="version">1/10/2016</string>
 
+    <!-- Navigation (drawer and toolbar)-->
     <string name="drawer_open">Open fragment navigation drawer</string>
     <string name="drawer_close">Close fragment navigation drawer</string>
 
-    <string name="nav_party">Party</string>
     <string name="nav_drink">Drinks</string>
     <string name="nav_order">Orders</string>
     <string name="nav_counters">Counters</string>
     <string name="nav_prices">Prices</string>
-    <string name="app">App</string>
+    <string name="crew_only">Crew only</string>
     <string name="nav_about">About</string>
     <string name="nav_log_in">Log in/out</string>
     <string name="nav_exit">Exit</string>
+    <string name="nav_admin_only">Admin only</string>
     <string name="nav_next">Next</string>
     <string name="nav_back">Back</string>
-    <string name="add">Add</string>
-    <string name="order">Order</string>
 
-    <string name="about">Capital Booze\nis a\nMoeder Peerdevisscher\ninitiative</string>
+    <!-- fragment_about-->
+    <string name="about">a\nMoeder\nPeerdevisscher\ninitiative</string>
     <string name="developer">Developer\ng-tanghe\ngarben.tanghe@gmail.com</string>
 
-    <string name="name">Name</string>
-    <string name="price">Price</string>
-    <string name="min">Min</string>
-    <string name="max">Max</string>
-    <string name="invalid_length">Min 2 letters</string>
-    <string name="already_used">Already in use</string>
-    <string name="invalid_min_price">Min 1.00</string>
-    <string name="invalid_min">Min smaller than price</string>
-    <string name="invalid_max_price">Max 60.00</string>
-    <string name="invalid_max">Max greater than price</string>
+    <!-- Firebase-->
+    <string name="url">https://capital-booze.firebaseio.com</string>
 
-    <!-- Strings related to login -->
+    <!-- fragment_log_in-->
     <string name="signed_out">Signed out</string>
     <string name="loading">Loading...</string>
     <string name="firebase_status_fmt">Firebase User: %s</string>
@@ -46,7 +40,28 @@
     <string name="emailpassword_status_fmt">Email User: %s</string>
     <string name="emailpassword_title_text">Email and Password</string>
 
+    <!-- fragment_drink-->
+    <string name="name">Name</string>
+    <string name="price">Price</string>
+    <string name="min">Min</string>
+    <string name="max">Max</string>
+    <string name="invalid_length">Min 2 letters</string>
+    <string name="already_used">Already in use</string>
+    <string name="invalid_min_price">Min 1.00</string>
+    <string name="invalid_min">Min smaller than price</string>
+    <string name="invalid_max_price">Max 60.00</string>
+    <string name="invalid_max">Max greater than price</string>
+    <string name="add">Add</string>
+
+    <!-- fragment_order-->
+    <string name="order">Order</string>
+
+    <!-- fragment_admin_only-->
+    <string name="start">START</string>
+    <string name="crash">CRASH</string>
+
+    <string name="total">Total</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-
 </resources>

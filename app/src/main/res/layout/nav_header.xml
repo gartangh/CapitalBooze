@@ -14,17 +14,19 @@
         android:layout_height="128dp"
         android:src="@mipmap/ic_launcher"
         android:layout_gravity="center"
-        android:layout_margin="2dp" />
+        android:layout_margin="2dp"
+        android:id="@+id/mIcon" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Capital Booze"
+        android:text="@string/app_name"
         android:textSize="32dp"
         android:textColor="@android:color/white"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:layout_gravity="bottom|center_horizontal"
         android:layout_margin="2dp"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:id="@+id/mAppName" />
 
 </LinearLayout>

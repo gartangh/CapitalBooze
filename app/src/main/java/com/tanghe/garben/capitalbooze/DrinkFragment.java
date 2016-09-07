@@ -1,7 +1,6 @@
 package com.tanghe.garben.capitalbooze;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.KeyEvent;
@@ -11,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,17 +36,17 @@ public class DrinkFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_drink, container, false);
 
-        final TextView nametext = (TextView) view.findViewById(R.id.name);
-        nametext.setOnClickListener(new View.OnClickListener() {
+        final TextView mName = (TextView) view.findViewById(R.id.mName);
+        mName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                nametext.setText("");
+                mName.setText("");
             }
         });
-        nametext.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        mName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                String s = nametext.getText().toString();
+                String s = mName.getText().toString();
                 s = s.substring(0,1).toUpperCase() + s.substring(1).toLowerCase();
                 if (s.length() > 1) {
                     boolean geldig = true;
@@ -57,118 +57,118 @@ public class DrinkFragment extends Fragment {
                     }
                     if (geldig) {
                         name = s;
-                        nametext.setText(name);
-                        nametext.setHint(getString(R.string.name));
+                        mName.setText(name);
+                        mName.setHint(getString(R.string.name));
                     }
                     else {
-                        nametext.setText("");
-                        nametext.setHint(getString(R.string.already_used));
+                        mName.setText("");
+                        mName.setHint(getString(R.string.already_used));
                     }
                 }
                 else {
-                    nametext.setText("");
-                    nametext.setHint(getString(R.string.invalid_length));
+                    mName.setText("");
+                    mName.setHint(getString(R.string.invalid_length));
                 }
                 return false;
             }
         });
-        final EditText pricenr = (EditText) view.findViewById(R.id.price);
-        pricenr.setOnClickListener(new View.OnClickListener() {
+        final EditText mPrice = (EditText) view.findViewById(R.id.mPrice);
+        mPrice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                pricenr.setText("");
+                mPrice.setText("");
             }
         });
-        pricenr.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        mPrice.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 try {
-                    Double d = Drink.round1decimal(Double.parseDouble(pricenr.getText().toString()));
+                    Double d = MainActivity.round(Double.parseDouble(mPrice.getText().toString()));
                     if (d > 60.00) {
-                        pricenr.setText("");
-                        pricenr.setHint(getString(R.string.invalid_max_price));
+                        mPrice.setText("");
+                        mPrice.setHint(getString(R.string.invalid_max_price));
                     }
                     else if (d < 1.00) {
-                        pricenr.setText("");
-                        pricenr.setHint(getString(R.string.invalid_min_price));
+                        mPrice.setText("");
+                        mPrice.setHint(getString(R.string.invalid_min_price));
                     }
                     else {
                         price = d;
-                        pricenr.setText(String.format("%.2f",d));
-                        pricenr.setHint(getString(R.string.price));
+                        mPrice.setText(String.format(Locale.getDefault(), "%.2f",d));
+                        mPrice.setHint(getString(R.string.price));
                     }
                 }
                 catch (NumberFormatException e) {
-                    pricenr.setText("");
-                    pricenr.setHint(getString(R.string.invalid_min_price));
+                    mPrice.setText("");
+                    mPrice.setHint(getString(R.string.invalid_min_price));
                 }
 
                 return false;
             }
         });
-        final EditText minnr = (EditText) view.findViewById(R.id.min);
-        minnr.setOnClickListener(new View.OnClickListener() {
+        final EditText mMin = (EditText) view.findViewById(R.id.mMin);
+        mMin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                minnr.setText("");
+                mMin.setText("");
             }
         });
-        minnr.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        mMin.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 try {
-                    Double d = Drink.round1decimal(Double.parseDouble(minnr.getText().toString()));
+                    Double d = MainActivity.round(Double.parseDouble(mMin.getText().toString()));
                     if (d < 1.00) {
-                        minnr.setText("");
-                        minnr.setHint(getString(R.string.invalid_min_price));
+                        mMin.setText("");
+                        mMin.setHint(getString(R.string.invalid_min_price));
                     }
                     else if (d > price) {
-                        minnr.setText("");
-                        minnr.setHint(getString(R.string.invalid_min_price));
+                        mMin.setText("");
+                        mMin.setHint(getString(R.string.invalid_min_price));
                     }
                     else {
                         min = d;
-                        minnr.setText(String.format("%.2f",d));
-                        minnr.setHint(getString(R.string.min));
+                        mMin.setText(String.format(Locale.getDefault(), "%.2f",d));
+                        mMin.setHint(getString(R.string.min));
                     }
                 }
                 catch (NumberFormatException e) {
-                    minnr.setText("");
-                    minnr.setHint(getString(R.string.invalid_min_price));
+                    mMin.setText("");
+                    mMin.setHint(getString(R.string.invalid_min_price));
                 }
                 return false;
 
             }
         });
-        final EditText maxnr = (EditText) view.findViewById(R.id.max);
-        maxnr.setOnClickListener(new View.OnClickListener() {
+        final EditText mMax = (EditText) view.findViewById(R.id.mMax);
+        mMax.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                maxnr.setText("");
+                mMax.setText("");
             }
         });
-        maxnr.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        mMax.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 try {
-                    Double d = Drink.round1decimal(Double.parseDouble(maxnr.getText().toString()));
+                    Double d = MainActivity.round(Double.parseDouble(mMax.getText().toString()));
                     if (d > 60.00) {
-                        maxnr.setText("");
-                        maxnr.setHint(getString(R.string.invalid_max));
+                        mMax.setText("");
+                        mMax.setHint(getString(R.string.invalid_max));
                     }
                     else if (d < price) {
-                        maxnr.setText("");
-                        maxnr.setHint(getString(R.string.invalid_max_price));
+                        mMax.setText("");
+                        mMax.setHint(getString(R.string.invalid_max_price));
                     }
                     else {
                         max = d;
-                        maxnr.setText(String.format("%.2f",d));
-                        maxnr.setHint(getString(R.string.max));
+                        mMax.setText(String.format(Locale.getDefault(), "%.2f",d));
+                        mMax.setHint(getString(R.string.max));
                     }
                 }
                 catch (NumberFormatException e) {
-                    maxnr.setText("");
-                    maxnr.setHint(getString(R.string.invalid_min_price));
+                    mMax.setText("");
+                    mMax.setHint(getString(R.string.invalid_min_price));
                 }
                 return false;
             }
@@ -183,10 +183,10 @@ public class DrinkFragment extends Fragment {
                     price = 0.00;
                     min = 0.00;
                     max = 0.00;
-                    nametext.setText("");
-                    pricenr.setText("");
-                    minnr.setText("");
-                    maxnr.setText("");
+                    mName.setText("");
+                    mPrice.setText("");
+                    mMin.setText("");
+                    mMax.setText("");
                 }
             }
         });

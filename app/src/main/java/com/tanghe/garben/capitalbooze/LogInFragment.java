@@ -15,7 +15,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -34,19 +33,15 @@ public class LogInFragment extends Fragment {
 
     private OnLogInFragmentInteractionListener mListener;
 
-    protected static Context context;
-
-    protected final static Firebase ref2 = new Firebase("https://capital-booze.firebaseio.com");
-
     private static final String TAG = "Log In";
 
-    private TextView status;
-    private TextView detail;
-    private LinearLayout fields;
-    private EditText email;
-    private EditText password;
-    private LinearLayout buttons;
-    private Button sign_out;
+    private TextView mStatus;
+    private TextView mDetail;
+    private LinearLayout mFields;
+    private EditText mEmail;
+    private EditText mPassword;
+    private LinearLayout mButtons;
+    private Button mSignOut;
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -98,28 +93,28 @@ public class LogInFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_log_in, container, false);
 
         // Views
-        status = (TextView) view.findViewById(R.id.status);
-        detail = (TextView) view.findViewById(R.id.detail);
-        fields = (LinearLayout) view.findViewById(R.id.fields);
-        email = (EditText) view.findViewById(R.id.email);
-        password = (EditText) view.findViewById(R.id.password);
-        buttons = (LinearLayout) view.findViewById(R.id.buttons);
-        Button sign_in = (Button) view.findViewById(R.id.sign_in);
-        sign_in.setOnClickListener(new View.OnClickListener() {
+        mStatus = (TextView) view.findViewById(R.id.mStatus);
+        mDetail = (TextView) view.findViewById(R.id.mDetail);
+        mFields = (LinearLayout) view.findViewById(R.id.mFields);
+        mEmail = (EditText) view.findViewById(R.id.mEmail);
+        mPassword = (EditText) view.findViewById(R.id.mPassword);
+        mButtons = (LinearLayout) view.findViewById(R.id.mButtons);
+        Button mSignIn = (Button) view.findViewById(R.id.mSignIn);
+        mSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                signIn(email.getText().toString(), password.getText().toString());
+                signIn(mEmail.getText().toString(), mPassword.getText().toString());
             }
         });
-        Button create_account = (Button) view.findViewById(R.id.create_account);
-        create_account.setOnClickListener(new View.OnClickListener() {
+        Button mCreatAccount = (Button) view.findViewById(R.id.mCreateAccount);
+        mCreatAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createAccount(email.getText().toString(), password.getText().toString());
+                createAccount(mEmail.getText().toString(), mPassword.getText().toString());
             }
         });
-        sign_out = (Button) view.findViewById(R.id.sign_out);
-        sign_out.setOnClickListener(new View.OnClickListener() {
+        mSignOut = (Button) view.findViewById(R.id.mSignOut);
+        mSignOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mAuth.signOut();
@@ -199,15 +194,14 @@ public class LogInFragment extends Fragment {
                 }
 
                 final FirebaseUser user = mAuth.getCurrentUser();
-                ref2.child("Users").child(user.getUid()).setValue(user);
-                ref2.child("Users").child(user.getUid()).child("accountType").setValue(0L);
-                ref2.child("Users").child(user.getUid()).child("accountType").addValueEventListener(new ValueEventListener() {
+                MainActivity.ref2.child("Users").child(user.getUid()).setValue(user);
+                MainActivity.ref2.child("Users").child(user.getUid()).child("accountType").setValue(0L);
+                MainActivity.ref2.child("Users").child(user.getUid()).child("accountType").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot snapshot) {
                         MainActivity.accountType = (Long) snapshot.getValue();
                         Log.d("FireBase", "Data changed: set accountType to " + MainActivity.accountType);
                         updateUI(user);
-                        Log.d("FireBase", "Data changed: set isAdmin to " + MainActivity.accountType);
                     }
                     @Override
                     public void onCancelled(FirebaseError firebaseError) {
@@ -240,21 +234,20 @@ public class LogInFragment extends Fragment {
                 if (!task.isSuccessful()) {
                     Log.w(TAG, "signInWithEmail:failed", task.getException());
                     Toast.makeText(getActivity(), R.string.auth_failed, Toast.LENGTH_SHORT).show();
-                    status.setText(R.string.auth_failed);
+                    mStatus.setText(R.string.auth_failed);
                 }
 
                 final FirebaseUser user = mAuth.getCurrentUser();
-                ref2.child("Users").child(user.getUid()).child("accountType").addValueEventListener(new ValueEventListener() {
+                MainActivity.ref2.child("Users").child(user.getUid()).child("accountType").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot snapshot) {
                         MainActivity.accountType = (Long) snapshot.getValue();
                         Log.d("FireBase", "Data changed: set accountType to " + MainActivity.accountType);
                         updateUI(user);
-                        Log.d("FireBase", "Data changed: set isAdmin to " + MainActivity.accountType);
                     }
                     @Override
                     public void onCancelled(FirebaseError firebaseError) {
-                        Log.d("Firebas", "The read failed: " + firebaseError.getMessage());
+                        Log.d("FireBase", "The read failed: " + firebaseError.getMessage());
                     }
                 });
 
@@ -266,20 +259,20 @@ public class LogInFragment extends Fragment {
     private boolean validateForm() {
         boolean valid = true;
 
-        String adress = email.getText().toString();
+        String adress = mEmail.getText().toString();
         if (TextUtils.isEmpty(adress)) {
-            email.setError("Required.");
+            mEmail.setError("Required.");
             valid = false;
         } else {
-            email.setError(null);
+            mEmail.setError(null);
         }
 
-        String code = password.getText().toString();
+        String code = mPassword.getText().toString();
         if (TextUtils.isEmpty(code)) {
-            password.setError("Required.");
+            mPassword.setError("Required.");
             valid = false;
         } else {
-            password.setError(null);
+            mPassword.setError(null);
         }
 
         return valid;
@@ -287,27 +280,21 @@ public class LogInFragment extends Fragment {
 
     private void updateUI(FirebaseUser user) {
 
-        mListener.hideProgressDialog();
-
         if (user != null) {
-            status.setText(getString(R.string.emailpassword_status_fmt, user.getEmail()));
-            detail.setText(getString(R.string.firebase_status_fmt, user.getUid()));
+            mStatus.setText(getString(R.string.emailpassword_status_fmt, user.getEmail()));
+            mDetail.setText(getString(R.string.firebase_status_fmt, user.getUid()));
 
-            buttons.setVisibility(View.GONE);
-            fields.setVisibility(View.GONE);
-            sign_out.setVisibility(View.VISIBLE);
+            mButtons.setVisibility(View.GONE);
+            mFields.setVisibility(View.GONE);
+            mSignOut.setVisibility(View.VISIBLE);
         }
         else {
-            status.setText(R.string.signed_out);
-            detail.setText(null);
+            mStatus.setText(R.string.signed_out);
+            mDetail.setText(null);
 
-            buttons.setVisibility(View.VISIBLE);
-            fields.setVisibility(View.VISIBLE);
-            sign_out.setVisibility(View.GONE);
+            mButtons.setVisibility(View.VISIBLE);
+            mFields.setVisibility(View.VISIBLE);
+            mSignOut.setVisibility(View.GONE);
         }
-    }
-
-    public static void setArgument(Context context) {
-        CountersFragment.context = context;
     }
 }

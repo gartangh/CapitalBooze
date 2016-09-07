@@ -1,7 +1,6 @@
 package com.tanghe.garben.capitalbooze;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.res.Configuration;
 import android.support.design.widget.NavigationView;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -13,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements
         DrinkFragment.OnDrinkFragmentInteractionListener,
         OrderFragment.OnOrderFragmentInteractionListener,
         CountersFragment.OnCountersFragmentInteractionListener,
+        AdminOnlyFragment.OnAdminOnlyFragmentInteractionListener,
         PricesFragment.OnPricesFragmentInteractionListener {
 
     private DrawerLayout mDrawer;
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements
     private static ProgressDialog mProgressDialog;
 
     public static Long accountType = 0L;
-    protected static Firebase ref2;
+    public static Firebase ref2;
     private FirebaseAuth mAuth;
 
     @Override
@@ -46,11 +47,11 @@ public class MainActivity extends AppCompatActivity implements
 
         Firebase.setAndroidContext(this);
 
-        LogInFragment.setArgument(MainActivity.this);
-        Drink.setArgument(MainActivity.this);
+        DrinkUI.setArgument(MainActivity.this);
+        OrderFragment.setArgument(MainActivity.this);
         CountersFragment.setArgument(MainActivity.this);
         PricesFragment.setArgument(MainActivity.this);
-        OrderFragment.setArgument(MainActivity.this);
+        AdminOnlyFragment.setArgument(MainActivity.this);
 
         // Set a Toolbar to replace the ActionBar.
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -72,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements
         fragmentManager.beginTransaction().replace(R.id.container, new AboutFragment()).commit();
         setTitle(getString(R.string.nav_about));
 
-        ref2 = new Firebase("https://capital-booze.firebaseio.com");
+        ref2 = new Firebase(getResources().getString(R.string.url));
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
@@ -82,12 +83,46 @@ public class MainActivity extends AppCompatActivity implements
                     accountType = (Long) snapshot.getValue();
                     Log.d("FireBase", "Data changed: set accountType to " + accountType);
                 }
+
                 @Override
                 public void onCancelled(FirebaseError firebaseError) {
-                    Log.d("Firebas", "The read failed: " + firebaseError.getMessage());
+                    Log.d("FireBase", "The read failed: " + firebaseError.getMessage());
                 }
             });
         }
+
+        ref2.child("Drinks").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                new DrinkUI((String) dataSnapshot.child("Name").getValue(), (Double) dataSnapshot.child("Price").getValue(), (Double) dataSnapshot.child("min").getValue(), (Double) dataSnapshot.child("max").getValue());
+                Log.d("FireBase", "new Drink: " + dataSnapshot.child("Name").getValue());
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                for (DrinkUI i :
+                        DrinkUI.uidrinks) {
+                    if (dataSnapshot.child("Name").getValue().equals(i.name)) {
+                        DrinkUI.uidrinks.remove(i);
+                    }
+                }
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                Log.d("FireBase", "The read failed: " + firebaseError.getMessage());
+            }
+        });
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
@@ -115,6 +150,9 @@ public class MainActivity extends AppCompatActivity implements
             case R.id.nav_counters_fragment:
                 fragmentClass = CountersFragment.class;
                 break;
+            case R.id.nav_admin_only_fragment:
+                fragmentClass  = AdminOnlyFragment.class;
+                break;
             case R.id.nav_prices_fragment:
                 fragmentClass = PricesFragment.class;
                 break;
@@ -133,7 +171,10 @@ public class MainActivity extends AppCompatActivity implements
         }
 
         try {
-            if (accountType == 0 && (fragmentClass == DrinkFragment.class || fragmentClass == OrderFragment.class || fragmentClass == CountersFragment.class)) {
+            if (accountType == 0 && (fragmentClass == DrinkFragment.class || fragmentClass == OrderFragment.class || fragmentClass == CountersFragment.class || fragmentClass == AdminOnlyFragment.class)) {
+                fragmentClass = AboutFragment.class;
+            }
+            if (accountType == 1 && (fragmentClass == AdminOnlyFragment.class)) {
                 fragmentClass = AboutFragment.class;
             }
             fragment = (Fragment) fragmentClass.newInstance();
@@ -174,6 +215,10 @@ public class MainActivity extends AppCompatActivity implements
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public static double round(double d) {
+        return Math.round(d*10)/10.0;
     }
 
     @Override
@@ -249,24 +294,41 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onCountersNextPressed() {
+        if (accountType != 2) {
+            fragmentManager.beginTransaction().replace(R.id.container, new PricesFragment()).commit();
+            setTitle(getString(R.string.nav_prices));
+        }
+        else {
+            fragmentManager.beginTransaction().replace(R.id.container, new AdminOnlyFragment()).commit();
+            setTitle(getString(R.string.nav_admin_only));
+        }
+    }
+
+    @Override
+    public void onAdminOnlyBackPressed() {
+        fragmentManager.beginTransaction().replace(R.id.container, new CountersFragment()).commit();
+        setTitle(getString(R.string.nav_counters));
+    }
+
+    @Override
+    public void onAdminOnlyNextPressed() {
         fragmentManager.beginTransaction().replace(R.id.container, new PricesFragment()).commit();
         setTitle(getString(R.string.nav_prices));
     }
 
     @Override
     public void onPricesBackPressed() {
-        if (accountType != 0) {
+        if (accountType == 1) {
             fragmentManager.beginTransaction().replace(R.id.container, new CountersFragment()).commit();
             setTitle(getString(R.string.nav_counters));
+        }
+        else if (accountType == 2) {
+            fragmentManager.beginTransaction().replace(R.id.container, new AdminOnlyFragment()).commit();
+            setTitle(getString(R.string.nav_admin_only));
         }
         else {
             fragmentManager.beginTransaction().replace(R.id.container, new LogInFragment()).commit();
             setTitle(getString(R.string.nav_log_in));
         }
-    }
-
-    @Override
-    public void onOrder() {
-        Log.d("debug", "Order set");
     }
 }

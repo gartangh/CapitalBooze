@@ -9,19 +9,19 @@
     android:gravity="center_horizontal">
 
             <TextView
-                android:id="@+id/status"
+                android:id="@+id/mStatus"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:text="@string/signed_out" />
 
             <TextView
-                android:id="@+id/detail"
+                android:id="@+id/mDetail"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 tools:text="Firebase User ID: 123456789abc" />
 
             <LinearLayout
-                android:id="@+id/fields"
+                android:id="@+id/mFields"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -29,7 +29,7 @@
                 android:paddingRight="16dp">
 
                 <EditText
-                    android:id="@+id/email"
+                    android:id="@+id/mEmail"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -37,7 +37,7 @@
                     android:inputType="textEmailAddress" />
 
                 <EditText
-                    android:id="@+id/password"
+                    android:id="@+id/mPassword"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -46,23 +46,23 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/buttons"
+                android:id="@+id/mButtons"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/fields"
+                android:layout_below="@+id/mFields"
                 android:orientation="horizontal"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp">
 
                 <Button
-                    android:id="@+id/sign_in"
+                    android:id="@+id/mSignIn"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/sign_in" />
 
                 <Button
-                    android:id="@+id/create_account"
+                    android:id="@+id/mCreateAccount"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -70,7 +70,7 @@
             </LinearLayout>
 
             <Button
-                android:id="@+id/sign_out"
+                android:id="@+id/mSignOut"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"

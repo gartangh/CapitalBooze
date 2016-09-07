@@ -3,11 +3,12 @@ package com.tanghe.garben.capitalbooze;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-
+import android.widget.LinearLayout;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -18,6 +19,7 @@ import android.widget.Button;
 public class OrderFragment extends Fragment {
 
     private OnOrderFragmentInteractionListener mListener;
+    private final static String TAG = "Order";
 
     public OrderFragment() {
         // Required empty public constructor
@@ -33,11 +35,16 @@ public class OrderFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_order, container, false);
 
+        final LinearLayout verticalLayoutOrders = (LinearLayout) view.findViewById(R.id.verticalLayoutOrders);
+        for (DrinkUI i : DrinkUI.uidrinks) {
+            verticalLayoutOrders.addView(i.horizontalLayoutOrders);
+        }
+
         final Button order = (Button) view.findViewById(R.id.order);
         order.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mListener.onOrder();
+                Log.d(TAG, "Order send");
             }
         });
 
@@ -86,7 +93,6 @@ public class OrderFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnOrderFragmentInteractionListener {
-        void onOrder();
         void onOrderBackPressed();
         void onOrderNextPressed();
     }

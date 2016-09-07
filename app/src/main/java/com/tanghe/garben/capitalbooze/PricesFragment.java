@@ -8,10 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.widget.TextView;
-
-import java.util.ArrayList;
 
 
 /**
@@ -34,10 +30,9 @@ public class PricesFragment extends Fragment {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_prices, container, false);
 
-
-        final LinearLayout linearLayoutPrices = (LinearLayout) view.findViewById(R.id.LinearLayoutPrices);
+        final LinearLayout verticalLayoutPrices = (LinearLayout) view.findViewById(R.id.verticalLayoutPrices);
         for (DrinkUI i : DrinkUI.uidrinks) {
-            linearLayoutPrices.addView(i.horizontalLayout);
+            verticalLayoutPrices.addView(i.horizontalLayoutPrices);
         }
 
         final Button back = (Button) view.findViewById(R.id.prices_back);

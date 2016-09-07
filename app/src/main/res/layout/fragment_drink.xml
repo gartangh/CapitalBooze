@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
         android:ems="10"
-        android:id="@+id/name"
+        android:id="@+id/mName"
         android:layout_margin="2dp"
         android:hint="@string/name"
         android:textSize="24dp"
@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:inputType="numberDecimal"
         android:ems="10"
-        android:id="@+id/price"
+        android:id="@+id/mPrice"
         android:hint="@string/price"
         android:textSize="24dp"
         android:textAlignment="center" />
@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:inputType="numberDecimal"
         android:ems="10"
-        android:id="@+id/min"
+        android:id="@+id/mMin"
         android:hint="@string/min"
         android:textSize="24dp"
         android:textAlignment="center" />
@@ -42,7 +42,7 @@
         android:layout_height="wrap_content"
         android:inputType="numberDecimal"
         android:ems="10"
-        android:id="@+id/max"
+        android:id="@+id/mMax"
         android:hint="@string/max"
         android:textSize="24dp"
         android:textAlignment="center" />
