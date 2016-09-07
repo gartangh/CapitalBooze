@@ -1,5 +1,7 @@
 package com.tanghe.garben.capitalbooze;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.res.Configuration;
 import android.support.design.widget.NavigationView;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -31,8 +33,9 @@ public class MainActivity extends AppCompatActivity implements
     private NavigationView nvDrawer;
     private ActionBarDrawerToggle drawerToggle;
     FragmentManager fragmentManager = getSupportFragmentManager();
+    private static ProgressDialog mProgressDialog;
 
-    public static boolean isAdmin = false;
+    public static Long accountType = 0L;
     protected static Firebase ref2;
     private FirebaseAuth mAuth;
 
@@ -72,21 +75,19 @@ public class MainActivity extends AppCompatActivity implements
         ref2 = new Firebase("https://capital-booze.firebaseio.com");
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
-        ref2.child("Users").child(user.getUid()).child("isAdmin").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                if ((Boolean) snapshot.getValue()) {
-                    MainActivity.isAdmin = true;
-                } else {
-                    MainActivity.isAdmin = false;
+        if (user != null) {
+            ref2.child("Users").child(user.getUid()).child("accountType").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot snapshot) {
+                    accountType = (Long) snapshot.getValue();
+                    Log.d("FireBase", "Data changed: set accountType to " + accountType);
                 }
-                Log.d("FireBase", "Data changed: set isAdmin to " + MainActivity.isAdmin);
-            }
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-                Log.d("Firebas", "The read failed: " + firebaseError.getMessage());
-            }
-        });
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
+                    Log.d("Firebas", "The read failed: " + firebaseError.getMessage());
+                }
+            });
+        }
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
@@ -124,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements
                 fragmentClass = LogInFragment.class;
                 break;
             case R.id.nav_exit:
-                isAdmin = false;
+                accountType = 0L;
                 finish();
                 System.exit(0);
             default:
@@ -132,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements
         }
 
         try {
-            if (!isAdmin && (fragmentClass == DrinkFragment.class || fragmentClass == OrderFragment.class || fragmentClass == CountersFragment.class)) {
+            if (accountType == 0 && (fragmentClass == DrinkFragment.class || fragmentClass == OrderFragment.class || fragmentClass == CountersFragment.class)) {
                 fragmentClass = AboutFragment.class;
             }
             fragment = (Fragment) fragmentClass.newInstance();
@@ -189,12 +190,30 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onLogInNextPressed() {
-        if (isAdmin) {
+        if (accountType != 0) {
             fragmentManager.beginTransaction().replace(R.id.container, new DrinkFragment()).commit();
             setTitle(getString(R.string.nav_drink));
         } else {
             fragmentManager.beginTransaction().replace(R.id.container, new PricesFragment()).commit();
             setTitle(getString(R.string.nav_prices));
+        }
+    }
+
+    @Override
+    public void showProgressDialog() {
+        if (mProgressDialog == null) {
+            mProgressDialog = new ProgressDialog(this);
+            mProgressDialog.setMessage(getString(R.string.loading));
+            mProgressDialog.setIndeterminate(true);
+        }
+
+        mProgressDialog.show();
+    }
+
+    @Override
+    public void hideProgressDialog() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
         }
     }
 
@@ -236,7 +255,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onPricesBackPressed() {
-        if (isAdmin) {
+        if (accountType != 0) {
             fragmentManager.beginTransaction().replace(R.id.container, new CountersFragment()).commit();
             setTitle(getString(R.string.nav_counters));
         }

@@ -3,11 +3,9 @@ package com.tanghe.garben.capitalbooze;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.NotificationCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.app.ProgressDialog;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
@@ -16,7 +14,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -49,14 +46,10 @@ public class LogInFragment extends Fragment {
     private EditText email;
     private EditText password;
     private LinearLayout buttons;
-    private Button sign_in;
-    private Button create_account;
     private Button sign_out;
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
-
-    private ProgressDialog mProgressDialog;
 
     public LogInFragment() {
         // Required empty public constructor
@@ -74,7 +67,8 @@ public class LogInFragment extends Fragment {
         if (mAuthListener != null) {
             mAuth.removeAuthStateListener(mAuthListener);
         }
-        //hideProgressDialog();
+
+        mListener.hideProgressDialog();
     }
 
     @Override
@@ -110,14 +104,14 @@ public class LogInFragment extends Fragment {
         email = (EditText) view.findViewById(R.id.email);
         password = (EditText) view.findViewById(R.id.password);
         buttons = (LinearLayout) view.findViewById(R.id.buttons);
-        sign_in = (Button) view.findViewById(R.id.sign_in);
+        Button sign_in = (Button) view.findViewById(R.id.sign_in);
         sign_in.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 signIn(email.getText().toString(), password.getText().toString());
             }
         });
-        create_account = (Button) view.findViewById(R.id.create_account);
+        Button create_account = (Button) view.findViewById(R.id.create_account);
         create_account.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -179,6 +173,8 @@ public class LogInFragment extends Fragment {
     public interface OnLogInFragmentInteractionListener {
         void onLogInBackPressed();
         void onLogInNextPressed();
+        void showProgressDialog();
+        void hideProgressDialog();
     }
 
     private void createAccount(String email, String password) {
@@ -187,7 +183,7 @@ public class LogInFragment extends Fragment {
             return;
         }
 
-        //showProgressDialog();
+        mListener.showProgressDialog();
 
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
 
@@ -204,17 +200,14 @@ public class LogInFragment extends Fragment {
 
                 final FirebaseUser user = mAuth.getCurrentUser();
                 ref2.child("Users").child(user.getUid()).setValue(user);
-                ref2.child("Users").child(user.getUid()).child("isAdmin").setValue(false);
-                ref2.child("Users").child(user.getUid()).child("isAdmin").addValueEventListener(new ValueEventListener() {
+                ref2.child("Users").child(user.getUid()).child("accountType").setValue(0L);
+                ref2.child("Users").child(user.getUid()).child("accountType").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot snapshot) {
-                        if ((Boolean) snapshot.getValue()) {
-                            MainActivity.isAdmin = true;
-                        } else {
-                            MainActivity.isAdmin = false;
-                        }
+                        MainActivity.accountType = (Long) snapshot.getValue();
+                        Log.d("FireBase", "Data changed: set accountType to " + MainActivity.accountType);
                         updateUI(user);
-                        Log.d("FireBase", "Data changed: set isAdmin to " + MainActivity.isAdmin);
+                        Log.d("FireBase", "Data changed: set isAdmin to " + MainActivity.accountType);
                     }
                     @Override
                     public void onCancelled(FirebaseError firebaseError) {
@@ -223,7 +216,7 @@ public class LogInFragment extends Fragment {
                 });
                 Log.d("Log in", "Wrote " + user.getEmail() + ": "+ user.getUid() + " to database");
 
-                //hideProgressDialog();
+                mListener.hideProgressDialog();
             }
         });
     }
@@ -234,7 +227,7 @@ public class LogInFragment extends Fragment {
             return;
         }
 
-        //showProgressDialog();
+        mListener.showProgressDialog();
 
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
             @Override
@@ -251,16 +244,13 @@ public class LogInFragment extends Fragment {
                 }
 
                 final FirebaseUser user = mAuth.getCurrentUser();
-                ref2.child("Users").child(user.getUid()).child("isAdmin").addValueEventListener(new ValueEventListener() {
+                ref2.child("Users").child(user.getUid()).child("accountType").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot snapshot) {
-                        if ((Boolean) snapshot.getValue()) {
-                            MainActivity.isAdmin = true;
-                        } else {
-                            MainActivity.isAdmin = false;
-                        }
+                        MainActivity.accountType = (Long) snapshot.getValue();
+                        Log.d("FireBase", "Data changed: set accountType to " + MainActivity.accountType);
                         updateUI(user);
-                        Log.d("FireBase", "Data changed: set isAdmin to " + MainActivity.isAdmin);
+                        Log.d("FireBase", "Data changed: set isAdmin to " + MainActivity.accountType);
                     }
                     @Override
                     public void onCancelled(FirebaseError firebaseError) {
@@ -268,7 +258,7 @@ public class LogInFragment extends Fragment {
                     }
                 });
 
-                //hideProgressDialog();
+                mListener.hideProgressDialog();
             }
         });
     }
@@ -297,7 +287,7 @@ public class LogInFragment extends Fragment {
 
     private void updateUI(FirebaseUser user) {
 
-        //hideProgressDialog();
+        mListener.hideProgressDialog();
 
         if (user != null) {
             status.setText(getString(R.string.emailpassword_status_fmt, user.getEmail()));
@@ -314,22 +304,6 @@ public class LogInFragment extends Fragment {
             buttons.setVisibility(View.VISIBLE);
             fields.setVisibility(View.VISIBLE);
             sign_out.setVisibility(View.GONE);
-        }
-    }
-
-    public void showProgressDialog() {
-        if (mProgressDialog == null) {
-            mProgressDialog = new ProgressDialog(context);
-            mProgressDialog.setMessage(getString(R.string.loading));
-            mProgressDialog.setIndeterminate(true);
-        }
-
-        mProgressDialog.show();
-    }
-
-    public void hideProgressDialog() {
-        if (mProgressDialog != null && mProgressDialog.isShowing()) {
-            mProgressDialog.dismiss();
         }
     }
 
