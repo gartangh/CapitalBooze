@@ -99,8 +99,7 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 boolean geldig = true;
-                for (DrinkUI i :
-                        DrinkUI.uidrinks) {
+                for (DrinkUI i : DrinkUI.uidrinks) {
                     if (dataSnapshot.child("name").getValue().equals(i.name)) {
                         geldig = false;
                     }
@@ -120,8 +119,7 @@ public class MainActivity extends AppCompatActivity implements
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                for (DrinkUI i :
-                        DrinkUI.uidrinks) {
+                for (DrinkUI i : DrinkUI.uidrinks) {
                     if (dataSnapshot.child("Name").getValue().equals(i.name)) {
                         DrinkUI.uidrinks.remove(i);
                     }
@@ -138,6 +136,9 @@ public class MainActivity extends AppCompatActivity implements
                 Log.d("FireBase", "The read failed: " + firebaseError.getMessage());
             }
         });
+
+        // TODO: download party statistics: statics in Drink
+        // TODO: download party statistics: boolean static partyStarted in AdminOnlyFragment
 
         hideProgressDialog();
     }
@@ -180,7 +181,6 @@ public class MainActivity extends AppCompatActivity implements
                 fragmentClass = LogInFragment.class;
                 break;
             case R.id.nav_exit:
-                accountType = 0L;
                 finish();
                 System.exit(0);
             default:

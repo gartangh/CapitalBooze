@@ -8,11 +8,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.Locale;
 
 public class DrinkUI extends Drink {
 
+    protected final static DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
     private static Context context;
     private static String TAG = "DinkUI";
 
@@ -64,15 +67,15 @@ public class DrinkUI extends Drink {
         mNameOrders.setText(name);
         mNameOrders.setTextSize(24);
         mNameOrders.setLayoutParams(params2);
+        /*
+        TODO: make this code work
         mNameOrders.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
                 for (DrinkUI i : DrinkUI.uidrinks) {
                     if (i.name.equals(mNameOrders.getText().toString()) && MainActivity.accountType == 2)  {
                         DrinkUI.uidrinks.remove(i);
-                        /*
-                        remove drink from FireBase database
-                         */
+                        // TODO: remove drink from FireBase
                         Log.d(TAG, "Drink " + i.name + " removed");
                         continue;
                     }
@@ -80,6 +83,7 @@ public class DrinkUI extends Drink {
                 return false;
             }
         });
+        */
 
         mRed = new Button(context);
         mRed.setText("-");
@@ -93,7 +97,7 @@ public class DrinkUI extends Drink {
                     p -= price;
                     s -= (int) (10*price);
                     --c;
-                    OrderFragment.setTotals(p,s,c);
+                    OrderFragment.setTotals(p, s, c);
                     /*
                     ref.runTransaction(new Transaction.Handler() {
                         @Override
@@ -134,7 +138,7 @@ public class DrinkUI extends Drink {
                 p += price;
                 s += (int) (10*price);
                 ++c;
-                OrderFragment.setTotals(p,s,c);
+                OrderFragment.setTotals(p, s, c);
                 /*
                 ref.runTransaction(new Transaction.Handler() {
                     @Override
@@ -216,7 +220,13 @@ public class DrinkUI extends Drink {
 
         mPriceDifference = new TextView(context);
         mPriceDifference.setTextColor(context.getResources().getColor(R.color.grey));
-        mPriceDifference.setText(String.format(Locale.getDefault(), "%.2f", priceDifference));
+        if (priceDifference >= 0) {
+            mPriceDifference.setText(String.format(Locale.getDefault(), "+%.2f", priceDifference));
+        }
+        else {
+            mPriceDifference.setText(String.format(Locale.getDefault(), "%.2f", priceDifference));
+        }
+
         mPriceDifference.setTextSize(24);
 
         horizontalLayoutPrices.addView(mNamePrices);
@@ -229,14 +239,11 @@ public class DrinkUI extends Drink {
 
     public static void task() {
         for (DrinkUI i : uidrinks) {
-            i.partyCount += i.countCurrent;
-            partyCountTotal += i.countCurrent;
-            i.partyRevenue += i.countCurrent *i.price;
-            partyRevenueTotal += i.countCurrent *i.price;
-
             i.countSecondLast = i.countLast;
             i.countLast = i.countCurrent;
+            i.mCountLast.setText(String.format(Locale.getDefault(), "(%1d)", i.countLast));
             i.countCurrent = 0;
+            i.mCountCurrent.setText(String.format(Locale.getDefault(), "%1d", 0));
             i.priceLast = i.price;
             i.countDifference = i.countLast - i.countSecondLast;
         }
@@ -271,10 +278,8 @@ public class DrinkUI extends Drink {
                 }
             }
             catch (IllegalArgumentException e) {
-                if (i.priceDifference > 0) {
-                    i.testPrice(i.priceLast);
-                } else {
-                    i.testPrice(i.priceLast - 0.1);
+                if (i.countDifference < 0) {
+                    i.testPrice(i.price - 0.10);
                 }
             }
         }
@@ -284,25 +289,54 @@ public class DrinkUI extends Drink {
         if (testPrice > max) {
             price = max;
         }
-        else if (testPrice < min){
+        else if (testPrice < min) {
             price = min;
         }
         else {
             price = MainActivity.round(testPrice);
         }
+        priceDifference = price - priceLast;
+
+        mPrice.setText(String.format(Locale.getDefault(), "€ %.2f", price));
+        mPriceDifference.setText(String.format(Locale.getDefault(), "%.2f", priceDifference));
+        if (priceDifference < 0) {
+            mPriceDifference.setTextColor(context.getResources().getColor(R.color.green));
+        }
+        else if (priceDifference > 0) {
+            mPriceDifference.setTextColor(context.getResources().getColor(R.color.red));
+        }
+        else {
+            mPriceDifference.setTextColor(context.getResources().getColor(R.color.grey));
+        }
     }
 
     public static void crash() {
-
+        // TODO: insert crash here
         Log.d(TAG, "Crash executed");
     }
 
     public static void orderSend() {
         for (DrinkUI i : DrinkUI.uidrinks) {
             i.countCurrent += i.orderCount;
-            Drink.countTotalCurrent += i.orderCount;
+            i.mCountCurrent.setText(String.format(Locale.getDefault(), "%1d", i.countCurrent));
+            i.partyCount += i.orderCount;
+            i.mPartyCount.setText(String.format(Locale.getDefault(), "%1d", i.partyCount));
+            i.partyRevenue += i.orderCount * i.price;
+            i.mPartyRevenue.setText(String.format(Locale.getDefault(), "€ %.2f", i.partyRevenue));
+            partyRevenueTotal += i.orderCount * i.price;
             i.orderCount = 0;
+
+            i.mDrinkCountOrders.setText(String.format(Locale.getDefault(), "%1d", i.orderCount));
+
+
+
         }
+        countTotalCurrent += c;
+        partyCountTotal += c;
+        p = 0.00;
+        s = 0;
+        c = 0;
+        OrderFragment.setTotals(p, s, c);
     }
 
     public static void setArgument(Context context) {

@@ -7,8 +7,6 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class Drink {
 
-    protected final static DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-
     // B = Big, S = Small, I = Increase, D = Decrease
     protected final static double BI = 1.3;
     protected final static double BD = 0.7;
@@ -20,8 +18,8 @@ public class Drink {
     protected static int countTotalLast;
     protected static int countTotalSecondLast;
     protected static int countTotalDifference;
-    protected static int partyCountTotal;
-    protected static double partyRevenueTotal;
+    protected static int partyCountTotal = 0;
+    protected static double partyRevenueTotal = 0.00;
 
     // drinks
     protected String name;
@@ -54,4 +52,49 @@ public class Drink {
     public String getName() {
         return name;
     }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public double getMin() {
+        return min;
+    }
+
+    public double getMax() {
+        return max;
+    }
+
+    public double getPriceLast() {
+        return priceLast;
+    }
+
+    public double getPriceDifference() {
+        return priceDifference;
+    }
+
+    public int getCountCurrent() {
+        return countCurrent;
+    }
+
+    public int getCountLast() {
+        return countLast;
+    }
+
+    public int getCountSecondLast() {
+        return countSecondLast;
+    }
+
+    public int getCountDifference() {
+        return countDifference;
+    }
+
+    public int getPartyCount() {
+        return partyCount;
+    }
+
+    public double getPartyRevenue() {
+        return partyRevenue;
+    }
+
 }

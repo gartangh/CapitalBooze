@@ -17,7 +17,8 @@
         android:text="@string/start"
         android:id="@+id/mStart"
         android:background="@drawable/round_green"
-        android:textSize="32sp" />
+        android:textSize="32sp"
+        android:elevation="2dp" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -30,7 +31,8 @@
         android:text="@string/crash"
         android:id="@+id/mCrash"
         android:background="@drawable/round_red"
-        android:textSize="32sp" />
+        android:textSize="32sp"
+        android:elevation="2dp" />
 
     <RelativeLayout
         android:layout_width="match_parent"

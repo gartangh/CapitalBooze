@@ -22,8 +22,8 @@ public class AdminOnlyFragment extends Fragment {
     private final static String TAG = "AdminOnlyFragment";
 
     private static boolean partyStarted = false;
-    private static long INTERVAL = 60*1000L;
-    private static final long[] PATTERN = {0L, 100L, 100L, 50L};
+    private final static long INTERVAL = 60*1000L;
+    private final static long[] PATTERN = {0L, 100L, 100L, 50L};
 
     public AdminOnlyFragment() {
         // Required empty public constructor
@@ -68,7 +68,7 @@ public class AdminOnlyFragment extends Fragment {
                         }
                     };
 
-                    Log.d(TAG,"TimerTaskset, interval set for " + INTERVAL/1000/60 + " minutes");
+                    Log.d(TAG,"TimerTask set, interval set for " + INTERVAL/1000/60 + " minutes");
                     timer.schedule(timerTask, INTERVAL, INTERVAL);
 
                     partyStarted = true;

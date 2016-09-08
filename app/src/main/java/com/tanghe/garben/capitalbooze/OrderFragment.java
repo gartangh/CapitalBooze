@@ -69,14 +69,19 @@ public class OrderFragment extends Fragment {
         order.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mTotalPriceLast.setText("(" + mTotalPrice.getText() + ")");
-                mTotalSquaresLast.setText("(" + mTotalSquares.getText() + ")");
-                mTotalCountLast.setText("(" + mTotalCount.getText() + ")");
-                mTotalPrice.setText(String.format(Locale.getDefault(), "€ %.2f", 0));
-                mTotalSquares.setText(String.format(Locale.getDefault(), "#%1d", 0));
-                mTotalCount.setText(String.format(Locale.getDefault(), "%1d", 0));
-                DrinkUI.orderSend();
-                Log.d(TAG, "Order send");
+                if (Integer.parseInt(mTotalCount.getText().toString()) > 0) {
+                    mTotalPriceLast.setText("(" + mTotalPrice.getText() + ")");
+                    mTotalSquaresLast.setText("(" + mTotalSquares.getText() + ")");
+                    mTotalCountLast.setText("(" + mTotalCount.getText() + ")");
+
+                    DrinkUI.orderSend();
+
+                    Log.d(TAG, "Order send");
+                }
+                else {
+                    Log.d(TAG, "Nothing in order");
+                }
+
             }
         });
 
