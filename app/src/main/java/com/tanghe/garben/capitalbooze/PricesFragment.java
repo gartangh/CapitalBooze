@@ -20,7 +20,7 @@ import android.widget.LinearLayout;
 public class PricesFragment extends Fragment {
 
     private OnPricesFragmentInteractionListener mListener;
-    protected static Context context;
+    private static Context context;
     private final static String TAG = "Prices";
 
     private static LinearLayout verticalLayoutPrices;

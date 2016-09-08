@@ -22,8 +22,8 @@ public class AdminOnlyFragment extends Fragment {
     private final static String TAG = "AdminOnlyFragment";
 
     private static boolean partyStarted = false;
-    protected static long INTERVAL = 60*1000L;
-    protected static final long[] PATTERN = {0L, 100L, 100L, 50L};
+    private static long INTERVAL = 60*1000L;
+    private static final long[] PATTERN = {0L, 100L, 100L, 50L};
 
     public AdminOnlyFragment() {
         // Required empty public constructor

@@ -9,6 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
+
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -22,6 +27,12 @@ public class OrderFragment extends Fragment {
     private final static String TAG = "Order";
 
     private static LinearLayout verticalLayoutOrders;
+    private static TextView mTotalPrice;
+    private static TextView mTotalPriceLast;
+    private static TextView mTotalSquares;
+    private static TextView mTotalSquaresLast;
+    private static TextView mTotalCount;
+    private static TextView mTotalCountLast;
 
     public OrderFragment() {
         // Required empty public constructor
@@ -47,10 +58,24 @@ public class OrderFragment extends Fragment {
             }
         }
 
+        mTotalPrice = (TextView) view.findViewById(R.id.mTotalPrice);
+        mTotalPriceLast = (TextView) view.findViewById(R.id.mTotalPriceLast);
+        mTotalSquares = (TextView) view.findViewById(R.id.mTotalSquares);
+        mTotalSquaresLast = (TextView) view.findViewById(R.id.mTotalSquaresLast);
+        mTotalCount = (TextView) view.findViewById(R.id.mTotalCount);
+        mTotalCountLast = (TextView) view.findViewById(R.id.mTotalCountLast);
+
         final Button order = (Button) view.findViewById(R.id.order);
         order.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mTotalPriceLast.setText("(" + mTotalPrice.getText() + ")");
+                mTotalSquaresLast.setText("(" + mTotalSquares.getText() + ")");
+                mTotalCountLast.setText("(" + mTotalCount.getText() + ")");
+                mTotalPrice.setText(String.format(Locale.getDefault(), "€ %.2f", 0));
+                mTotalSquares.setText(String.format(Locale.getDefault(), "#%1d", 0));
+                mTotalCount.setText(String.format(Locale.getDefault(), "%1d", 0));
+                DrinkUI.orderSend();
                 Log.d(TAG, "Order send");
             }
         });
@@ -93,6 +118,12 @@ public class OrderFragment extends Fragment {
     public void onDestroyView() {
         verticalLayoutOrders.removeAllViews();
         super.onDestroyView();
+    }
+
+    public static void setTotals(double p, int s, int c) {
+        mTotalPrice.setText(String.format(Locale.getDefault(), "€ %.2f", p));
+        mTotalSquares.setText(String.format(Locale.getDefault(), "#%1d", s));
+        mTotalCount.setText(String.format(Locale.getDefault(), "%1d", c));
     }
 
     /**

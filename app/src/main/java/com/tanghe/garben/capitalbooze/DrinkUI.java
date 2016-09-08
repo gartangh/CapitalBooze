@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Locale;
@@ -17,31 +16,37 @@ public class DrinkUI extends Drink {
     private static Context context;
     private static String TAG = "DinkUI";
 
+    protected static double p = 0.00;
+    protected static int s = 0;
+    protected static int c = 0;
+
+    protected int orderCount = 0;
+
     protected final static ArrayList<DrinkUI> uidrinks = new ArrayList<>();
 
-    protected LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+    private LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+    private LinearLayout.LayoutParams params2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
 
     // Orders
     protected LinearLayout horizontalLayoutOrders;
-    protected TextView mNameOrders;
-    protected RelativeLayout mRelativeOrder;
-    protected Button mRed;
-    protected TextView mDrinkCountOrders;
-    protected Button mGreen;
+    private TextView mNameOrders;
+    private Button mRed;
+    private TextView mDrinkCountOrders;
+    private Button mGreen;
 
     // Counters
     protected LinearLayout horizontalLayoutCounters;
-    protected TextView mNameCounters;
-    protected TextView mCountCurrent;
-    protected TextView mCountLast;
-    protected TextView mPartyCount;
-    protected TextView mPartyRevenue;
+    private TextView mNameCounters;
+    private TextView mCountCurrent;
+    private TextView mCountLast;
+    private TextView mPartyCount;
+    private TextView mPartyRevenue;
 
     // Prices
     protected LinearLayout horizontalLayoutPrices;
-    protected TextView mNamePrices;
-    protected TextView mPrice;
-    protected TextView mPriceDifference;
+    private TextView mNamePrices;
+    private TextView mPrice;
+    private TextView mPriceDifference;
 
     public DrinkUI(String name, double price, double min, double max) {
         super(name, price, min, max);
@@ -58,14 +63,18 @@ public class DrinkUI extends Drink {
         mNameOrders = new TextView(context);
         mNameOrders.setText(name);
         mNameOrders.setTextSize(24);
+        mNameOrders.setLayoutParams(params2);
         mNameOrders.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                for (DrinkUI i :
-                        DrinkUI.uidrinks) {
+                for (DrinkUI i : DrinkUI.uidrinks) {
                     if (i.name.equals(mNameOrders.getText().toString()) && MainActivity.accountType == 2)  {
                         DrinkUI.uidrinks.remove(i);
+                        /*
+                        remove drink from FireBase database
+                         */
                         Log.d(TAG, "Drink " + i.name + " removed");
+                        continue;
                     }
                 }
                 return false;
@@ -74,12 +83,17 @@ public class DrinkUI extends Drink {
 
         mRed = new Button(context);
         mRed.setText("-");
+        mRed.setTextSize(24);
         mRed.setBackgroundResource(R.drawable.round_red);
         mRed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (countCurrent > 0) {
-                    mDrinkCountOrders.setText(--countCurrent);
+                if (orderCount > 0) {
+                    mDrinkCountOrders.setText(String.format(Locale.getDefault(), "%1d", --orderCount));
+                    p -= price;
+                    s -= (int) (10*price);
+                    --c;
+                    OrderFragment.setTotals(p,s,c);
                     /*
                     ref.runTransaction(new Transaction.Handler() {
                         @Override
@@ -107,14 +121,20 @@ public class DrinkUI extends Drink {
 
         mDrinkCountOrders = new TextView(context);
         mDrinkCountOrders.setText("0");
+        mDrinkCountOrders.setTextSize(24);
 
         mGreen = new Button(context);
         mGreen.setText("+");
+        mGreen.setTextSize(24);
         mGreen.setBackgroundResource(R.drawable.round_green);
         mGreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mDrinkCountOrders.setText(Integer.toString(++countCurrent));
+                mDrinkCountOrders.setText(String.format(Locale.getDefault(), "%1d", ++orderCount));
+                p += price;
+                s += (int) (10*price);
+                ++c;
+                OrderFragment.setTotals(p,s,c);
                 /*
                 ref.runTransaction(new Transaction.Handler() {
                     @Override
@@ -154,18 +174,23 @@ public class DrinkUI extends Drink {
         mNameCounters = new TextView(context);
         mNameCounters.setText(name);
         mNameCounters.setTextSize(24);
+        mNameCounters.setLayoutParams(params2);
 
         mCountCurrent = new TextView(context);
         mCountCurrent.setText(String.format(Locale.getDefault(), "%1d", countCurrent));
+        mCountCurrent.setTextSize(24);
 
         mCountLast = new TextView(context);
         mCountLast.setText(String.format(Locale.getDefault(), "(%1d)", countLast));
+        mCountLast.setTextSize(24);
 
         mPartyCount = new TextView(context);
         mPartyCount.setText(String.format(Locale.getDefault(), "%1d", partyCount));
+        mPartyCount.setTextSize(24);
 
         mPartyRevenue = new TextView(context);
         mPartyRevenue.setText(String.format(Locale.getDefault(), "€ %.2f", partyRevenue));
+        mPartyRevenue.setTextSize(24);
 
         horizontalLayoutCounters.addView(mNameCounters);
         horizontalLayoutCounters.addView(mCountCurrent);
@@ -182,14 +207,17 @@ public class DrinkUI extends Drink {
 
         mNamePrices = new TextView(context);
         mNamePrices.setText(name);
-        mNameOrders.setTextSize(24);
+        mNamePrices.setTextSize(24);
+        mNamePrices.setLayoutParams(params2);
 
         mPrice = new TextView(context);
         mPrice.setText(String.format(Locale.getDefault(), "€ %.2f", price));
+        mPrice.setTextSize(24);
 
         mPriceDifference = new TextView(context);
         mPriceDifference.setTextColor(context.getResources().getColor(R.color.grey));
         mPriceDifference.setText(String.format(Locale.getDefault(), "%.2f", priceDifference));
+        mPriceDifference.setTextSize(24);
 
         horizontalLayoutPrices.addView(mNamePrices);
         horizontalLayoutPrices.addView(mPrice);
@@ -252,7 +280,7 @@ public class DrinkUI extends Drink {
         }
     }
 
-    protected void testPrice(double testPrice) {
+    private void testPrice(double testPrice) {
         if (testPrice > max) {
             price = max;
         }
@@ -267,6 +295,14 @@ public class DrinkUI extends Drink {
     public static void crash() {
 
         Log.d(TAG, "Crash executed");
+    }
+
+    public static void orderSend() {
+        for (DrinkUI i : DrinkUI.uidrinks) {
+            i.countCurrent += i.orderCount;
+            Drink.countTotalCurrent += i.orderCount;
+            i.orderCount = 0;
+        }
     }
 
     public static void setArgument(Context context) {
