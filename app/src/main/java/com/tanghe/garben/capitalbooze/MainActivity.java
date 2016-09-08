@@ -29,16 +29,15 @@ public class MainActivity extends AppCompatActivity implements
         AdminOnlyFragment.OnAdminOnlyFragmentInteractionListener,
         PricesFragment.OnPricesFragmentInteractionListener {
 
+    private final static String TAG = "MainActivity";
+
     private DrawerLayout mDrawer;
-    private Toolbar toolbar;
-    private NavigationView nvDrawer;
     private ActionBarDrawerToggle drawerToggle;
     FragmentManager fragmentManager = getSupportFragmentManager();
     private static ProgressDialog mProgressDialog;
 
     public static Long accountType = 0L;
     public static Firebase ref2;
-    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,21 +47,24 @@ public class MainActivity extends AppCompatActivity implements
         Firebase.setAndroidContext(this);
 
         DrinkUI.setArgument(MainActivity.this);
-        OrderFragment.setArgument(MainActivity.this);
-        CountersFragment.setArgument(MainActivity.this);
         PricesFragment.setArgument(MainActivity.this);
         AdminOnlyFragment.setArgument(MainActivity.this);
 
         // Set a Toolbar to replace the ActionBar.
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        try {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+        catch (NullPointerException e) {
+            Log.d(TAG, "Did NOT set DisplayHomeAsUpEnabled to true");
+        }
         getSupportActionBar().setHomeButtonEnabled(true);
 
         // Find our drawer view
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         // Find our drawer view
-        nvDrawer = (NavigationView) findViewById(R.id.nvView);
+        NavigationView nvDrawer = (NavigationView) findViewById(R.id.nvView);
         // Setup drawer view
         setupDrawerContent(nvDrawer);
         drawerToggle = new ActionBarDrawerToggle(this, mDrawer, R.string.drawer_open,  R.string.drawer_close);
@@ -73,8 +75,10 @@ public class MainActivity extends AppCompatActivity implements
         fragmentManager.beginTransaction().replace(R.id.container, new AboutFragment()).commit();
         setTitle(getString(R.string.nav_about));
 
+        showProgressDialog();
+
         ref2 = new Firebase(getResources().getString(R.string.url));
-        mAuth = FirebaseAuth.getInstance();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
             ref2.child("Users").child(user.getUid()).child("accountType").addValueEventListener(new ValueEventListener() {
@@ -94,8 +98,19 @@ public class MainActivity extends AppCompatActivity implements
         ref2.child("Drinks").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                new DrinkUI((String) dataSnapshot.child("Name").getValue(), (Double) dataSnapshot.child("Price").getValue(), (Double) dataSnapshot.child("min").getValue(), (Double) dataSnapshot.child("max").getValue());
-                Log.d("FireBase", "new Drink: " + dataSnapshot.child("Name").getValue());
+                boolean geldig = true;
+                for (DrinkUI i :
+                        DrinkUI.uidrinks) {
+                    if (dataSnapshot.child("name").getValue().equals(i.name)) {
+                        geldig = false;
+                    }
+                }
+                if (geldig) {
+                    new DrinkUI((String) dataSnapshot.child("name").getValue(), (Double) dataSnapshot.child("price").getValue(), (Double) dataSnapshot.child("min").getValue(), (Double) dataSnapshot.child("max").getValue());
+                    Log.d("FireBase", "new Drink: " + dataSnapshot.child("name").getValue() + " added");
+                } else {
+                    Log.d("FireBase","new Drink: " + dataSnapshot.child("name").getValue() + " already in DrinkUI.uidrinks");
+                }
             }
 
             @Override
@@ -123,6 +138,8 @@ public class MainActivity extends AppCompatActivity implements
                 Log.d("FireBase", "The read failed: " + firebaseError.getMessage());
             }
         });
+
+        hideProgressDialog();
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
@@ -211,10 +228,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (drawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        return drawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 
     public static double round(double d) {

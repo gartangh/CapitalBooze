@@ -3,6 +3,7 @@ package com.tanghe.garben.capitalbooze;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +18,12 @@ import android.widget.LinearLayout;
  * to handle interaction events.
  */
 public class PricesFragment extends Fragment {
-    protected static Context context;
 
     private OnPricesFragmentInteractionListener mListener;
+    protected static Context context;
+    private final static String TAG = "Prices";
+
+    private static LinearLayout verticalLayoutPrices;
 
     public PricesFragment() {
         // Required empty public constructor
@@ -30,9 +34,14 @@ public class PricesFragment extends Fragment {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_prices, container, false);
 
-        final LinearLayout verticalLayoutPrices = (LinearLayout) view.findViewById(R.id.verticalLayoutPrices);
+        verticalLayoutPrices = (LinearLayout) view.findViewById(R.id.verticalLayoutPrices);
         for (DrinkUI i : DrinkUI.uidrinks) {
-            verticalLayoutPrices.addView(i.horizontalLayoutPrices);
+            try {
+                verticalLayoutPrices.addView(i.horizontalLayoutPrices);
+            }
+            catch (IllegalStateException e) {
+                Log.d(TAG, "DrinkUI " + i.name + " already in verticalLayoutPrices");
+            }
         }
 
         final Button back = (Button) view.findViewById(R.id.prices_back);
@@ -60,6 +69,12 @@ public class PricesFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onDestroyView() {
+        verticalLayoutPrices.removeAllViews();
+        super.onDestroyView();
     }
 
     /**

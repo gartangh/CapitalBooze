@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Locale;
@@ -23,6 +24,7 @@ public class DrinkUI extends Drink {
     // Orders
     protected LinearLayout horizontalLayoutOrders;
     protected TextView mNameOrders;
+    protected RelativeLayout mRelativeOrder;
     protected Button mRed;
     protected TextView mDrinkCountOrders;
     protected Button mGreen;
@@ -55,6 +57,7 @@ public class DrinkUI extends Drink {
 
         mNameOrders = new TextView(context);
         mNameOrders.setText(name);
+        mNameOrders.setTextSize(24);
         mNameOrders.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
@@ -70,7 +73,6 @@ public class DrinkUI extends Drink {
         });
 
         mRed = new Button(context);
-        mRed.setGravity(Gravity.END);
         mRed.setText("-");
         mRed.setBackgroundResource(R.drawable.round_red);
         mRed.setOnClickListener(new View.OnClickListener() {
@@ -104,17 +106,15 @@ public class DrinkUI extends Drink {
         });
 
         mDrinkCountOrders = new TextView(context);
-        mDrinkCountOrders.setGravity(Gravity.END);
         mDrinkCountOrders.setText("0");
 
         mGreen = new Button(context);
-        mGreen.setGravity(Gravity.END);
         mGreen.setText("+");
         mGreen.setBackgroundResource(R.drawable.round_green);
         mGreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mDrinkCountOrders.setText(++countCurrent);
+                mDrinkCountOrders.setText(Integer.toString(++countCurrent));
                 /*
                 ref.runTransaction(new Transaction.Handler() {
                     @Override
@@ -153,6 +153,7 @@ public class DrinkUI extends Drink {
 
         mNameCounters = new TextView(context);
         mNameCounters.setText(name);
+        mNameCounters.setTextSize(24);
 
         mCountCurrent = new TextView(context);
         mCountCurrent.setText(String.format(Locale.getDefault(), "%1d", countCurrent));
@@ -181,6 +182,7 @@ public class DrinkUI extends Drink {
 
         mNamePrices = new TextView(context);
         mNamePrices.setText(name);
+        mNameOrders.setTextSize(24);
 
         mPrice = new TextView(context);
         mPrice.setText(String.format(Locale.getDefault(), "€ %.2f", price));

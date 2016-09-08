@@ -3,6 +3,7 @@ package com.tanghe.garben.capitalbooze;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +13,9 @@ import android.widget.LinearLayout;
 public class CountersFragment extends Fragment {
 
     private OnCountersFragmentInteractionListener mListener;
-    protected static Context context;
+    private final static String TAG = "Counters";
+
+    private static LinearLayout verticalLayoutCounters;
 
     public CountersFragment() {
         // Required empty public constructor
@@ -27,9 +30,14 @@ public class CountersFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_counters, container, false);
 
-        final LinearLayout verticalLayoutCounters = (LinearLayout) view.findViewById(R.id.verticalLayoutCounters);
+        verticalLayoutCounters = (LinearLayout) view.findViewById(R.id.verticalLayoutCounters);
         for (DrinkUI i : DrinkUI.uidrinks) {
-            verticalLayoutCounters.addView(i.horizontalLayoutCounters);
+            try {
+                verticalLayoutCounters.addView(i.horizontalLayoutCounters);
+            }
+            catch (IllegalStateException e) {
+                Log.d(TAG, "DrinkUI " + i.name + " already in verticalLayoutCounters");
+            }
         }
 
         final Button back = (Button) view.findViewById(R.id.counters_back);
@@ -67,12 +75,14 @@ public class CountersFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onDestroyView() {
+        verticalLayoutCounters.removeAllViews();
+        super.onDestroyView();
+    }
+
     public interface OnCountersFragmentInteractionListener {
         void onCountersBackPressed();
         void onCountersNextPressed();
-    }
-
-    public static void setArgument(Context context) {
-        CountersFragment.context = context;
     }
 }

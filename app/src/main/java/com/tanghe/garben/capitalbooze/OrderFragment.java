@@ -21,6 +21,8 @@ public class OrderFragment extends Fragment {
     private OnOrderFragmentInteractionListener mListener;
     private final static String TAG = "Order";
 
+    private static LinearLayout verticalLayoutOrders;
+
     public OrderFragment() {
         // Required empty public constructor
     }
@@ -35,9 +37,14 @@ public class OrderFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_order, container, false);
 
-        final LinearLayout verticalLayoutOrders = (LinearLayout) view.findViewById(R.id.verticalLayoutOrders);
+        verticalLayoutOrders = (LinearLayout) view.findViewById(R.id.verticalLayoutOrders);
         for (DrinkUI i : DrinkUI.uidrinks) {
-            verticalLayoutOrders.addView(i.horizontalLayoutOrders);
+            try {
+                verticalLayoutOrders.addView(i.horizontalLayoutOrders);
+            }
+            catch (IllegalStateException e) {
+                Log.d(TAG, "DrinkUI " + i.name + " already in verticalLayoutOrders");
+            }
         }
 
         final Button order = (Button) view.findViewById(R.id.order);
@@ -82,6 +89,12 @@ public class OrderFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onDestroyView() {
+        verticalLayoutOrders.removeAllViews();
+        super.onDestroyView();
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -95,9 +108,5 @@ public class OrderFragment extends Fragment {
     public interface OnOrderFragmentInteractionListener {
         void onOrderBackPressed();
         void onOrderNextPressed();
-    }
-
-    public static void setArgument(Context context) {
-        CountersFragment.context = context;
     }
 }
