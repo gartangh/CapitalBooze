@@ -21,7 +21,7 @@ public class AdminOnlyFragment extends Fragment {
     private static Context context;
     private final static String TAG = "AdminOnlyFragment";
 
-    private static boolean partyStarted = false;
+    protected static boolean partyStarted = false;
     private final static long INTERVAL = 60*1000L;
     private final static long[] PATTERN = {0L, 100L, 100L, 50L};
 
@@ -72,6 +72,7 @@ public class AdminOnlyFragment extends Fragment {
                     timer.schedule(timerTask, INTERVAL, INTERVAL);
 
                     partyStarted = true;
+                    MainActivity.ref2.child("partyStarted").setValue(partyStarted);
                 }
             }
         });
@@ -80,10 +81,8 @@ public class AdminOnlyFragment extends Fragment {
         mCrash.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                DrinkUI.crash();
-
                 Log.d(TAG, "CRASH");
+                DrinkUI.crash();
             }
         });
 

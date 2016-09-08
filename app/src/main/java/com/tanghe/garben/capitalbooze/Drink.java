@@ -9,16 +9,16 @@ public class Drink {
 
     // B = Big, S = Small, I = Increase, D = Decrease
     protected final static double BI = 1.3;
-    protected final static double BD = 0.7;
+    protected final static double BD = 0.8;
     protected final static double SI = 1.15;
-    protected final static double SD = 0.85;
+    protected final static double SD = 0.9;
 
     // party
-    protected static int countTotalCurrent = 0;
-    protected static int countTotalLast;
-    protected static int countTotalSecondLast;
-    protected static int countTotalDifference;
-    protected static int partyCountTotal = 0;
+    protected static long countTotalCurrent = 0;
+    protected static long countTotalLast;
+    protected static long countTotalSecondLast;
+    protected static long countTotalDifference;
+    protected static long partyCountTotal = 0;
     protected static double partyRevenueTotal = 0.00;
 
     // drinks

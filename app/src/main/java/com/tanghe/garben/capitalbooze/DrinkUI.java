@@ -32,14 +32,10 @@ public class DrinkUI extends Drink {
 
     // Orders
     protected LinearLayout horizontalLayoutOrders;
-    private TextView mNameOrders;
-    private Button mRed;
     private TextView mDrinkCountOrders;
-    private Button mGreen;
 
     // Counters
     protected LinearLayout horizontalLayoutCounters;
-    private TextView mNameCounters;
     private TextView mCountCurrent;
     private TextView mCountLast;
     private TextView mPartyCount;
@@ -47,7 +43,6 @@ public class DrinkUI extends Drink {
 
     // Prices
     protected LinearLayout horizontalLayoutPrices;
-    private TextView mNamePrices;
     private TextView mPrice;
     private TextView mPriceDifference;
 
@@ -63,19 +58,17 @@ public class DrinkUI extends Drink {
         horizontalLayoutOrders.setLayoutParams(params);
         horizontalLayoutOrders.setGravity(Gravity.END);
 
-        mNameOrders = new TextView(context);
+        final TextView mNameOrders = new TextView(context);
         mNameOrders.setText(name);
         mNameOrders.setTextSize(24);
         mNameOrders.setLayoutParams(params2);
-        /*
-        TODO: make this code work
         mNameOrders.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                for (DrinkUI i : DrinkUI.uidrinks) {
-                    if (i.name.equals(mNameOrders.getText().toString()) && MainActivity.accountType == 2)  {
+                for (DrinkUI i : uidrinks) {
+                    if (i.name.equals(mNameOrders.getText().toString()) && MainActivity.accountType == 2) {
                         DrinkUI.uidrinks.remove(i);
-                        // TODO: remove drink from FireBase
+                        MainActivity.ref2.child("Drinks").child(i.name).removeValue();
                         Log.d(TAG, "Drink " + i.name + " removed");
                         continue;
                     }
@@ -83,9 +76,8 @@ public class DrinkUI extends Drink {
                 return false;
             }
         });
-        */
 
-        mRed = new Button(context);
+        Button mRed = new Button(context);
         mRed.setText("-");
         mRed.setTextSize(24);
         mRed.setBackgroundResource(R.drawable.round_red);
@@ -127,7 +119,7 @@ public class DrinkUI extends Drink {
         mDrinkCountOrders.setText("0");
         mDrinkCountOrders.setTextSize(24);
 
-        mGreen = new Button(context);
+        Button mGreen = new Button(context);
         mGreen.setText("+");
         mGreen.setTextSize(24);
         mGreen.setBackgroundResource(R.drawable.round_green);
@@ -175,7 +167,7 @@ public class DrinkUI extends Drink {
         horizontalLayoutCounters.setLayoutParams(params);
         horizontalLayoutCounters.setGravity(Gravity.END);
 
-        mNameCounters = new TextView(context);
+        TextView mNameCounters = new TextView(context);
         mNameCounters.setText(name);
         mNameCounters.setTextSize(24);
         mNameCounters.setLayoutParams(params2);
@@ -209,7 +201,7 @@ public class DrinkUI extends Drink {
         horizontalLayoutPrices.setLayoutParams(params);
         horizontalLayoutPrices.setGravity(Gravity.END);
 
-        mNamePrices = new TextView(context);
+        TextView mNamePrices = new TextView(context);
         mNamePrices.setText(name);
         mNamePrices.setTextSize(24);
         mNamePrices.setLayoutParams(params2);
@@ -240,17 +232,34 @@ public class DrinkUI extends Drink {
     public static void task() {
         for (DrinkUI i : uidrinks) {
             i.countSecondLast = i.countLast;
+            MainActivity.ref2.child("Drinks").child(i.name).child("countSecondLast").setValue(i.countSecondLast);
+
             i.countLast = i.countCurrent;
+            MainActivity.ref2.child("Drinks").child(i.name).child("countLast").setValue(i.countLast);
             i.mCountLast.setText(String.format(Locale.getDefault(), "(%1d)", i.countLast));
+
             i.countCurrent = 0;
+            MainActivity.ref2.child("Drinks").child(i.name).child("countCurrent").setValue(i.countCurrent);
             i.mCountCurrent.setText(String.format(Locale.getDefault(), "%1d", 0));
+
             i.priceLast = i.price;
+            MainActivity.ref2.child("Drinks").child(i.name).child("priceLast").setValue(i.priceLast);
+
             i.countDifference = i.countLast - i.countSecondLast;
+            MainActivity.ref2.child("Drinks").child(i.name).child("countDifference").setValue(i.countDifference);
         }
+
         countTotalSecondLast = countTotalLast;
+        MainActivity.ref2.child("countTotalSecondLast").setValue(countTotalSecondLast);
+
         countTotalLast = countTotalCurrent;
+        MainActivity.ref2.child("countTotalLast").setValue(countTotalLast);
+
         countTotalCurrent = 0;
+        MainActivity.ref2.child("countTotalCurrent").setValue(countTotalCurrent);
+
         countTotalDifference = countTotalLast - countTotalSecondLast;
+        MainActivity.ref2.child("countTotalDifference").setValue(countTotalDifference);
 
         calcPrises();
 
@@ -261,31 +270,38 @@ public class DrinkUI extends Drink {
         for (DrinkUI i : uidrinks) {
             try {
                 double rate = i.countLast*1.0/countTotalLast - i.countSecondLast*1.0/countTotalSecondLast;
-
-                if (countTotalDifference >= 0) {
-                    if (rate >= 0) {
-                        i.testPrice(BI *i.priceLast);
-                    } else {
-                        i.testPrice(SD *i.priceLast);
-                    }
+                if (i.countLast == 0) {
+                    i.testPrice(i.price - 0.20);
                 }
                 else {
-                    if (rate > 0) {
-                        i.testPrice(SI *i.priceLast);
-                    } else {
-                        i.testPrice(BD *i.priceLast);
+                    if (countTotalDifference >= 0) {
+                        if (rate >= 0) {
+                            i.testPrice(BI *i.priceLast);
+                        } else {
+                            i.testPrice(SD *i.priceLast);
+                        }
+                    }
+                    else {
+                        if (rate > 0) {
+                            i.testPrice(SI *i.priceLast);
+                        } else {
+                            i.testPrice(BD *i.priceLast);
+                        }
                     }
                 }
             }
             catch (IllegalArgumentException e) {
-                if (i.countDifference < 0) {
+                if (countTotalLast == 0) {
                     i.testPrice(i.price - 0.10);
+                } else {
+                    i.testPrice(i.price);
                 }
             }
         }
     }
 
     private void testPrice(double testPrice) {
+        // price
         if (testPrice > max) {
             price = max;
         }
@@ -295,9 +311,12 @@ public class DrinkUI extends Drink {
         else {
             price = MainActivity.round(testPrice);
         }
-        priceDifference = price - priceLast;
-
+        MainActivity.ref2.child("Drinks").child(name).child("price").setValue(price);
         mPrice.setText(String.format(Locale.getDefault(), "€ %.2f", price));
+
+        // priceDifference
+        priceDifference = price - priceLast;
+        MainActivity.ref2.child("Drinks").child(name).child("priceDifference").setValue(priceDifference);
         mPriceDifference.setText(String.format(Locale.getDefault(), "%.2f", priceDifference));
         if (priceDifference < 0) {
             mPriceDifference.setTextColor(context.getResources().getColor(R.color.green));
@@ -311,28 +330,38 @@ public class DrinkUI extends Drink {
     }
 
     public static void crash() {
-        // TODO: insert crash here
+        for (DrinkUI i : uidrinks) {
+            i.testPrice(i.price - 0.5);
+        }
         Log.d(TAG, "Crash executed");
     }
 
     public static void orderSend() {
         for (DrinkUI i : DrinkUI.uidrinks) {
             i.countCurrent += i.orderCount;
+            MainActivity.ref2.child("Drinks").child(i.name).child("countCurrent").setValue(i.countCurrent);
             i.mCountCurrent.setText(String.format(Locale.getDefault(), "%1d", i.countCurrent));
+
             i.partyCount += i.orderCount;
+            MainActivity.ref2.child("Drinks").child(i.name).child("partyCount").setValue(i.partyCount);
             i.mPartyCount.setText(String.format(Locale.getDefault(), "%1d", i.partyCount));
+
             i.partyRevenue += i.orderCount * i.price;
+            MainActivity.ref2.child("Drinks").child(i.name).child("partyRevenue").setValue(i.partyRevenue);
             i.mPartyRevenue.setText(String.format(Locale.getDefault(), "€ %.2f", i.partyRevenue));
+
             partyRevenueTotal += i.orderCount * i.price;
+            MainActivity.ref2.child("partyRevenueTotal").setValue(partyRevenueTotal);
             i.orderCount = 0;
 
             i.mDrinkCountOrders.setText(String.format(Locale.getDefault(), "%1d", i.orderCount));
-
-
-
         }
+
         countTotalCurrent += c;
+        MainActivity.ref2.child("countTotalCurrent").setValue(countTotalCurrent);
         partyCountTotal += c;
+        MainActivity.ref2.child("partyCountTotal").setValue(partyCountTotal);
+
         p = 0.00;
         s = 0;
         c = 0;

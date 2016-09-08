@@ -95,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements
             });
         }
 
+        // Drinks
         ref2.child("Drinks").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -120,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 for (DrinkUI i : DrinkUI.uidrinks) {
-                    if (dataSnapshot.child("Name").getValue().equals(i.name)) {
+                    if (dataSnapshot.child("name").getValue().equals(i.name)) {
                         DrinkUI.uidrinks.remove(i);
                     }
                 }
@@ -137,8 +138,88 @@ public class MainActivity extends AppCompatActivity implements
             }
         });
 
-        // TODO: download party statistics: statics in Drink
-        // TODO: download party statistics: boolean static partyStarted in AdminOnlyFragment
+        // Party in Drink
+        ref2.child("countTotalCurrent").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Drink.countTotalCurrent = (long) dataSnapshot.getValue();
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+        ref2.child("countTotalDifference").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                DrinkUI.countTotalDifference = (long) dataSnapshot.getValue();
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+        ref2.child("countTotalLast").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                DrinkUI.countTotalLast = (long) dataSnapshot.getValue();
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+        ref2.child("countTotalSecondLast").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                DrinkUI.countTotalSecondLast = (long) dataSnapshot.getValue();
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+        ref2.child("partyCountTotal").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                DrinkUI.partyCountTotal = (long) dataSnapshot.getValue();
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+        ref2.child("partyRevenueTotal").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                DrinkUI.partyRevenueTotal = (double) dataSnapshot.getValue();
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+
+        // AdminOnly
+        ref2.child("partyStarted").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if((boolean) dataSnapshot.getValue()) {
+                    AdminOnlyFragment.partyStarted = true;
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
 
         hideProgressDialog();
     }
