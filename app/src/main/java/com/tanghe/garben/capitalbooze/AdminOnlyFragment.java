@@ -22,6 +22,7 @@ public class AdminOnlyFragment extends Fragment {
     private final static String TAG = "AdminOnlyFragment";
 
     protected static boolean partyStarted = false;
+    // TODO: set interval to 15*60*1000L
     private final static long INTERVAL = 60*1000L;
     private final static long[] PATTERN = {0L, 100L, 100L, 50L};
 
@@ -43,6 +44,19 @@ public class AdminOnlyFragment extends Fragment {
 
                 if (!partyStarted) {
                     v.vibrate(PATTERN, -1);
+
+                    Drink.countTotalCurrent = 0;
+                    MainActivity.ref2.child("countTotalCurrent").setValue(Drink.countTotalCurrent);
+                    Drink.countTotalLast = 0;
+                    MainActivity.ref2.child("countTotalLast").setValue(Drink.countTotalLast);
+                    Drink.countTotalSecondLast = 0;
+                    MainActivity.ref2.child("countTotalSecondLast").setValue(Drink.countTotalSecondLast);
+                    Drink.countTotalDifference = 0;
+                    MainActivity.ref2.child("countTotalDifference").setValue(Drink.countTotalDifference);
+                    Drink.partyCountTotal = 0;
+                    MainActivity.ref2.child("partyCountTotal").setValue(Drink.partyCountTotal);
+                    Drink.partyRevenueTotal = 0.00;
+                    MainActivity.ref2.child("partyRevenueTotal").setValue(Drink.partyRevenueTotal);
 
                     final Handler handler = new Handler();
 

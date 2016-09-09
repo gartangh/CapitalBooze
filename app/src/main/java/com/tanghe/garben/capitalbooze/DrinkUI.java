@@ -242,9 +242,6 @@ public class DrinkUI extends Drink {
             MainActivity.ref2.child("Drinks").child(i.name).child("countCurrent").setValue(i.countCurrent);
             i.mCountCurrent.setText(String.format(Locale.getDefault(), "%1d", 0));
 
-            i.priceLast = i.price;
-            MainActivity.ref2.child("Drinks").child(i.name).child("priceLast").setValue(i.priceLast);
-
             i.countDifference = i.countLast - i.countSecondLast;
             MainActivity.ref2.child("Drinks").child(i.name).child("countDifference").setValue(i.countDifference);
         }
@@ -276,16 +273,16 @@ public class DrinkUI extends Drink {
                 else {
                     if (countTotalDifference >= 0) {
                         if (rate >= 0) {
-                            i.testPrice(BI *i.priceLast);
+                            i.testPrice(BI *i.price);
                         } else {
-                            i.testPrice(SD *i.priceLast);
+                            i.testPrice(SD *i.price);
                         }
                     }
                     else {
                         if (rate > 0) {
-                            i.testPrice(SI *i.priceLast);
+                            i.testPrice(SI *i.price);
                         } else {
-                            i.testPrice(BD *i.priceLast);
+                            i.testPrice(BD *i.price);
                         }
                     }
                 }
@@ -302,6 +299,9 @@ public class DrinkUI extends Drink {
 
     private void testPrice(double testPrice) {
         // price
+        priceLast = price;
+        MainActivity.ref2.child("Drinks").child(name).child("priceLast").setValue(priceLast);
+
         if (testPrice > max) {
             price = max;
         }
@@ -317,7 +317,12 @@ public class DrinkUI extends Drink {
         // priceDifference
         priceDifference = price - priceLast;
         MainActivity.ref2.child("Drinks").child(name).child("priceDifference").setValue(priceDifference);
-        mPriceDifference.setText(String.format(Locale.getDefault(), "%.2f", priceDifference));
+        if (priceDifference >= 0) {
+            mPriceDifference.setText(String.format(Locale.getDefault(), "+%.2f", priceDifference));
+        }
+        else {
+            mPriceDifference.setText(String.format(Locale.getDefault(), "%.2f", priceDifference));
+        }
         if (priceDifference < 0) {
             mPriceDifference.setTextColor(context.getResources().getColor(R.color.green));
         }
@@ -331,7 +336,7 @@ public class DrinkUI extends Drink {
 
     public static void crash() {
         for (DrinkUI i : uidrinks) {
-            i.testPrice(i.price - 0.5);
+            i.testPrice(0.75 * i.price);
         }
         Log.d(TAG, "Crash executed");
     }

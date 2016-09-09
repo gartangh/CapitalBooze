@@ -25,16 +25,8 @@
         <menu>
             <group android:checkableBehavior="single">
                 <item
-                    android:id="@+id/nav_drink_fragment"
-                    android:title="@string/nav_drink"
-                    android:icon="@android:drawable/ic_menu_add" />
-                <item
                     android:id="@+id/nav_order_fragment"
                     android:title="@string/nav_order"
-                    android:icon="@android:drawable/ic_menu_add" />
-                <item
-                    android:id="@+id/nav_counters_fragment"
-                    android:title="@string/nav_counters"
                     android:icon="@android:drawable/ic_menu_add" />
             </group>
         </menu>
@@ -42,6 +34,14 @@
     <item android:title="@string/nav_admin_only">
         <menu>
             <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_drink_fragment"
+                    android:title="@string/nav_drink"
+                    android:icon="@android:drawable/ic_menu_add" />
+                <item
+                    android:id="@+id/nav_counters_fragment"
+                    android:title="@string/nav_counters"
+                    android:icon="@android:drawable/ic_menu_add" />
                 <item
                     android:id="@+id/nav_admin_only_fragment"
                     android:title="@string/nav_admin_only"

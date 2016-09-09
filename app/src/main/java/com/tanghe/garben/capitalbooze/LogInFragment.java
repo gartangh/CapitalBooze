@@ -118,6 +118,7 @@ public class LogInFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 mAuth.signOut();
+                MainActivity.accountType = 0L;
             }
         });
 
