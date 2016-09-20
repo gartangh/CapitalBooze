@@ -13,40 +13,40 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class DrinkUI extends Drink {
+class DrinkUI extends Drink {
 
     protected final static DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
     private static Context context;
     private static String TAG = "DinkUI";
 
-    protected static double p = 0.00;
+    private static double p = 0.00;
     protected static int s = 0;
     protected static int c = 0;
 
-    protected int orderCount = 0;
+    private int orderCount = 0;
 
-    protected final static ArrayList<DrinkUI> uidrinks = new ArrayList<>();
+    final static ArrayList<DrinkUI> uidrinks = new ArrayList<>();
 
     private LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
     private LinearLayout.LayoutParams params2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
 
     // Orders
-    protected LinearLayout horizontalLayoutOrders;
+    LinearLayout horizontalLayoutOrders;
     private TextView mDrinkCountOrders;
 
     // Counters
-    protected LinearLayout horizontalLayoutCounters;
-    private TextView mCountCurrent;
-    private TextView mCountLast;
-    private TextView mPartyCount;
-    private TextView mPartyRevenue;
+    LinearLayout horizontalLayoutCounters;
+    TextView mCountCurrent;
+    TextView mCountLast;
+    TextView mPartyCount;
+    TextView mPartyRevenue;
 
     // Prices
-    protected LinearLayout horizontalLayoutPrices;
-    private TextView mPrice;
-    private TextView mPriceDifference;
+    LinearLayout horizontalLayoutPrices;
+    TextView mPrice;
+    TextView mPriceDifference;
 
-    public DrinkUI(String name, double price, double min, double max) {
+    DrinkUI(String name, double price, double min, double max) {
         super(name, price, min, max);
         makeUIElements();
     }
@@ -236,7 +236,6 @@ public class DrinkUI extends Drink {
 
             i.countLast = i.countCurrent;
             MainActivity.ref2.child("Drinks").child(i.name).child("countLast").setValue(i.countLast);
-            i.mCountLast.setText(String.format(Locale.getDefault(), "(%1d)", i.countLast));
 
             i.countCurrent = 0;
             MainActivity.ref2.child("Drinks").child(i.name).child("countCurrent").setValue(i.countCurrent);
@@ -312,26 +311,10 @@ public class DrinkUI extends Drink {
             price = MainActivity.round(testPrice);
         }
         MainActivity.ref2.child("Drinks").child(name).child("price").setValue(price);
-        mPrice.setText(String.format(Locale.getDefault(), "€ %.2f", price));
 
         // priceDifference
         priceDifference = price - priceLast;
         MainActivity.ref2.child("Drinks").child(name).child("priceDifference").setValue(priceDifference);
-        if (priceDifference >= 0) {
-            mPriceDifference.setText(String.format(Locale.getDefault(), "+%.2f", priceDifference));
-        }
-        else {
-            mPriceDifference.setText(String.format(Locale.getDefault(), "%.2f", priceDifference));
-        }
-        if (priceDifference < 0) {
-            mPriceDifference.setTextColor(context.getResources().getColor(R.color.green));
-        }
-        else if (priceDifference > 0) {
-            mPriceDifference.setTextColor(context.getResources().getColor(R.color.red));
-        }
-        else {
-            mPriceDifference.setTextColor(context.getResources().getColor(R.color.grey));
-        }
     }
 
     public static void crash() {

@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "305330370121-n7qe6sbbpu1k4igkd769j0oeu20h17de.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tanghe.garben.capitalbooze",
+            "certificate_hash": "E15E848D557D0C45155EE5E01E2C87DE38C5BD94"
+          }
+        },
+        {
           "client_id": "305330370121-t8thhbj67ul8lo7v7hmb5vhub7hvhphe.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

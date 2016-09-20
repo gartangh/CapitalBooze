@@ -82,6 +82,7 @@ public class LogInFragment extends Fragment {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
                 }
+
                 updateUI(user);
             }
         };

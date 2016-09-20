@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -20,7 +21,6 @@ import android.widget.LinearLayout;
 public class PricesFragment extends Fragment {
 
     private OnPricesFragmentInteractionListener mListener;
-    private static Context context;
     private final static String TAG = "Prices";
 
     private static LinearLayout verticalLayoutPrices;
@@ -51,6 +51,19 @@ public class PricesFragment extends Fragment {
                 mListener.onPricesBackPressed();
             }
         });
+
+        /*
+        final Button refresh = (Button) view.findViewById(R.id.refresh);
+        refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for (DrinkUI i :
+                        DrinkUI.uidrinks) {
+                    i.mPrice.setText(String.format(Locale.getDefault(), ));
+                }
+            }
+        });
+        */
 
         return view;
     }
@@ -89,9 +102,5 @@ public class PricesFragment extends Fragment {
      */
     public interface OnPricesFragmentInteractionListener {
         void onPricesBackPressed();
-    }
-
-    public static void setArgument(Context context) {
-        PricesFragment.context = context;
     }
 }

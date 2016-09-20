@@ -59,6 +59,9 @@
     <string name="start">START</string>
     <string name="crash">CRASH</string>
 
+    <!-- fragment_prices-->
+    <string name="refresh">refresh</string>
+
     <string name="total">Total</string>
 
     <!-- TODO: Remove or change this placeholder text -->

@@ -20,6 +20,8 @@ import com.firebase.client.ValueEventListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.Locale;
+
 public class MainActivity extends AppCompatActivity implements
         AboutFragment.OnAboutFragmentInteractionListener,
         LogInFragment.OnLogInFragmentInteractionListener,
@@ -47,7 +49,6 @@ public class MainActivity extends AppCompatActivity implements
         Firebase.setAndroidContext(this);
 
         DrinkUI.setArgument(MainActivity.this);
-        PricesFragment.setArgument(MainActivity.this);
         AdminOnlyFragment.setArgument(MainActivity.this);
 
         // Set a Toolbar to replace the ActionBar.
@@ -100,18 +101,133 @@ public class MainActivity extends AppCompatActivity implements
         // Drinks
         ref2.child("Drinks").addChildEventListener(new ChildEventListener() {
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            public void onChildAdded(final DataSnapshot dataSnapshotDrink, String s) {
                 boolean geldig = true;
                 for (DrinkUI i : DrinkUI.uidrinks) {
-                    if (dataSnapshot.child("name").getValue().equals(i.name)) {
+                    if (dataSnapshotDrink.child("name").getValue().equals(i.name)) {
                         geldig = false;
                     }
                 }
                 if (geldig) {
-                    new DrinkUI((String) dataSnapshot.child("name").getValue(), (Double) dataSnapshot.child("price").getValue(), (Double) dataSnapshot.child("min").getValue(), (Double) dataSnapshot.child("max").getValue());
-                    Log.d("FireBase", "new Drink: " + dataSnapshot.child("name").getValue() + " added");
+                    new DrinkUI((String) dataSnapshotDrink.child("name").getValue(), (Double) dataSnapshotDrink.child("price").getValue(), (Double) dataSnapshotDrink.child("min").getValue(), (Double) dataSnapshotDrink.child("max").getValue());
+                    Log.d("FireBase", "new Drink: " + dataSnapshotDrink.child("name").getValue() + " added");
                 } else {
-                    Log.d("FireBase","new Drink: " + dataSnapshot.child("name").getValue() + " already in DrinkUI.uidrinks");
+                    Log.d("FireBase","new Drink: " + dataSnapshotDrink.child("name").getValue() + " already in DrinkUI.uidrinks");
+                }
+
+                ref2.child("Drinks").child(dataSnapshotDrink.child("name").getValue().toString()).child("price").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        double price = Double.parseDouble(dataSnapshot.getValue().toString());
+                        for (DrinkUI i : DrinkUI.uidrinks) {
+                            if (dataSnapshotDrink.child("name").getValue().toString().equals(i.getName())) {
+                                i.price = price;
+                                i.mPrice.setText(String.format(Locale.getDefault(), "€ %.2f", price));
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(FirebaseError firebaseError) {
+
+                    }
+                });
+                ref2.child("Drinks").child(dataSnapshotDrink.child("name").getValue().toString()).child("priceDifference").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        double priceDifference = Double.parseDouble(dataSnapshot.getValue().toString());
+                        for (DrinkUI i : DrinkUI.uidrinks) {
+                            if (dataSnapshotDrink.child("name").getValue().toString().equals(i.getName())) {
+                                i.priceDifference = priceDifference;
+                                if (priceDifference >= 0) {
+                                    i.mPriceDifference.setText(String.format(Locale.getDefault(), "+%.2f", priceDifference));
+                                }
+                                else {
+                                    i.mPriceDifference.setText(String.format(Locale.getDefault(), "%.2f", priceDifference));
+                                }
+
+                                if (priceDifference < 0) {
+                                    i.mPriceDifference.setTextColor(getResources().getColor(R.color.green));
+                                }
+                                else if (priceDifference > 0) {
+                                    i.mPriceDifference.setTextColor(getResources().getColor(R.color.red));
+                                }
+                                else {
+                                    i.mPriceDifference.setTextColor(getResources().getColor(R.color.grey));
+                                }
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(FirebaseError firebaseError) {
+
+                    }
+                });
+                if (accountType == 2) {
+                    // TODO: add value event listeners for other properties of dataSnapshotDrink
+                    ref2.child("Drinks").child(dataSnapshotDrink.child("name").getValue().toString()).child("countCurrent").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            for (DrinkUI i : DrinkUI.uidrinks) {
+                                if (dataSnapshotDrink.child("name").getValue().toString().equals(i.getName())) {
+                                    i.countCurrent = (int) dataSnapshot.getValue();
+                                    i.mCountCurrent.setText(String.format(Locale.getDefault(), "(%1d)", i.countCurrent));
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(FirebaseError firebaseError) {
+
+                        }
+                    });
+                    ref2.child("Drinks").child(dataSnapshotDrink.child("name").getValue().toString()).child("countDifference").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            for (DrinkUI i : DrinkUI.uidrinks) {
+                                if (dataSnapshotDrink.child("name").getValue().toString().equals(i.getName())) {
+                                    i.countDifference = (int) dataSnapshot.getValue();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(FirebaseError firebaseError) {
+
+                        }
+                    });
+                    ref2.child("Drinks").child(dataSnapshotDrink.child("name").getValue().toString()).child("countLast").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            for (DrinkUI i : DrinkUI.uidrinks) {
+                                if (dataSnapshotDrink.child("name").getValue().toString().equals(i.getName())) {
+                                    i.countLast = (int) dataSnapshot.getValue();
+                                    i.mCountLast.setText(String.format(Locale.getDefault(), "(%1d)", i.countLast));
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(FirebaseError firebaseError) {
+
+                        }
+                    });
+                    ref2.child("Drinks").child(dataSnapshotDrink.child("name").getValue().toString()).child("countSecondLast").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            for (DrinkUI i : DrinkUI.uidrinks) {
+                                if (dataSnapshotDrink.child("name").getValue().toString().equals(i.getName())) {
+                                    i.countSecondLast = (int) dataSnapshot.getValue();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(FirebaseError firebaseError) {
+
+                        }
+                    });
                 }
             }
 

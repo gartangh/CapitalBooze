@@ -53,6 +53,7 @@ public class Drink {
         return name;
     }
 
+    // Not used, but necessary for firebase
     public double getPrice() {
         return price;
     }
@@ -96,5 +97,4 @@ public class Drink {
     public double getPartyRevenue() {
         return partyRevenue;
     }
-
 }
