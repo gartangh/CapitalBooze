@@ -19,10 +19,10 @@ public class CountersFragment extends Fragment {
     private final static String TAG = "Counters";
 
     private static LinearLayout verticalLayoutCounters;
-    private static TextView mCountTotalCurrent;
-    private static TextView mCountTotalLast;
-    private static TextView mPartyCountTotal;
-    private static TextView mPartyRevenueTotal;
+    static TextView mCountTotalCurrent;
+    static TextView mCountTotalLast;
+    static TextView mPartyCountTotal;
+    static TextView mPartyRevenueTotal;
 
     public CountersFragment() {
         // Required empty public constructor
@@ -48,13 +48,13 @@ public class CountersFragment extends Fragment {
         }
 
         mCountTotalCurrent = (TextView) view.findViewById(R.id.mCountTotalCurrent);
-        mCountTotalCurrent.setText(String.format(Locale.getDefault(), "%1d", Drink.countTotalCurrent));
+        CountersFragment.mCountTotalCurrent.setText(String.format(Locale.getDefault(), "%1d", Drink.countTotalCurrent));
         mCountTotalLast = (TextView) view.findViewById(R.id.mCountTotalLast);
-        mCountTotalLast.setText(String.format(Locale.getDefault(), "(%1d)", Drink.countTotalLast));
+        CountersFragment.mCountTotalLast.setText(String.format(Locale.getDefault(), "(%1d)", Drink.countTotalLast));
         mPartyCountTotal = (TextView) view.findViewById(R.id.mPartyCountTotal);
-        mPartyCountTotal.setText(String.format(Locale.getDefault(), "%1d", Drink.partyCountTotal));
+        CountersFragment.mPartyCountTotal.setText(String.format(Locale.getDefault(), "%1d", Drink.partyCountTotal));
         mPartyRevenueTotal = (TextView) view.findViewById(R.id.mPartyRevenueTotal);
-        mPartyRevenueTotal.setText(String.format(Locale.getDefault(), "€ %.2f", Drink.partyRevenueTotal));
+        CountersFragment.mPartyRevenueTotal.setText(String.format(Locale.getDefault(), "€ %.2f", Drink.partyRevenueTotal));
 
         final Button back = (Button) view.findViewById(R.id.counters_back);
         back.setOnClickListener(new View.OnClickListener() {

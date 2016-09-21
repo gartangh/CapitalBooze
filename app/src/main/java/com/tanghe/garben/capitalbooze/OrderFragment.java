@@ -10,9 +10,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
-
 import java.util.Locale;
 
 /**
@@ -25,6 +22,13 @@ public class OrderFragment extends Fragment {
 
     private OnOrderFragmentInteractionListener mListener;
     private final static String TAG = "Order";
+
+    protected static double totalPrice = 0.00;
+    protected static double totalPriceLast = 0.00;
+    protected static int totalSquares = 0;
+    protected static int totalSquaresLast = 0;
+    protected static int totalCount = 0;
+    protected static int totalCountLast = 0;
 
     private static LinearLayout verticalLayoutOrders;
     private static TextView mTotalPrice;
@@ -65,23 +69,46 @@ public class OrderFragment extends Fragment {
         mTotalCount = (TextView) view.findViewById(R.id.mTotalCount);
         mTotalCountLast = (TextView) view.findViewById(R.id.mTotalCountLast);
 
+        setTotals();
+        setTotalsLast();
+
         final Button order = (Button) view.findViewById(R.id.order);
         order.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (Integer.parseInt(mTotalCount.getText().toString()) > 0) {
-                    mTotalPriceLast.setText("(" + mTotalPrice.getText() + ")");
-                    mTotalSquaresLast.setText("(" + mTotalSquares.getText() + ")");
-                    mTotalCountLast.setText("(" + mTotalCount.getText() + ")");
+                if (totalCount > 0) {
+                    for (DrinkUI i : DrinkUI.uidrinks) {
+                        i.countCurrent += i.orderCount;
+                        MainActivity.ref2.child("Drinks").child(i.name).child("countCurrent").setValue(i.countCurrent);
 
-                    DrinkUI.orderSend();
+                        i.partyCount += i.orderCount;
+                        MainActivity.ref2.child("Drinks").child(i.name).child("partyCount").setValue(i.partyCount);
 
-                    Log.d(TAG, "Order send");
+                        i.partyRevenue += i.orderCount * i.price;
+                        MainActivity.ref2.child("Drinks").child(i.name).child("partyRevenue").setValue(i.partyRevenue);
+
+                        Drink.partyRevenueTotal += i.orderCount * i.price;
+                        MainActivity.ref2.child("partyRevenueTotal").setValue(Drink.partyRevenueTotal);
+
+                        i.orderCount = 0;
+                        i.mDrinkCountOrders.setText(String.format(Locale.getDefault(), "%1d", i.orderCount));
+                    }
+
+                    Drink.countTotalCurrent += totalCount;
+                    MainActivity.ref2.child("countTotalCurrent").setValue(Drink.countTotalCurrent);
+                    Drink.partyCountTotal += totalCount;
+                    MainActivity.ref2.child("partyCountTotal").setValue(Drink.partyCountTotal);
+
+                    totalPriceLast = totalPrice;
+                    totalPrice = 0.00;
+                    totalSquaresLast = totalSquares;
+                    totalSquares = 0;
+                    totalCountLast = totalCount;
+                    totalCount = 0;
+
+                    setTotals();
+                    setTotalsLast();
                 }
-                else {
-                    Log.d(TAG, "Nothing in order");
-                }
-
             }
         });
 
@@ -125,10 +152,16 @@ public class OrderFragment extends Fragment {
         super.onDestroyView();
     }
 
-    public static void setTotals(double p, int s, int c) {
-        mTotalPrice.setText(String.format(Locale.getDefault(), "€ %.2f", p));
-        mTotalSquares.setText(String.format(Locale.getDefault(), "#%1d", s));
-        mTotalCount.setText(String.format(Locale.getDefault(), "%1d", c));
+    public static void setTotals() {
+        mTotalPrice.setText(String.format(Locale.getDefault(), "€ %.2f", totalPrice));
+        mTotalSquares.setText(String.format(Locale.getDefault(), "#%1d", totalSquares));
+        mTotalCount.setText(String.format(Locale.getDefault(), "%1d", totalCount));
+    }
+
+    public static void setTotalsLast() {
+        mTotalPriceLast.setText(String.format(Locale.getDefault(), "(€ %.2f)", totalPriceLast));
+        mTotalSquaresLast.setText(String.format(Locale.getDefault(), "(#%1d)", totalSquaresLast));
+        mTotalCountLast.setText(String.format(Locale.getDefault(), "(%1d)", totalCountLast));
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.tanghe.garben.capitalbooze;
 
 import android.content.Context;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -8,22 +9,20 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Locale;
 
 class DrinkUI extends Drink {
 
-    protected final static DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
     private static Context context;
     private static String TAG = "DinkUI";
 
-    private static double p = 0.00;
-    protected static int s = 0;
-    protected static int c = 0;
+    static long timeCrashLast = 0L;
 
-    private int orderCount = 0;
+    int orderCount = 0;
 
     final static ArrayList<DrinkUI> uidrinks = new ArrayList<>();
 
@@ -32,7 +31,7 @@ class DrinkUI extends Drink {
 
     // Orders
     LinearLayout horizontalLayoutOrders;
-    private TextView mDrinkCountOrders;
+    TextView mDrinkCountOrders;
 
     // Counters
     LinearLayout horizontalLayoutCounters;
@@ -46,9 +45,25 @@ class DrinkUI extends Drink {
     TextView mPrice;
     TextView mPriceDifference;
 
-    DrinkUI(String name, double price, double min, double max) {
+    DrinkUI(final String name, double price, double min, double max) {
         super(name, price, min, max);
-        makeUIElements();
+
+        MainActivity.ref2.child("Drinks").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                countCurrent = (long) dataSnapshot.child(name).child("countCurrent").getValue();
+                partyCount = (long) dataSnapshot.child(name).child("partyCount").getValue();
+                countLast = (long) dataSnapshot.child(name).child("countLast").getValue();
+                partyRevenue = (double) dataSnapshot.child(name).child("partyRevenue").getValue();
+
+                makeUIElements();
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
     }
 
     private void makeUIElements() {
@@ -70,7 +85,7 @@ class DrinkUI extends Drink {
                         DrinkUI.uidrinks.remove(i);
                         MainActivity.ref2.child("Drinks").child(i.name).removeValue();
                         Log.d(TAG, "Drink " + i.name + " removed");
-                        continue;
+                        break;
                     }
                 }
                 return false;
@@ -86,37 +101,16 @@ class DrinkUI extends Drink {
             public void onClick(View view) {
                 if (orderCount > 0) {
                     mDrinkCountOrders.setText(String.format(Locale.getDefault(), "%1d", --orderCount));
-                    p -= price;
-                    s -= (int) (10*price);
-                    --c;
-                    OrderFragment.setTotals(p, s, c);
-                    /*
-                    ref.runTransaction(new Transaction.Handler() {
-                        @Override
-                        public Transaction.Result doTransaction(MutableData mutableData) {
-                            Drink drink = mutableData.getValue(Drink.class);
-                            if (drink == null) {
-                                return Transaction.success(mutableData);
-                            }
-
-                            // Set value and report transaction success
-                            mutableData.setValue(drink);
-                            return Transaction.success(mutableData);
-                        }
-
-                        @Override
-                        public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
-                            // Transaction completed
-                            Log.d("DrinkUI", "postTransaction:onComplete:" + databaseError);
-                        }
-                    });
-                    */
+                    OrderFragment.totalPrice -= price;
+                    OrderFragment.totalSquares -= (int) (10*price);
+                    --OrderFragment.totalCount;
+                    OrderFragment.setTotals();
                 }
             }
         });
 
         mDrinkCountOrders = new TextView(context);
-        mDrinkCountOrders.setText("0");
+        mDrinkCountOrders.setText(String.format(Locale.getDefault(), "%1d", 0));
         mDrinkCountOrders.setTextSize(24);
 
         Button mGreen = new Button(context);
@@ -127,31 +121,10 @@ class DrinkUI extends Drink {
             @Override
             public void onClick(View view) {
                 mDrinkCountOrders.setText(String.format(Locale.getDefault(), "%1d", ++orderCount));
-                p += price;
-                s += (int) (10*price);
-                ++c;
-                OrderFragment.setTotals(p, s, c);
-                /*
-                ref.runTransaction(new Transaction.Handler() {
-                    @Override
-                    public Transaction.Result doTransaction(MutableData mutableData) {
-                        Drink drink = mutableData.getValue(Drink.class);
-                        if (drink == null) {
-                            return Transaction.success(mutableData);
-                        }
-
-                        // Set value and report transaction success
-                        mutableData.setValue(drink);
-                        return Transaction.success(mutableData);
-                    }
-
-                    @Override
-                    public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
-                        // Transaction completed
-                        Log.d("Drink", "postTransaction:onComplete:" + databaseError);
-                    }
-                });
-                */
+                OrderFragment.totalPrice += price;
+                OrderFragment.totalSquares += (int) (10*price);
+                ++OrderFragment.totalCount;
+                OrderFragment.setTotals();
             }
         });
 
@@ -174,6 +147,7 @@ class DrinkUI extends Drink {
 
         mCountCurrent = new TextView(context);
         mCountCurrent.setText(String.format(Locale.getDefault(), "%1d", countCurrent));
+        Log.d(TAG, "" + countCurrent);
         mCountCurrent.setTextSize(24);
 
         mCountLast = new TextView(context);
@@ -229,7 +203,7 @@ class DrinkUI extends Drink {
         uidrinks.add(this);
     }
 
-    public static void task() {
+    static void task() {
         for (DrinkUI i : uidrinks) {
             i.countSecondLast = i.countLast;
             MainActivity.ref2.child("Drinks").child(i.name).child("countSecondLast").setValue(i.countSecondLast);
@@ -239,7 +213,6 @@ class DrinkUI extends Drink {
 
             i.countCurrent = 0;
             MainActivity.ref2.child("Drinks").child(i.name).child("countCurrent").setValue(i.countCurrent);
-            i.mCountCurrent.setText(String.format(Locale.getDefault(), "%1d", 0));
 
             i.countDifference = i.countLast - i.countSecondLast;
             MainActivity.ref2.child("Drinks").child(i.name).child("countDifference").setValue(i.countDifference);
@@ -262,7 +235,7 @@ class DrinkUI extends Drink {
         Log.d(TAG, "Task executed");
     }
 
-    protected static void calcPrises() throws IllegalArgumentException {
+    private static void calcPrises() throws IllegalArgumentException {
         for (DrinkUI i : uidrinks) {
             try {
                 double rate = i.countLast*1.0/countTotalLast - i.countSecondLast*1.0/countTotalSecondLast;
@@ -317,46 +290,25 @@ class DrinkUI extends Drink {
         MainActivity.ref2.child("Drinks").child(name).child("priceDifference").setValue(priceDifference);
     }
 
-    public static void crash() {
-        for (DrinkUI i : uidrinks) {
-            i.testPrice(0.75 * i.price);
+    static void crash() {
+        final Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+
+        if (System.currentTimeMillis() - timeCrashLast >= 60*60*1000L) {
+            for (DrinkUI i : uidrinks) {
+                i.testPrice(0.75 * i.price);
+            }
+            MainActivity.ref2.child("timeCrashLast").setValue(System.currentTimeMillis());
+
+            v.vibrate(500L);
+
+            Log.d(TAG, "Crash executed");
         }
-        Log.d(TAG, "Crash executed");
+        else {
+            Log.d(TAG, "Crash NOT executed, wait " + (60*60*1000L - (System.currentTimeMillis() - timeCrashLast))/(60*1000L) + " more minutes");
+        }
     }
 
-    public static void orderSend() {
-        for (DrinkUI i : DrinkUI.uidrinks) {
-            i.countCurrent += i.orderCount;
-            MainActivity.ref2.child("Drinks").child(i.name).child("countCurrent").setValue(i.countCurrent);
-            i.mCountCurrent.setText(String.format(Locale.getDefault(), "%1d", i.countCurrent));
-
-            i.partyCount += i.orderCount;
-            MainActivity.ref2.child("Drinks").child(i.name).child("partyCount").setValue(i.partyCount);
-            i.mPartyCount.setText(String.format(Locale.getDefault(), "%1d", i.partyCount));
-
-            i.partyRevenue += i.orderCount * i.price;
-            MainActivity.ref2.child("Drinks").child(i.name).child("partyRevenue").setValue(i.partyRevenue);
-            i.mPartyRevenue.setText(String.format(Locale.getDefault(), "€ %.2f", i.partyRevenue));
-
-            partyRevenueTotal += i.orderCount * i.price;
-            MainActivity.ref2.child("partyRevenueTotal").setValue(partyRevenueTotal);
-            i.orderCount = 0;
-
-            i.mDrinkCountOrders.setText(String.format(Locale.getDefault(), "%1d", i.orderCount));
-        }
-
-        countTotalCurrent += c;
-        MainActivity.ref2.child("countTotalCurrent").setValue(countTotalCurrent);
-        partyCountTotal += c;
-        MainActivity.ref2.child("partyCountTotal").setValue(partyCountTotal);
-
-        p = 0.00;
-        s = 0;
-        c = 0;
-        OrderFragment.setTotals(p, s, c);
-    }
-
-    public static void setArgument(Context context) {
+    static void setArgument(Context context) {
         DrinkUI.context = context;
     }
 }

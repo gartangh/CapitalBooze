@@ -52,19 +52,6 @@ public class PricesFragment extends Fragment {
             }
         });
 
-        /*
-        final Button refresh = (Button) view.findViewById(R.id.refresh);
-        refresh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                for (DrinkUI i :
-                        DrinkUI.uidrinks) {
-                    i.mPrice.setText(String.format(Locale.getDefault(), ));
-                }
-            }
-        });
-        */
-
         return view;
     }
 

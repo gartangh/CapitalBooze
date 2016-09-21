@@ -35,12 +35,12 @@ public class AdminOnlyFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_admin_only, container, false);
 
+        final Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+
         Button mStart = (Button) view.findViewById(R.id.mStart);
         mStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                final Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
 
                 if (!partyStarted) {
                     v.vibrate(PATTERN, -1);
@@ -57,6 +57,25 @@ public class AdminOnlyFragment extends Fragment {
                     MainActivity.ref2.child("partyCountTotal").setValue(Drink.partyCountTotal);
                     Drink.partyRevenueTotal = 0.00;
                     MainActivity.ref2.child("partyRevenueTotal").setValue(Drink.partyRevenueTotal);
+
+                    for (DrinkUI i : DrinkUI.uidrinks) {
+                        i.countCurrent = 0L;
+                        MainActivity.ref2.child("Drinks").child(i.name).child("countCurrent").setValue(i.countCurrent);
+                        i.partyRevenue = 0.00;
+                        MainActivity.ref2.child("Drinks").child(i.name).child("partyRevenue").setValue(i.partyRevenue);
+                        i.countLast = 0L;
+                        MainActivity.ref2.child("Drinks").child(i.name).child("countLast").setValue(i.countLast);
+                        i.countDifference = 0L;
+                        MainActivity.ref2.child("Drinks").child(i.name).child("countDifference").setValue(i.countDifference);
+                        i.countSecondLast = 0L;
+                        MainActivity.ref2.child("Drinks").child(i.name).child("countSecondLast").setValue(i.countSecondLast);
+                        i.partyCount = 0L;
+                        MainActivity.ref2.child("Drinks").child(i.name).child("partyCount").setValue(i.partyCount);
+                        i.priceDifference = 0.00;
+                        MainActivity.ref2.child("Drinks").child(i.name).child("priceDifference").setValue(i.priceDifference);
+                        i.priceLast = 0.00;
+                        MainActivity.ref2.child("Drinks").child(i.name).child("priceLast").setValue(i.priceLast);
+                    }
 
                     final Handler handler = new Handler();
 
@@ -95,8 +114,9 @@ public class AdminOnlyFragment extends Fragment {
         mCrash.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "CRASH");
-                DrinkUI.crash();
+                if (partyStarted) {
+                    DrinkUI.crash();
+                }
             }
         });
 

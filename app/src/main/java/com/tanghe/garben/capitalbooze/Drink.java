@@ -1,52 +1,70 @@
 package com.tanghe.garben.capitalbooze;
 
 import android.util.Log;
+
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class Drink {
+class Drink {
+
+    private final static String TAG = "Drink";
 
     // B = Big, S = Small, I = Increase, D = Decrease
-    protected final static double BI = 1.3;
-    protected final static double BD = 0.8;
-    protected final static double SI = 1.15;
-    protected final static double SD = 0.9;
+    final static double BI = 1.3;
+    final static double BD = 0.8;
+    final static double SI = 1.15;
+    final static double SD = 0.9;
 
     // party
-    protected static long countTotalCurrent = 0;
-    protected static long countTotalLast;
-    protected static long countTotalSecondLast;
-    protected static long countTotalDifference;
-    protected static long partyCountTotal = 0;
-    protected static double partyRevenueTotal = 0.00;
+    static long countTotalCurrent;
+    static long countTotalLast;
+    static long countTotalSecondLast;
+    static long countTotalDifference;
+    static long partyCountTotal;
+    static double partyRevenueTotal;
 
     // drinks
-    protected String name;
-    protected double price;
-    protected double min;
-    protected double max;
-    protected double priceLast;
-    protected double priceDifference;
-    protected int countCurrent = 0;
-    protected int countLast;
-    protected int countSecondLast;
-    protected int countDifference;
-    protected int partyCount = 0;
-    protected double partyRevenue = 0.0;
+    String name;
+    double price;
+    double min;
+    double max;
+    double priceLast;
+    double priceDifference;
+    long countCurrent = 0;
+    long countLast;
+    long countSecondLast;
+    long countDifference;
+    long partyCount = 0;
+    double partyRevenue = 0.0;
 
     public Drink() {
         // Default constructor required for calls to DataSnapshot.getValue(Drink.class)
     }
 
-    public Drink(String name, double price, double min, double max) {
+    Drink(final String name, double price, double min, double max) {
         this.name = name;
         this.price = price;
         this.min = min;
         this.max = max;
 
-        MainActivity.ref2.child("Drinks").child(name).setValue(this);
-        Log.d("Drink", "Wrote " + name + " to database");
+        MainActivity.ref2.child("Drinks").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.child(name).getValue() == null) {
+                    MainActivity.ref2.child("Drinks").child(name).setValue(Drink.this);
+                    Log.d("Drink", "Wrote " + name + " to database");
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
     }
 
     public String getName() {
@@ -74,23 +92,23 @@ public class Drink {
         return priceDifference;
     }
 
-    public int getCountCurrent() {
+    public long getCountCurrent() {
         return countCurrent;
     }
 
-    public int getCountLast() {
+    public long getCountLast() {
         return countLast;
     }
 
-    public int getCountSecondLast() {
+    public long getCountSecondLast() {
         return countSecondLast;
     }
 
-    public int getCountDifference() {
+    public long getCountDifference() {
         return countDifference;
     }
 
-    public int getPartyCount() {
+    public long getPartyCount() {
         return partyCount;
     }
 
