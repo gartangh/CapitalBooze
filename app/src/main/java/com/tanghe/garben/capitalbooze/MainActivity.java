@@ -1,7 +1,10 @@
 package com.tanghe.garben.capitalbooze;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.res.Configuration;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.design.widget.NavigationView;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
@@ -12,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -45,30 +49,6 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Firebase.setAndroidContext(this);
-
-        // User
-        ref2 = new Firebase(getResources().getString(R.string.url));
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        FirebaseUser user = mAuth.getCurrentUser();
-        if (user != null) {
-            ref2.child("Users").child(user.getUid()).child("accountType").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot snapshot) {
-                    accountType = (Long) snapshot.getValue();
-                    // TODO: look at the commented code
-                    //fragmentManager.beginTransaction().replace(R.id.container, new AboutFragment()).commit();
-                    //setTitle(getString(R.string.nav_about));
-                    Log.d("FireBase", "Data changed: accountType = " + accountType);
-                }
-
-                @Override
-                public void onCancelled(FirebaseError firebaseError) {
-                    Log.d("FireBase", "The read failed: " + firebaseError.getMessage());
-                }
-            });
-        }
-
         DrinkUI.setArgument(MainActivity.this);
         AdminOnlyFragment.setArgument(MainActivity.this);
 
@@ -97,7 +77,36 @@ public class MainActivity extends AppCompatActivity implements
         fragmentManager.beginTransaction().replace(R.id.container, new AboutFragment()).commit();
         setTitle(getString(R.string.nav_about));
 
-        setValueEventListeners();
+        Firebase.setAndroidContext(this);
+
+        ref2 = new Firebase(getResources().getString(R.string.url));
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+
+        // if internet, set valueEvenListeners
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED || connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+            // User
+            if (user != null) {
+                ref2.child("Users").child(user.getUid()).child("accountType").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot snapshot) {
+                        accountType = (Long) snapshot.getValue();
+                        Log.d("FireBase", "Data changed: accountType = " + accountType);
+                    }
+
+                    @Override
+                    public void onCancelled(FirebaseError firebaseError) {
+                        Log.d("FireBase", "The read failed: " + firebaseError.getMessage());
+                    }
+                });
+            }
+
+            setValueEventListeners();
+        }
+        else {
+            notConnectedError();
+        }
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
@@ -190,6 +199,28 @@ public class MainActivity extends AppCompatActivity implements
 
     public static double round(double d) {
         return Math.round(d*10)/10.0;
+    }
+
+    @Override
+    public void showProgressDialog() {
+        if (mProgressDialog == null) {
+            mProgressDialog = new ProgressDialog(this);
+            mProgressDialog.setMessage(getString(R.string.loading));
+            mProgressDialog.setIndeterminate(true);
+        }
+
+        mProgressDialog.show();
+    }
+
+    @Override
+    public void hideProgressDialog() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
+    }
+
+    public void notConnectedError() {
+        Toast.makeText(getApplicationContext(), getResources().getString(R.string.not_connected_error), Toast.LENGTH_LONG).show();
     }
 
     public void setValueEventListeners() {
@@ -532,16 +563,29 @@ public class MainActivity extends AppCompatActivity implements
         //}
     }
 
+    // Navigation
     @Override
     public void onAboutNextPressed() {
+        fragmentManager.beginTransaction().replace(R.id.container, new PricesFragment()).commit();
+        setTitle(getString(R.string.nav_prices));
+    }
+
+    @Override
+    public void onPricesBackPressed() {
+        fragmentManager.beginTransaction().replace(R.id.container, new AboutFragment()).commit();
+        setTitle(getString(R.string.nav_about));
+    }
+
+    @Override
+    public void onPricesNextPressed() {
         fragmentManager.beginTransaction().replace(R.id.container, new LogInFragment()).commit();
         setTitle(getString(R.string.nav_log_in));
     }
 
     @Override
     public void onLogInBackPressed() {
-        fragmentManager.beginTransaction().replace(R.id.container, new AboutFragment()).commit();
-        setTitle(getString(R.string.nav_about));
+        fragmentManager.beginTransaction().replace(R.id.container, new PricesFragment()).commit();
+        setTitle(getString(R.string.nav_prices));
     }
 
     @Override
@@ -550,26 +594,8 @@ public class MainActivity extends AppCompatActivity implements
             fragmentManager.beginTransaction().replace(R.id.container, new OrderFragment()).commit();
             setTitle(getString(R.string.nav_order));
         } else {
-            fragmentManager.beginTransaction().replace(R.id.container, new PricesFragment()).commit();
-            setTitle(getString(R.string.nav_prices));
-        }
-    }
-
-    @Override
-    public void showProgressDialog() {
-        if (mProgressDialog == null) {
-            mProgressDialog = new ProgressDialog(this);
-            mProgressDialog.setMessage(getString(R.string.loading));
-            mProgressDialog.setIndeterminate(true);
-        }
-
-        mProgressDialog.show();
-    }
-
-    @Override
-    public void hideProgressDialog() {
-        if (mProgressDialog != null && mProgressDialog.isShowing()) {
-            mProgressDialog.dismiss();
+            fragmentManager.beginTransaction().replace(R.id.container, new AboutFragment()).commit();
+            setTitle(getString(R.string.nav_about));
         }
     }
 
@@ -586,10 +612,9 @@ public class MainActivity extends AppCompatActivity implements
             setTitle(getString(R.string.nav_drink));
         }
         else {
-            fragmentManager.beginTransaction().replace(R.id.container, new PricesFragment()).commit();
-            setTitle(getString(R.string.nav_prices));
+            fragmentManager.beginTransaction().replace(R.id.container, new AboutFragment()).commit();
+            setTitle(getString(R.string.nav_about));
         }
-
     }
 
     @Override
@@ -624,23 +649,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onAdminOnlyNextPressed() {
-        fragmentManager.beginTransaction().replace(R.id.container, new PricesFragment()).commit();
-        setTitle(getString(R.string.nav_prices));
-    }
-
-    @Override
-    public void onPricesBackPressed() {
-        if (accountType == 1) {
-            fragmentManager.beginTransaction().replace(R.id.container, new OrderFragment()).commit();
-            setTitle(getString(R.string.nav_order));
-        }
-        else if (accountType == 2) {
-            fragmentManager.beginTransaction().replace(R.id.container, new AdminOnlyFragment()).commit();
-            setTitle(getString(R.string.nav_admin_only));
-        }
-        else {
-            fragmentManager.beginTransaction().replace(R.id.container, new LogInFragment()).commit();
-            setTitle(getString(R.string.nav_log_in));
-        }
+        fragmentManager.beginTransaction().replace(R.id.container, new AboutFragment()).commit();
+        setTitle(getString(R.string.nav_about));
     }
 }

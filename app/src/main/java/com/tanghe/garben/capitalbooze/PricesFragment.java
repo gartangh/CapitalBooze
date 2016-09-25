@@ -52,6 +52,14 @@ public class PricesFragment extends Fragment {
             }
         });
 
+        final Button next = (Button) view.findViewById(R.id.prices_next);
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onPricesNextPressed();
+            }
+        });
+
         return view;
     }
 
@@ -89,5 +97,6 @@ public class PricesFragment extends Fragment {
      */
     public interface OnPricesFragmentInteractionListener {
         void onPricesBackPressed();
+        void onPricesNextPressed();
     }
 }

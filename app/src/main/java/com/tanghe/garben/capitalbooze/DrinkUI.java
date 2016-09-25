@@ -147,7 +147,6 @@ class DrinkUI extends Drink {
 
         mCountCurrent = new TextView(context);
         mCountCurrent.setText(String.format(Locale.getDefault(), "%1d", countCurrent));
-        Log.d(TAG, "" + countCurrent);
         mCountCurrent.setTextSize(24);
 
         mCountLast = new TextView(context);
