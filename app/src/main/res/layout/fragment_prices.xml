@@ -17,15 +17,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/verticalLayoutPrices"
-            android:gravity="right"></LinearLayout>
+            android:gravity="right" />
     </ScrollView>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        tools:ignore="UselessLeaf">
-    </RelativeLayout>
+        tools:ignore="UselessLeaf" />
 
     <LinearLayout
         android:orientation="horizontal"
@@ -39,12 +38,14 @@
             android:id="@+id/prices_back"
             android:text="@string/nav_back" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            tools:ignore="UselessLeaf">
-        </RelativeLayout>
+            android:id="@+id/mUpdated"
+            android:text="@string/updated"
+            android:textAlignment="center">
+        </TextView>
 
         <Button
             style="@style/Widget.AppCompat.Button.Colored"

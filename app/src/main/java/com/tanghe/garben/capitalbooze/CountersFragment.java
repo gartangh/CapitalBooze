@@ -54,7 +54,7 @@ public class CountersFragment extends Fragment {
         mPartyCountTotal = (TextView) view.findViewById(R.id.mPartyCountTotal);
         CountersFragment.mPartyCountTotal.setText(String.format(Locale.getDefault(), "%1d", Drink.partyCountTotal));
         mPartyRevenueTotal = (TextView) view.findViewById(R.id.mPartyRevenueTotal);
-        CountersFragment.mPartyRevenueTotal.setText(String.format(Locale.getDefault(), "€ %.2f", Drink.partyRevenueTotal));
+        CountersFragment.mPartyRevenueTotal.setText(String.format(Locale.getDefault(), "€%.2f", Drink.partyRevenueTotal));
 
         final Button back = (Button) view.findViewById(R.id.counters_back);
         back.setOnClickListener(new View.OnClickListener() {

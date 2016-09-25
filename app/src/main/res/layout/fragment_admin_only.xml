@@ -9,7 +9,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        tools:ignore="UselessLeaf"/>
 
     <Button
         android:layout_width="128dp"
@@ -23,7 +24,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        tools:ignore="UselessLeaf"/>
 
     <Button
         android:layout_width="128dp"
@@ -37,7 +39,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        tools:ignore="UselessLeaf"/>
 
     <LinearLayout
         android:orientation="horizontal"
@@ -53,9 +56,10 @@
             android:text="@string/nav_back" />
 
         <RelativeLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            tools:ignore="UselessLeaf"/>
 
         <Button
             style="@style/Widget.AppCompat.Button.Colored"

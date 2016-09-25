@@ -28,6 +28,8 @@ class DrinkUI extends Drink {
 
     private LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
     private LinearLayout.LayoutParams params2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
+    private LinearLayout.LayoutParams params3 = new LinearLayout.LayoutParams(128, ViewGroup.LayoutParams.WRAP_CONTENT);
+    private LinearLayout.LayoutParams params4 = new LinearLayout.LayoutParams(256, ViewGroup.LayoutParams.WRAP_CONTENT);
 
     // Orders
     LinearLayout horizontalLayoutOrders;
@@ -112,6 +114,7 @@ class DrinkUI extends Drink {
         mDrinkCountOrders = new TextView(context);
         mDrinkCountOrders.setText(String.format(Locale.getDefault(), "%1d", 0));
         mDrinkCountOrders.setTextSize(24);
+        mDrinkCountOrders.setLayoutParams(params3);
 
         Button mGreen = new Button(context);
         mGreen.setText("+");
@@ -148,18 +151,22 @@ class DrinkUI extends Drink {
         mCountCurrent = new TextView(context);
         mCountCurrent.setText(String.format(Locale.getDefault(), "%1d", countCurrent));
         mCountCurrent.setTextSize(24);
+        mCountCurrent.setLayoutParams(params3);
 
         mCountLast = new TextView(context);
         mCountLast.setText(String.format(Locale.getDefault(), "(%1d)", countLast));
         mCountLast.setTextSize(24);
+        mCountLast.setLayoutParams(params3);
 
         mPartyCount = new TextView(context);
         mPartyCount.setText(String.format(Locale.getDefault(), "%1d", partyCount));
         mPartyCount.setTextSize(24);
+        mPartyCount.setLayoutParams(params3);
 
         mPartyRevenue = new TextView(context);
-        mPartyRevenue.setText(String.format(Locale.getDefault(), "€ %.2f", partyRevenue));
+        mPartyRevenue.setText(String.format(Locale.getDefault(), "€%.2f", partyRevenue));
         mPartyRevenue.setTextSize(24);
+        mPartyRevenue.setLayoutParams(params4);
 
         horizontalLayoutCounters.addView(mNameCounters);
         horizontalLayoutCounters.addView(mCountCurrent);
@@ -180,8 +187,9 @@ class DrinkUI extends Drink {
         mNamePrices.setLayoutParams(params2);
 
         mPrice = new TextView(context);
-        mPrice.setText(String.format(Locale.getDefault(), "€ %.2f", price));
+        mPrice.setText(String.format(Locale.getDefault(), "€%.2f", price));
         mPrice.setTextSize(24);
+        mPrice.setLayoutParams(params4);
 
         mPriceDifference = new TextView(context);
         mPriceDifference.setTextColor(context.getResources().getColor(R.color.grey));
@@ -191,8 +199,8 @@ class DrinkUI extends Drink {
         else {
             mPriceDifference.setText(String.format(Locale.getDefault(), "%.2f", priceDifference));
         }
-
         mPriceDifference.setTextSize(24);
+        mPriceDifference.setLayoutParams(params4);
 
         horizontalLayoutPrices.addView(mNamePrices);
         horizontalLayoutPrices.addView(mPrice);

@@ -14,7 +14,7 @@
         android:id="@+id/mName"
         android:layout_margin="2dp"
         android:hint="@string/name"
-        android:textSize="24dp"
+        android:textSize="24sp"
         android:textAlignment="center" />
 
     <EditText
@@ -24,7 +24,7 @@
         android:ems="10"
         android:id="@+id/mPrice"
         android:hint="@string/price"
-        android:textSize="24dp"
+        android:textSize="24sp"
         android:textAlignment="center" />
 
     <EditText
@@ -34,7 +34,7 @@
         android:ems="10"
         android:id="@+id/mMin"
         android:hint="@string/min"
-        android:textSize="24dp"
+        android:textSize="24sp"
         android:textAlignment="center" />
 
     <EditText
@@ -44,13 +44,14 @@
         android:ems="10"
         android:id="@+id/mMax"
         android:hint="@string/max"
-        android:textSize="24dp"
+        android:textSize="24sp"
         android:textAlignment="center" />
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1" />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        tools:ignore="UselessLeaf"/>
 
     <LinearLayout
         android:orientation="horizontal"
@@ -66,8 +67,9 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            tools:ignore="UselessLeaf"/>
 
         <Button
             android:layout_width="wrap_content"
@@ -79,8 +81,9 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            tools:ignore="UselessLeaf"/>
 
         <Button
             style="@style/Widget.AppCompat.Button.Colored"

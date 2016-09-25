@@ -23,6 +23,8 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements
@@ -35,6 +37,8 @@ public class MainActivity extends AppCompatActivity implements
         PricesFragment.OnPricesFragmentInteractionListener {
 
     private final static String TAG = "MainActivity";
+
+    static SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
 
     private DrawerLayout mDrawer;
     private ActionBarDrawerToggle drawerToggle;
@@ -249,7 +253,13 @@ public class MainActivity extends AppCompatActivity implements
                         for (DrinkUI i : DrinkUI.uidrinks) {
                             if (dataSnapshotDrink.child("name").getValue().toString().equals(i.getName())) {
                                 i.price = Double.parseDouble(dataSnapshot.getValue().toString());
-                                i.mPrice.setText(String.format(Locale.getDefault(), "€ %.2f", i.price));
+                                i.mPrice.setText(String.format(Locale.getDefault(), "€%.2f", i.price));
+
+                                // Adjust time in mUpdated
+                                PricesFragment.updated = new Date();
+                                if (PricesFragment.mUpdated != null) {
+                                    PricesFragment.mUpdated.setText(getResources().getString(R.string.updated, MainActivity.sdf.format(PricesFragment.updated)));
+                                }
                             }
                         }
                     }
@@ -280,6 +290,12 @@ public class MainActivity extends AppCompatActivity implements
                                 }
                                 else {
                                     i.mPriceDifference.setTextColor(getResources().getColor(R.color.grey));
+                                }
+
+                                // Adjust time in mUpdated
+                                PricesFragment.updated = new Date();
+                                if (PricesFragment.mUpdated != null) {
+                                    PricesFragment.mUpdated.setText(getResources().getString(R.string.updated, MainActivity.sdf.format(PricesFragment.updated)));
                                 }
                             }
                         }
@@ -413,7 +429,7 @@ public class MainActivity extends AppCompatActivity implements
                             for (DrinkUI i : DrinkUI.uidrinks) {
                                 if (dataSnapshotDrink.child("name").getValue().toString().equals(i.getName())) {
                                     i.partyRevenue = Double.parseDouble(dataSnapshot.getValue().toString());
-                                    i.mPartyRevenue.setText(String.format(Locale.getDefault(), "€ %.2f", i.partyRevenue));
+                                    i.mPartyRevenue.setText(String.format(Locale.getDefault(), "€%.2f", i.partyRevenue));
                                 }
                             }
                         }
@@ -530,7 +546,7 @@ public class MainActivity extends AppCompatActivity implements
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     Drink.partyRevenueTotal = Double.parseDouble(dataSnapshot.getValue().toString());
-                    //CountersFragment.mPartyRevenueTotal.setText(String.format(Locale.getDefault(), "€ %.2f", Drink.partyRevenueTotal));
+                    //CountersFragment.mPartyRevenueTotal.setText(String.format(Locale.getDefault(), "€%.2f", Drink.partyRevenueTotal));
                 }
 
                 @Override

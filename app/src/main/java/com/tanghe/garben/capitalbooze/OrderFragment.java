@@ -153,13 +153,13 @@ public class OrderFragment extends Fragment {
     }
 
     public static void setTotals() {
-        mTotalPrice.setText(String.format(Locale.getDefault(), "€ %.2f", totalPrice));
+        mTotalPrice.setText(String.format(Locale.getDefault(), "€%.2f", totalPrice));
         mTotalSquares.setText(String.format(Locale.getDefault(), "#%1d", totalSquares));
         mTotalCount.setText(String.format(Locale.getDefault(), "%1d", totalCount));
     }
 
     public static void setTotalsLast() {
-        mTotalPriceLast.setText(String.format(Locale.getDefault(), "(€ %.2f)", totalPriceLast));
+        mTotalPriceLast.setText(String.format(Locale.getDefault(), "(€%.2f)", totalPriceLast));
         mTotalSquaresLast.setText(String.format(Locale.getDefault(), "(#%1d)", totalSquaresLast));
         mTotalCountLast.setText(String.format(Locale.getDefault(), "(%1d)", totalCountLast));
     }

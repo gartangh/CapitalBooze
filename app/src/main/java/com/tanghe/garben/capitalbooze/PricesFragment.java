@@ -9,8 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
-
-import java.util.Locale;
+import android.widget.TextView;
+import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,7 +23,10 @@ public class PricesFragment extends Fragment {
     private OnPricesFragmentInteractionListener mListener;
     private final static String TAG = "Prices";
 
-    private static LinearLayout verticalLayoutPrices;
+    static Date updated;
+
+    private LinearLayout verticalLayoutPrices;
+    static TextView mUpdated;
 
     public PricesFragment() {
         // Required empty public constructor
@@ -42,6 +45,15 @@ public class PricesFragment extends Fragment {
             catch (IllegalStateException e) {
                 Log.d(TAG, "DrinkUI " + i.name + " already in verticalLayoutPrices");
             }
+        }
+
+        mUpdated = (TextView) view.findViewById(R.id.mUpdated);
+
+        if (updated == null) {
+            mUpdated.setText(getContext().getResources().getString(R.string.no_data_yet));
+        }
+        else {
+            mUpdated.setText(getContext().getResources().getString(R.string.updated, MainActivity.sdf.format(updated)));
         }
 
         final Button back = (Button) view.findViewById(R.id.prices_back);
@@ -98,5 +110,9 @@ public class PricesFragment extends Fragment {
     public interface OnPricesFragmentInteractionListener {
         void onPricesBackPressed();
         void onPricesNextPressed();
+    }
+
+    public static void setUpdated(Date date) {
+        updated = date;
     }
 }
