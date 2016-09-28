@@ -11,13 +11,14 @@
         android:id="@+id/mStatus"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:text="@string/logged_out" />
+        android:text="@string/logged_out"
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/mDetail"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        tools:text="Firebase User ID: 123456789abc" />
+        android:textSize="16sp" />
 
     <LinearLayout
         android:id="@+id/mFields"

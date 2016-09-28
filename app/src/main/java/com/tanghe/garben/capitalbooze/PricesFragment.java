@@ -27,8 +27,9 @@ public class PricesFragment extends Fragment {
 
     static boolean seen = false;
     static Date updated;
+    static String maxOrderName = "";
 
-    static TextView mMaxOrder;
+    static TextView mWolf;
     private LinearLayout verticalLayoutPrices;
     static TextView mUpdated;
 
@@ -41,8 +42,13 @@ public class PricesFragment extends Fragment {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_prices, container, false);
 
-        mMaxOrder = (TextView) view.findViewById(R.id.mMaxOrder);
-        mMaxOrder.setText(String.format(Locale.getDefault(), "%1d", OrderFragment.maxOrder));
+        mWolf = (TextView) view.findViewById(R.id.mWolf);
+        if (maxOrderName.equals("")) {
+            mWolf.setText(String.format(Locale.getDefault(), getResources().getString(R.string.wolf), getResources().getString(R.string.no_wolf), OrderFragment.maxOrder));
+        }
+        else {
+            mWolf.setText(String.format(Locale.getDefault(), getResources().getString(R.string.wolf), maxOrderName, OrderFragment.maxOrder));
+        }
 
         verticalLayoutPrices = (LinearLayout) view.findViewById(R.id.verticalLayoutPrices);
         for (DrinkUI i : DrinkUI.uidrinks) {

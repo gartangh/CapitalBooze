@@ -18,17 +18,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"
-        android:textSize="32sp"
+        android:textSize="42sp"
         android:text="@string/app_name"
-        android:id="@+id/mAppName" />
+        android:id="@+id/mAppName"
+        android:textStyle="bold" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"
-        android:textSize="24sp"
+        android:textSize="32sp"
         android:text="@string/version"
-        android:id="@+id/mVersion" />
+        android:id="@+id/mVersion"
+        android:textStyle="bold" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -59,7 +61,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/mDeveloper"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 android:layout_gravity="center_horizontal"
                 android:textAlignment="center"
                 android:text="@string/developer"

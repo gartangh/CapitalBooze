@@ -6,25 +6,13 @@
     tools:context="com.tanghe.garben.capitalbooze.PricesFragment"
     android:id="@+id/LinearLayout">
 
-    <LinearLayout
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.7"
-            android:text="@string/biggest_order"
-            android:textSize="24sp" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.3"
-            android:id="@+id/mMaxOrder"
-            android:textSize="24sp" />
-    </LinearLayout>
+        android:id="@+id/mWolf"
+        android:textSize="24sp"
+        android:textAlignment="center"
+        android:textStyle="bold" />
 
     <ScrollView
         android:layout_width="match_parent"

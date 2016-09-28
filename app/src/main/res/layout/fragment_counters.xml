@@ -24,7 +24,7 @@
             android:text="@string/total" />
 
         <TextView
-            android:layout_width="128dp"
+            android:layout_width="96dp"
             android:layout_height="wrap_content"
             android:id="@+id/mCountTotalCurrent"
             android:textSize="24sp"
@@ -55,15 +55,17 @@
             android:layout_weight="1"
             android:layout_margin="2dp"
             android:layout_gravity="right"
-            android:text="@string/total" />
+            android:text="@string/total"
+            android:textStyle="bold" />
 
         <TextView
-            android:layout_width="128dp"
+            android:layout_width="96dp"
             android:layout_height="wrap_content"
             android:id="@+id/mPartyCountTotal"
             android:textSize="24sp"
             android:layout_margin="2dp"
-            android:layout_gravity="right" />
+            android:layout_gravity="right"
+            android:textStyle="bold" />
 
         <TextView
             android:layout_width="128dp"
@@ -71,12 +73,13 @@
             android:id="@+id/mPartyRevenueTotal"
             android:textSize="24sp"
             android:layout_margin="2dp"
-            android:layout_gravity="right" />
+            android:layout_gravity="right"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_weight="1"
         android:id="@+id/scrollView"
         android:layout_gravity="right">

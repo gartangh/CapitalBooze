@@ -314,6 +314,7 @@ public class MainActivity extends AppCompatActivity implements
                     }
                 });
 
+                // TODO: reduce internet use
                 // Admin only
                 //if (accountType == 2) {
                     ref2.child("Drinks").child(dataSnapshotDrink.child("name").getValue().toString()).child("countCurrent").addValueEventListener(new ValueEventListener() {
@@ -514,6 +515,7 @@ public class MainActivity extends AppCompatActivity implements
             }
         });
 
+        // TODO: reduce internet use
         // Admin only
         //if (accountType == 2) {
             ref2.child("countTotalCurrent").addValueEventListener(new ValueEventListener() {
@@ -676,16 +678,57 @@ public class MainActivity extends AppCompatActivity implements
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     OrderFragment.maxOrder = (long) dataSnapshot.getValue();
-                    if (PricesFragment.mMaxOrder != null) {
-                        PricesFragment.mMaxOrder.setText(String.format(Locale.getDefault(), "%1d", OrderFragment.maxOrder));
-
-                        // Adjust time in mPricesUpdated
-                        PricesFragment.updated = new Date();
-                        PricesFragment.seen = false;
-                        if (PricesFragment.mUpdated != null) {
-                            PricesFragment.mUpdated.setText(getResources().getString(R.string.updated, MainActivity.sdf.format(PricesFragment.updated)));
-                            PricesFragment.mUpdated.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
+                    if (PricesFragment.maxOrderName.equals("")) {
+                        if (PricesFragment.mWolf != null) {
+                            PricesFragment.mWolf.setText(String.format(Locale.getDefault(), getString(R.string.wolf), getString(R.string.no_wolf), OrderFragment.maxOrder));
                         }
+                    }
+                    else {
+                        if (PricesFragment.mWolf != null) {
+                            PricesFragment.mWolf.setText(String.format(Locale.getDefault(), getString(R.string.wolf), PricesFragment.maxOrderName, OrderFragment.maxOrder));
+                        }
+                    }
+
+                    // Adjust time in mPricesUpdated
+                    PricesFragment.updated = new Date();
+                    PricesFragment.seen = false;
+                    if (PricesFragment.mUpdated != null) {
+                        PricesFragment.mUpdated.setText(getResources().getString(R.string.updated, MainActivity.sdf.format(PricesFragment.updated)));
+                        PricesFragment.mUpdated.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
+                    }
+                }
+
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
+
+                }
+            });
+            ref2.child("maxOrderName").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.getValue() == null) {
+                        PricesFragment.maxOrderName = "";
+                    }
+                    else {
+                        PricesFragment.maxOrderName = (String) dataSnapshot.getValue();
+                    }
+                    if (PricesFragment.maxOrderName.equals("")) {
+                        if (PricesFragment.mWolf != null) {
+                            PricesFragment.mWolf.setText(String.format(Locale.getDefault(), getString(R.string.wolf), getString(R.string.no_wolf), OrderFragment.maxOrder));
+                        }
+                    }
+                    else {
+                        if (PricesFragment.mWolf != null) {
+                            PricesFragment.mWolf.setText(String.format(Locale.getDefault(), getString(R.string.wolf), PricesFragment.maxOrderName, OrderFragment.maxOrder));
+                        }
+                    }
+
+                    // Adjust time in mPricesUpdated
+                    PricesFragment.updated = new Date();
+                    PricesFragment.seen = false;
+                    if (PricesFragment.mUpdated != null) {
+                        PricesFragment.mUpdated.setText(getResources().getString(R.string.updated, MainActivity.sdf.format(PricesFragment.updated)));
+                        PricesFragment.mUpdated.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
                     }
                 }
 

@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.util.Locale;
 
 /**
@@ -177,17 +179,20 @@ public class DrinkFragment extends Fragment {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!name.equals("") && price >= 1.00 && min >= 1.00 && max >= price && min <= price) {
+                if (!name.equals("") && price >= 1.00 && min >= 1.00 && max >= price && min <= price && !AdminOnlyFragment.partyStarted) {
                     new DrinkUI(name, price, min, max);
-                    name = "";
-                    price = 0.00;
-                    min = 0.00;
-                    max = 0.00;
-                    mName.setText("");
-                    mPrice.setText("");
-                    mMin.setText("");
-                    mMax.setText("");
                 }
+                else {
+                    Toast.makeText(getContext(), getResources().getString(R.string.could_not_add_drink), Toast.LENGTH_LONG).show();
+                }
+                name = "";
+                price = 0.00;
+                min = 0.00;
+                max = 0.00;
+                mName.setText("");
+                mPrice.setText("");
+                mMin.setText("");
+                mMax.setText("");
             }
         });
 

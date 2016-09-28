@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.util.Locale;
 
 /**
@@ -107,6 +109,7 @@ public class OrderFragment extends Fragment {
                     totalCountLast = totalCount;
                     if (totalCount > maxOrder) {
                         MainActivity.ref2.child("maxOrder").setValue(totalCount);
+                        Toast.makeText(getContext(), getResources().getString(R.string.new_wolf), Toast.LENGTH_LONG).show();
                     }
                     totalCount = 0;
 

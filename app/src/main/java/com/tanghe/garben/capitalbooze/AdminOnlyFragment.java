@@ -59,6 +59,8 @@ public class AdminOnlyFragment extends Fragment {
                     MainActivity.ref2.child("partyRevenueTotal").setValue(Drink.partyRevenueTotal);
                     OrderFragment.maxOrder = 0L;
                     MainActivity.ref2.child("maxOrder").setValue(OrderFragment.maxOrder);
+                    PricesFragment.maxOrderName = "";
+                    MainActivity.ref2.child("maxOrderName").setValue("");
 
                     for (DrinkUI i : DrinkUI.uidrinks) {
                         i.countCurrent = 0L;
@@ -89,7 +91,7 @@ public class AdminOnlyFragment extends Fragment {
 
                                     DrinkUI.task();
 
-                                    Toast.makeText(context, container.getResources().getString(R.string.task_executed), Toast.LENGTH_LONG).show();
+                                    Toast.makeText(context, context.getResources().getString(R.string.task_executed), Toast.LENGTH_LONG).show();
                                     Log.d(TAG, container.getResources().getString(R.string.task_executed));
                                 }
                             });
@@ -111,8 +113,9 @@ public class AdminOnlyFragment extends Fragment {
 
                     partyStarted = true;
                     MainActivity.ref2.child("partyStarted").setValue(partyStarted);
-
-
+                }
+                else {
+                    Toast.makeText(getContext(), getResources().getString(R.string.party_already_started), Toast.LENGTH_LONG).show();
                 }
             }
         });

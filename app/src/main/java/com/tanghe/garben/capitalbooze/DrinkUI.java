@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Vibrator;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +12,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
@@ -31,8 +31,9 @@ class DrinkUI extends Drink {
 
     private LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
     private LinearLayout.LayoutParams params2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
-    private LinearLayout.LayoutParams params3 = new LinearLayout.LayoutParams(128, ViewGroup.LayoutParams.WRAP_CONTENT);
-    private LinearLayout.LayoutParams params4 = new LinearLayout.LayoutParams(256, ViewGroup.LayoutParams.WRAP_CONTENT);
+    private LinearLayout.LayoutParams params3 = new LinearLayout.LayoutParams((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48, context.getResources().getDisplayMetrics()), ViewGroup.LayoutParams.WRAP_CONTENT);
+    private LinearLayout.LayoutParams params4 = new LinearLayout.LayoutParams((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 64, context.getResources().getDisplayMetrics()), ViewGroup.LayoutParams.WRAP_CONTENT);
+    private LinearLayout.LayoutParams params5 = new LinearLayout.LayoutParams((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 96, context.getResources().getDisplayMetrics()), ViewGroup.LayoutParams.WRAP_CONTENT);
 
     // Orders
     LinearLayout horizontalLayoutOrders;
@@ -80,7 +81,7 @@ class DrinkUI extends Drink {
 
         final TextView mNameOrders = new TextView(context);
         mNameOrders.setText(name);
-        mNameOrders.setTextSize(24);
+        mNameOrders.setTextSize(20);
         mNameOrders.setLayoutParams(params2);
         mNameOrders.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -99,8 +100,9 @@ class DrinkUI extends Drink {
 
         Button mRed = new Button(context);
         mRed.setText("-");
-        mRed.setTextSize(24);
+        mRed.setTextSize(20);
         mRed.setBackgroundResource(R.drawable.round_red);
+        mRed.setTextColor(ContextCompat.getColor(context, android.R.color.primary_text_dark));
         mRed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -121,8 +123,9 @@ class DrinkUI extends Drink {
 
         Button mGreen = new Button(context);
         mGreen.setText("+");
-        mGreen.setTextSize(24);
+        mGreen.setTextSize(20);
         mGreen.setBackgroundResource(R.drawable.round_green);
+        mGreen.setTextColor(ContextCompat.getColor(context, android.R.color.primary_text_dark));
         mGreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -148,28 +151,28 @@ class DrinkUI extends Drink {
 
         TextView mNameCounters = new TextView(context);
         mNameCounters.setText(name);
-        mNameCounters.setTextSize(24);
+        mNameCounters.setTextSize(20);
         mNameCounters.setLayoutParams(params2);
 
         mCountCurrent = new TextView(context);
         mCountCurrent.setText(String.format(Locale.getDefault(), "%1d", countCurrent));
-        mCountCurrent.setTextSize(24);
+        mCountCurrent.setTextSize(20);
         mCountCurrent.setLayoutParams(params3);
 
         mCountLast = new TextView(context);
         mCountLast.setText(String.format(Locale.getDefault(), "(%1d)", countLast));
-        mCountLast.setTextSize(24);
-        mCountLast.setLayoutParams(params3);
+        mCountLast.setTextSize(20);
+        mCountLast.setLayoutParams(params4);
 
         mPartyCount = new TextView(context);
         mPartyCount.setText(String.format(Locale.getDefault(), "%1d", partyCount));
-        mPartyCount.setTextSize(24);
-        mPartyCount.setLayoutParams(params3);
+        mPartyCount.setTextSize(20);
+        mPartyCount.setLayoutParams(params4);
 
         mPartyRevenue = new TextView(context);
         mPartyRevenue.setText(String.format(Locale.getDefault(), "€%.2f", partyRevenue));
-        mPartyRevenue.setTextSize(24);
-        mPartyRevenue.setLayoutParams(params4);
+        mPartyRevenue.setTextSize(20);
+        mPartyRevenue.setLayoutParams(params5);
 
         horizontalLayoutCounters.addView(mNameCounters);
         horizontalLayoutCounters.addView(mCountCurrent);
