@@ -8,6 +8,6 @@
     android:fitsSystemWindows="false"
     android:minHeight="?attr/actionBarSize"
     android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-    app:navigationIcon="?homeAsUpIndicator"
-    android:background="?attr/colorPrimaryDark">
+    android:background="?attr/colorPrimaryDark"
+    app:navigationIcon="?homeAsUpIndicator">
 </android.support.v7.widget.Toolbar>

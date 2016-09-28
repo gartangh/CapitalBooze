@@ -2,6 +2,7 @@ package com.tanghe.garben.capitalbooze;
 
 import android.content.Context;
 import android.os.Vibrator;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -9,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
@@ -192,7 +195,7 @@ class DrinkUI extends Drink {
         mPrice.setLayoutParams(params4);
 
         mPriceDifference = new TextView(context);
-        mPriceDifference.setTextColor(context.getResources().getColor(R.color.grey));
+        mPriceDifference.setTextColor(ContextCompat.getColor(context, R.color.grey));
         if (priceDifference >= 0) {
             mPriceDifference.setText(String.format(Locale.getDefault(), "+%.2f", priceDifference));
         }
@@ -308,10 +311,13 @@ class DrinkUI extends Drink {
 
             v.vibrate(500L);
 
-            Log.d(TAG, "Crash executed");
+            Toast.makeText(context, context.getResources().getString(R.string.crash_executed), Toast.LENGTH_LONG).show();
+            Log.d(TAG, context.getResources().getString(R.string.crash_executed));
         }
         else {
-            Log.d(TAG, "Crash NOT executed, wait " + (60*60*1000L - (System.currentTimeMillis() - timeCrashLast))/(60*1000L) + " more minutes");
+            int min = (int) ((60*60*1000L - (System.currentTimeMillis() - timeCrashLast))/(60*1000L));
+            Toast.makeText(context, String.format(Locale.getDefault(), context.getResources().getString(R.string.crash_not_executed_error), min), Toast.LENGTH_LONG).show();
+            Log.d(TAG, String.format(Locale.getDefault(), context.getResources().getString(R.string.crash_not_executed_error), min));
         }
     }
 

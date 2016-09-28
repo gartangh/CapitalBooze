@@ -32,10 +32,11 @@
     <!-- fragment_prices-->
     <string name="updated">Updated at %s</string>
     <string name="no_data_yet">No data yet</string>
+    <string name="biggest_order">Biggest order</string>
 
     <!-- fragment_log_in-->
     <string name="logged_out">Logged out</string>
-    <string name="loading">Loading...</string>
+    <string name="loading">Loading…</string>
     <string name="firebase_status_fmt">User ID: %s</string>
     <string name="get_custom_token">Get token</string>
     <string name="log_in">Log in</string>
@@ -66,6 +67,10 @@
 
     <!-- fragment_admin_only-->
     <string name="start">Start</string>
+    <string name="timertask">"TimerTask set, interval set for %d minutes"</string>
+    <string name="task_executed">"Task executed."</string>
     <string name="crash">Crash</string>
+    <string name="crash_executed">Crash executed!</string>
+    <string name="crash_not_executed_error">Error: crash not executed!\nWait %d more minutes.</string>
 
 </resources>

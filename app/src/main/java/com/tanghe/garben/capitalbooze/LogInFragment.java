@@ -97,6 +97,7 @@ public class LogInFragment extends Fragment {
         mStatus = (TextView) view.findViewById(R.id.mStatus);
         mDetail = (TextView) view.findViewById(R.id.mDetail);
         mFields = (LinearLayout) view.findViewById(R.id.mFields);
+        //TODO: Make mEmail an autoCompleteTextView
         mEmail = (EditText) view.findViewById(R.id.mEmail);
         mPassword = (EditText) view.findViewById(R.id.mPassword);
         mButtons = (LinearLayout) view.findViewById(R.id.mButtons);
@@ -192,25 +193,28 @@ public class LogInFragment extends Fragment {
                 // the auth state listener will be notified and logic to handle the
                 // signed in user can be handled in the listener.
                 if (!task.isSuccessful()) {
-                    Toast.makeText(getActivity(), R.string.auth_failed, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.auth_failed, Toast.LENGTH_LONG).show();
                 }
                 else {
                     final FirebaseUser user = mAuth.getCurrentUser();
-                    MainActivity.ref2.child("Users").child(user.getUid()).setValue(user);
-                    MainActivity.ref2.child("Users").child(user.getUid()).child("accountType").setValue(0L);
-                    MainActivity.ref2.child("Users").child(user.getUid()).child("accountType").addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot snapshot) {
-                            MainActivity.accountType = (Long) snapshot.getValue();
-                            Log.d("FireBase", "Data changed: set accountType to " + MainActivity.accountType);
-                            updateUI(user);
-                        }
-                        @Override
-                        public void onCancelled(FirebaseError firebaseError) {
-                            Log.d("Firebas", "The read failed: " + firebaseError.getMessage());
-                        }
-                    });
-                    Log.d("Log in", "Wrote " + user.getEmail() + ": "+ user.getUid() + " to database");
+                    if (user != null) {
+                        MainActivity.ref2.child("Users").child(user.getUid()).setValue(user);
+                        MainActivity.ref2.child("Users").child(user.getUid()).child("accountType").setValue(0L);
+                        MainActivity.ref2.child("Users").child(user.getUid()).child("accountType").addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot snapshot) {
+                                MainActivity.accountType = (Long) snapshot.getValue();
+                                Log.d("FireBase", "Data changed: set accountType to " + MainActivity.accountType);
+                                updateUI(user);
+                            }
+
+                            @Override
+                            public void onCancelled(FirebaseError firebaseError) {
+                                Log.d("Firebas", "The read failed: " + firebaseError.getMessage());
+                            }
+                        });
+                        Log.d("Log in", "Wrote " + user.getEmail() + ": " + user.getUid() + " to database");
+                    }
                 }
 
                 mListener.hideProgressDialog();
@@ -236,23 +240,25 @@ public class LogInFragment extends Fragment {
                 // signed in user can be handled in the listener.
                 if (!task.isSuccessful()) {
                     Log.w(TAG, "signInWithEmail:failed", task.getException());
-                    Toast.makeText(getActivity(), R.string.auth_failed, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.auth_failed, Toast.LENGTH_LONG).show();
                     mStatus.setText(R.string.auth_failed);
                 }
                 else {
                     final FirebaseUser user = mAuth.getCurrentUser();
-                    MainActivity.ref2.child("Users").child(user.getUid()).child("accountType").addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot snapshot) {
-                            MainActivity.accountType = (Long) snapshot.getValue();
-                            Log.d("FireBase", "Data changed: set accountType to " + MainActivity.accountType);
-                            updateUI(user);
-                        }
-                        @Override
-                        public void onCancelled(FirebaseError firebaseError) {
-                            Log.d("FireBase", "The read failed: " + firebaseError.getMessage());
-                        }
-                    });
+                    if (user != null) {
+                        MainActivity.ref2.child("Users").child(user.getUid()).child("accountType").addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot snapshot) {
+                                MainActivity.accountType = (Long) snapshot.getValue();
+                                Log.d("FireBase", "Data changed: set accountType to " + MainActivity.accountType);
+                                updateUI(user);
+                            }
+                            @Override
+                            public void onCancelled(FirebaseError firebaseError) {
+                                Log.d("FireBase", "The read failed: " + firebaseError.getMessage());
+                            }
+                        });
+                    }
                 }
 
                 mListener.hideProgressDialog();

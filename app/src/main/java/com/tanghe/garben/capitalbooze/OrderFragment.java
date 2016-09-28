@@ -29,6 +29,7 @@ public class OrderFragment extends Fragment {
     protected static int totalSquaresLast = 0;
     protected static int totalCount = 0;
     protected static int totalCountLast = 0;
+    protected static long maxOrder = 0L;
 
     private static LinearLayout verticalLayoutOrders;
     private static TextView mTotalPrice;
@@ -104,6 +105,9 @@ public class OrderFragment extends Fragment {
                     totalSquaresLast = totalSquares;
                     totalSquares = 0;
                     totalCountLast = totalCount;
+                    if (totalCount > maxOrder) {
+                        MainActivity.ref2.child("maxOrder").setValue(totalCount);
+                    }
                     totalCount = 0;
 
                     setTotals();

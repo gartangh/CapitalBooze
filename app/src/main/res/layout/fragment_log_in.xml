@@ -1,12 +1,11 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.tanghe.garben.capitalbooze.LogInFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_weight="3"
     android:orientation="vertical"
-    android:gravity="center_horizontal">
+    android:gravity="center_horizontal"
+    tools:context="com.tanghe.garben.capitalbooze.LogInFragment">
 
     <TextView
         android:id="@+id/mStatus"
@@ -28,13 +27,14 @@
         android:paddingLeft="16dp"
         android:paddingRight="16dp">
 
+        <!--TODO: Make this EditText an AutoCompleteTextView-->
         <EditText
             android:id="@+id/mEmail"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:hint="@string/hint_email"
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"/>
 
         <EditText
             android:id="@+id/mPassword"

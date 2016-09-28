@@ -3,6 +3,7 @@ package com.tanghe.garben.capitalbooze;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
+import java.util.Date;
 import java.util.Locale;
 
 public class CountersFragment extends Fragment {
@@ -18,11 +19,15 @@ public class CountersFragment extends Fragment {
     private OnCountersFragmentInteractionListener mListener;
     private final static String TAG = "Counters";
 
+    static boolean seen = false;
+    static Date updated;
+
     private static LinearLayout verticalLayoutCounters;
     static TextView mCountTotalCurrent;
     static TextView mCountTotalLast;
     static TextView mPartyCountTotal;
     static TextView mPartyRevenueTotal;
+    static TextView mUpdated;
 
     public CountersFragment() {
         // Required empty public constructor
@@ -63,6 +68,28 @@ public class CountersFragment extends Fragment {
                 mListener.onCountersBackPressed();
             }
         });
+
+        mUpdated = (TextView) view.findViewById(R.id.mCountersUpdated);
+        if (updated == null) {
+            mUpdated.setText(getContext().getResources().getString(R.string.no_data_yet));
+        }
+        else {
+            mUpdated.setText(getContext().getResources().getString(R.string.updated, MainActivity.sdf.format(updated)));
+        }
+        if (seen) {
+            mUpdated.setTextColor(ContextCompat.getColor(getContext(), R.color.grey));
+        }
+        else {
+            mUpdated.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+        }
+        mUpdated.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                seen = true;
+                mUpdated.setTextColor(ContextCompat.getColor(getContext(), R.color.grey));
+            }
+        });
+
         final Button next = (Button) view.findViewById(R.id.counters_next);
         next.setOnClickListener(new View.OnClickListener() {
             @Override

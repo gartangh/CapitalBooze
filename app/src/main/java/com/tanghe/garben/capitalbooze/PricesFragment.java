@@ -3,6 +3,7 @@ package com.tanghe.garben.capitalbooze;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,8 +25,10 @@ public class PricesFragment extends Fragment {
     private OnPricesFragmentInteractionListener mListener;
     private final static String TAG = "Prices";
 
+    static boolean seen = false;
     static Date updated;
 
+    static TextView mMaxOrder;
     private LinearLayout verticalLayoutPrices;
     static TextView mUpdated;
 
@@ -37,6 +41,9 @@ public class PricesFragment extends Fragment {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_prices, container, false);
 
+        mMaxOrder = (TextView) view.findViewById(R.id.mMaxOrder);
+        mMaxOrder.setText(String.format(Locale.getDefault(), "%1d", OrderFragment.maxOrder));
+
         verticalLayoutPrices = (LinearLayout) view.findViewById(R.id.verticalLayoutPrices);
         for (DrinkUI i : DrinkUI.uidrinks) {
             try {
@@ -47,20 +54,32 @@ public class PricesFragment extends Fragment {
             }
         }
 
-        mUpdated = (TextView) view.findViewById(R.id.mUpdated);
+        final Button back = (Button) view.findViewById(R.id.prices_back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mListener.onPricesBackPressed();
+            }
+        });
 
+        mUpdated = (TextView) view.findViewById(R.id.mPricesUpdated);
         if (updated == null) {
             mUpdated.setText(getContext().getResources().getString(R.string.no_data_yet));
         }
         else {
             mUpdated.setText(getContext().getResources().getString(R.string.updated, MainActivity.sdf.format(updated)));
         }
-
-        final Button back = (Button) view.findViewById(R.id.prices_back);
-        back.setOnClickListener(new View.OnClickListener() {
+        if (seen) {
+            mUpdated.setTextColor(ContextCompat.getColor(getContext(), R.color.grey));
+        }
+        else {
+            mUpdated.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+        }
+        mUpdated.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                mListener.onPricesBackPressed();
+            public void onClick(View v) {
+                seen = true;
+                mUpdated.setTextColor(ContextCompat.getColor(getContext(), R.color.grey));
             }
         });
 
@@ -110,9 +129,5 @@ public class PricesFragment extends Fragment {
     public interface OnPricesFragmentInteractionListener {
         void onPricesBackPressed();
         void onPricesNextPressed();
-    }
-
-    public static void setUpdated(Date date) {
-        updated = date;
     }
 }

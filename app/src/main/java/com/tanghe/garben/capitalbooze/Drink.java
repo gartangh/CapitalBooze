@@ -11,8 +11,6 @@ import com.google.firebase.database.FirebaseDatabase;
 
 class Drink {
 
-    private final static String TAG = "Drink";
-
     // B = Big, S = Small, I = Increase, D = Decrease
     final static double BI = 1.3;
     final static double BD = 0.8;
