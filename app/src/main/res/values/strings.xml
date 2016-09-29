@@ -81,5 +81,6 @@
     <string name="crash_executed">Crash executed!</string>
     <string name="crash_not_executed_error">Error: crash not executed!\nWait %d more minutes.</string>
     <string name="party_already_started">Party Already started!</string>
+    <string name="type_wolf_here">Type new wolf here</string>
 
 </resources>

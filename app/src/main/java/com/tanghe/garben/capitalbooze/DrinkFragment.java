@@ -48,9 +48,9 @@ public class DrinkFragment extends Fragment {
         mName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                String s = mName.getText().toString();
-                s = s.substring(0,1).toUpperCase() + s.substring(1).toLowerCase();
-                if (s.length() > 1) {
+                if (mName.getText().toString().length() > 1) {
+                    String s = mName.getText().toString();
+                    s = s.substring(0,1).toUpperCase() + s.substring(1).toLowerCase();
                     boolean geldig = true;
                     for (DrinkUI uidrink : DrinkUI.uidrinks) {
                         if (uidrink.getName().equals(s)) {
@@ -183,7 +183,7 @@ public class DrinkFragment extends Fragment {
                     new DrinkUI(name, price, min, max);
                 }
                 else {
-                    Toast.makeText(getContext(), getResources().getString(R.string.could_not_add_drink), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), getString(R.string.could_not_add_drink), Toast.LENGTH_LONG).show();
                 }
                 name = "";
                 price = 0.00;

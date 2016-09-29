@@ -6,10 +6,13 @@ import android.os.Handler;
 import android.os.Vibrator;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Locale;
@@ -38,7 +41,7 @@ public class AdminOnlyFragment extends Fragment {
 
         final Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
 
-        Button mStart = (Button) view.findViewById(R.id.mStart);
+        final Button mStart = (Button) view.findViewById(R.id.mStart);
         mStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -91,8 +94,8 @@ public class AdminOnlyFragment extends Fragment {
 
                                     DrinkUI.task();
 
-                                    Toast.makeText(context, context.getResources().getString(R.string.task_executed), Toast.LENGTH_LONG).show();
-                                    Log.d(TAG, container.getResources().getString(R.string.task_executed));
+                                    Toast.makeText(context, context.getString(R.string.task_executed), Toast.LENGTH_LONG).show();
+                                    Log.d(TAG, context.getString(R.string.task_executed));
                                 }
                             });
                         }
@@ -107,20 +110,20 @@ public class AdminOnlyFragment extends Fragment {
                     };
 
                     int min = (int) INTERVAL/1000/60;
-                    Toast.makeText(context, String.format(Locale.getDefault(), context.getResources().getString(R.string.timertask), min), Toast.LENGTH_LONG).show();
-                    Log.d(TAG, String.format(Locale.getDefault(), context.getResources().getString(R.string.timertask), min));
+                    Toast.makeText(context, String.format(Locale.getDefault(), context.getString(R.string.timertask), min), Toast.LENGTH_LONG).show();
+                    Log.d(TAG, String.format(Locale.getDefault(), context.getString(R.string.timertask), min));
                     timer.schedule(timerTask, INTERVAL, INTERVAL);
 
                     partyStarted = true;
                     MainActivity.ref2.child("partyStarted").setValue(partyStarted);
                 }
                 else {
-                    Toast.makeText(getContext(), getResources().getString(R.string.party_already_started), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), getString(R.string.party_already_started), Toast.LENGTH_LONG).show();
                 }
             }
         });
 
-        Button mCrash = (Button) view.findViewById(R.id.mCrash);
+        final Button mCrash = (Button) view.findViewById(R.id.mCrash);
         mCrash.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -128,6 +131,30 @@ public class AdminOnlyFragment extends Fragment {
                     //TODO: uncomment
                     //DrinkUI.crash();
                 }
+            }
+        });
+
+        final EditText mTypeWolfHere = (EditText) view.findViewById(R.id.mTypeWolfHere);
+        mTypeWolfHere.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mTypeWolfHere.setText("");
+            }
+        });
+        mTypeWolfHere.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (mTypeWolfHere.getText().toString().equals("")) {
+                    MainActivity.ref2.child("maxOrderName").setValue("");
+                }
+                else if (mTypeWolfHere.getText().length() > 1) {
+                    MainActivity.ref2.child("maxOrderName").setValue(mTypeWolfHere.getText().toString().toUpperCase(Locale.getDefault()));
+                }
+                else {
+                    Toast.makeText(getContext(), getString(R.string.invalid_length), Toast.LENGTH_LONG).show();
+                }
+                mTypeWolfHere.setText("");
+                return false;
             }
         });
 

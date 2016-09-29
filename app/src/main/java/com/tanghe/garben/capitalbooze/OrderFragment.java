@@ -109,7 +109,7 @@ public class OrderFragment extends Fragment {
                     totalCountLast = totalCount;
                     if (totalCount > maxOrder) {
                         MainActivity.ref2.child("maxOrder").setValue(totalCount);
-                        Toast.makeText(getContext(), getResources().getString(R.string.new_wolf), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), getString(R.string.new_wolf), Toast.LENGTH_LONG).show();
                     }
                     totalCount = 0;
 

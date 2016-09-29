@@ -44,10 +44,10 @@ public class PricesFragment extends Fragment {
 
         mWolf = (TextView) view.findViewById(R.id.mWolf);
         if (maxOrderName.equals("")) {
-            mWolf.setText(String.format(Locale.getDefault(), getResources().getString(R.string.wolf), getResources().getString(R.string.no_wolf), OrderFragment.maxOrder));
+            mWolf.setText(String.format(Locale.getDefault(), getString(R.string.wolf), getString(R.string.no_wolf), OrderFragment.maxOrder));
         }
         else {
-            mWolf.setText(String.format(Locale.getDefault(), getResources().getString(R.string.wolf), maxOrderName, OrderFragment.maxOrder));
+            mWolf.setText(String.format(Locale.getDefault(), getString(R.string.wolf), maxOrderName, OrderFragment.maxOrder));
         }
 
         verticalLayoutPrices = (LinearLayout) view.findViewById(R.id.verticalLayoutPrices);
@@ -70,10 +70,10 @@ public class PricesFragment extends Fragment {
 
         mUpdated = (TextView) view.findViewById(R.id.mPricesUpdated);
         if (updated == null) {
-            mUpdated.setText(getContext().getResources().getString(R.string.no_data_yet));
+            mUpdated.setText(getContext().getString(R.string.no_data_yet));
         }
         else {
-            mUpdated.setText(getContext().getResources().getString(R.string.updated, MainActivity.sdf.format(updated)));
+            mUpdated.setText(getContext().getString(R.string.updated, MainActivity.sdf.format(updated)));
         }
         if (seen) {
             mUpdated.setTextColor(ContextCompat.getColor(getContext(), R.color.grey));

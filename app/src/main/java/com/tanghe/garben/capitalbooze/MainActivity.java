@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements
 
         Firebase.setAndroidContext(this);
 
-        ref2 = new Firebase(getResources().getString(R.string.url));
+        ref2 = new Firebase(getString(R.string.url));
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
 
@@ -227,7 +227,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     public void notConnectedError() {
-        Toast.makeText(getApplicationContext(), getResources().getString(R.string.not_connected_error), Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), getString(R.string.not_connected_error), Toast.LENGTH_LONG).show();
     }
 
     public void setValueEventListeners() {
@@ -262,7 +262,7 @@ public class MainActivity extends AppCompatActivity implements
                                 PricesFragment.updated = new Date();
                                 PricesFragment.seen = false;
                                 if (PricesFragment.mUpdated != null) {
-                                    PricesFragment.mUpdated.setText(getResources().getString(R.string.updated, MainActivity.sdf.format(PricesFragment.updated)));
+                                    PricesFragment.mUpdated.setText(getString(R.string.updated, MainActivity.sdf.format(PricesFragment.updated)));
                                     PricesFragment.mUpdated.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
                                 }
                             }
@@ -301,7 +301,7 @@ public class MainActivity extends AppCompatActivity implements
                                 PricesFragment.updated = new Date();
                                 PricesFragment.seen = false;
                                 if (PricesFragment.mUpdated != null) {
-                                    PricesFragment.mUpdated.setText(getResources().getString(R.string.updated, MainActivity.sdf.format(PricesFragment.updated)));
+                                    PricesFragment.mUpdated.setText(getString(R.string.updated, MainActivity.sdf.format(PricesFragment.updated)));
                                     PricesFragment.mUpdated.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
                                 }
                             }
@@ -474,7 +474,7 @@ public class MainActivity extends AppCompatActivity implements
                 CountersFragment.updated = new Date();
                 CountersFragment.seen = false;
                 if (CountersFragment.mUpdated != null) {
-                    CountersFragment.mUpdated.setText(getResources().getString(R.string.updated, MainActivity.sdf.format(CountersFragment.updated)));
+                    CountersFragment.mUpdated.setText(getString(R.string.updated, MainActivity.sdf.format(CountersFragment.updated)));
                     CountersFragment.mUpdated.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
                 }
             }
@@ -489,7 +489,7 @@ public class MainActivity extends AppCompatActivity implements
                         PricesFragment.updated = new Date();
                         PricesFragment.seen = false;
                         if (PricesFragment.mUpdated != null) {
-                            PricesFragment.mUpdated.setText(getResources().getString(R.string.updated, MainActivity.sdf.format(PricesFragment.updated)));
+                            PricesFragment.mUpdated.setText(getString(R.string.updated, MainActivity.sdf.format(PricesFragment.updated)));
                             PricesFragment.mUpdated.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
                         }
 
@@ -497,7 +497,7 @@ public class MainActivity extends AppCompatActivity implements
                         CountersFragment.updated = new Date();
                         CountersFragment.seen = false;
                         if (CountersFragment.mUpdated != null) {
-                            CountersFragment.mUpdated.setText(getResources().getString(R.string.updated, MainActivity.sdf.format(CountersFragment.updated)));
+                            CountersFragment.mUpdated.setText(getString(R.string.updated, MainActivity.sdf.format(CountersFragment.updated)));
                             CountersFragment.mUpdated.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
                         }
                     }
@@ -530,7 +530,7 @@ public class MainActivity extends AppCompatActivity implements
                     CountersFragment.updated = new Date();
                     CountersFragment.seen = false;
                     if (CountersFragment.mUpdated != null) {
-                        CountersFragment.mUpdated.setText(getResources().getString(R.string.updated, MainActivity.sdf.format(CountersFragment.updated)));
+                        CountersFragment.mUpdated.setText(getString(R.string.updated, MainActivity.sdf.format(CountersFragment.updated)));
                         CountersFragment.mUpdated.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
                     }
                 }
@@ -549,7 +549,7 @@ public class MainActivity extends AppCompatActivity implements
                     CountersFragment.updated = new Date();
                     CountersFragment.seen = false;
                     if (CountersFragment.mUpdated != null) {
-                        CountersFragment.mUpdated.setText(getResources().getString(R.string.updated, MainActivity.sdf.format(CountersFragment.updated)));
+                        CountersFragment.mUpdated.setText(getString(R.string.updated, MainActivity.sdf.format(CountersFragment.updated)));
                         CountersFragment.mUpdated.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
                     }
                 }
@@ -571,7 +571,7 @@ public class MainActivity extends AppCompatActivity implements
                     CountersFragment.updated = new Date();
                     CountersFragment.seen = false;
                     if (CountersFragment.mUpdated != null) {
-                        CountersFragment.mUpdated.setText(getResources().getString(R.string.updated, MainActivity.sdf.format(CountersFragment.updated)));
+                        CountersFragment.mUpdated.setText(getString(R.string.updated, MainActivity.sdf.format(CountersFragment.updated)));
                         CountersFragment.mUpdated.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
                     }
                 }
@@ -590,7 +590,7 @@ public class MainActivity extends AppCompatActivity implements
                     CountersFragment.updated = new Date();
                     CountersFragment.seen = false;
                     if (CountersFragment.mUpdated != null) {
-                        CountersFragment.mUpdated.setText(getResources().getString(R.string.updated, MainActivity.sdf.format(CountersFragment.updated)));
+                        CountersFragment.mUpdated.setText(getString(R.string.updated, MainActivity.sdf.format(CountersFragment.updated)));
                         CountersFragment.mUpdated.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
                     }
                 }
@@ -612,7 +612,7 @@ public class MainActivity extends AppCompatActivity implements
                     CountersFragment.updated = new Date();
                     CountersFragment.seen = false;
                     if (CountersFragment.mUpdated != null) {
-                        CountersFragment.mUpdated.setText(getResources().getString(R.string.updated, MainActivity.sdf.format(CountersFragment.updated)));
+                        CountersFragment.mUpdated.setText(getString(R.string.updated, MainActivity.sdf.format(CountersFragment.updated)));
                         CountersFragment.mUpdated.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
                     }
                 }
@@ -634,7 +634,7 @@ public class MainActivity extends AppCompatActivity implements
                     CountersFragment.updated = new Date();
                     CountersFragment.seen = false;
                     if (CountersFragment.mUpdated != null) {
-                        CountersFragment.mUpdated.setText(getResources().getString(R.string.updated, MainActivity.sdf.format(CountersFragment.updated)));
+                        CountersFragment.mUpdated.setText(getString(R.string.updated, MainActivity.sdf.format(CountersFragment.updated)));
                         CountersFragment.mUpdated.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
                     }
                 }
@@ -653,7 +653,7 @@ public class MainActivity extends AppCompatActivity implements
                     CountersFragment.updated = new Date();
                     CountersFragment.seen = false;
                     if (CountersFragment.mUpdated != null) {
-                        CountersFragment.mUpdated.setText(getResources().getString(R.string.updated, MainActivity.sdf.format(CountersFragment.updated)));
+                        CountersFragment.mUpdated.setText(getString(R.string.updated, MainActivity.sdf.format(CountersFragment.updated)));
                         CountersFragment.mUpdated.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
                     }
                 }
@@ -693,7 +693,7 @@ public class MainActivity extends AppCompatActivity implements
                     PricesFragment.updated = new Date();
                     PricesFragment.seen = false;
                     if (PricesFragment.mUpdated != null) {
-                        PricesFragment.mUpdated.setText(getResources().getString(R.string.updated, MainActivity.sdf.format(PricesFragment.updated)));
+                        PricesFragment.mUpdated.setText(getString(R.string.updated, MainActivity.sdf.format(PricesFragment.updated)));
                         PricesFragment.mUpdated.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
                     }
                 }
@@ -727,7 +727,7 @@ public class MainActivity extends AppCompatActivity implements
                     PricesFragment.updated = new Date();
                     PricesFragment.seen = false;
                     if (PricesFragment.mUpdated != null) {
-                        PricesFragment.mUpdated.setText(getResources().getString(R.string.updated, MainActivity.sdf.format(PricesFragment.updated)));
+                        PricesFragment.mUpdated.setText(getString(R.string.updated, MainActivity.sdf.format(PricesFragment.updated)));
                         PricesFragment.mUpdated.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
                     }
                 }

@@ -71,10 +71,10 @@ public class CountersFragment extends Fragment {
 
         mUpdated = (TextView) view.findViewById(R.id.mCountersUpdated);
         if (updated == null) {
-            mUpdated.setText(getContext().getResources().getString(R.string.no_data_yet));
+            mUpdated.setText(getContext().getString(R.string.no_data_yet));
         }
         else {
-            mUpdated.setText(getContext().getResources().getString(R.string.updated, MainActivity.sdf.format(updated)));
+            mUpdated.setText(getContext().getString(R.string.updated, MainActivity.sdf.format(updated)));
         }
         if (seen) {
             mUpdated.setTextColor(ContextCompat.getColor(getContext(), R.color.grey));
