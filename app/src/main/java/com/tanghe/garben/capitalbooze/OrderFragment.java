@@ -160,7 +160,13 @@ public class OrderFragment extends Fragment {
     }
 
     public static void setTotals() {
-        mTotalPrice.setText(String.format(Locale.getDefault(), "€%.2f", totalPrice));
+        if (totalPrice > 0.00) {
+            mTotalPrice.setText(String.format(Locale.getDefault(), "€%.2f", totalPrice));
+        }
+        else {
+            totalPrice = 0.00;
+            mTotalPrice.setText(String.format(Locale.getDefault(), "€%.2f", totalPrice));
+        }
         mTotalSquares.setText(String.format(Locale.getDefault(), "#%1d", totalSquares));
         mTotalCount.setText(String.format(Locale.getDefault(), "%1d", totalCount));
     }
