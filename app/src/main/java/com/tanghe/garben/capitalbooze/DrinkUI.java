@@ -245,6 +245,7 @@ class DrinkUI extends Drink {
 
         calcPrises();
 
+        // TODO: remove this log
         Log.d(TAG, "Task executed");
     }
 
@@ -253,6 +254,7 @@ class DrinkUI extends Drink {
             try {
                 double rate = i.countLast*1.0/countTotalLast - i.countSecondLast*1.0/countTotalSecondLast;
                 if (i.countLast == 0) {
+                    // TODO: fix this bug in begin of party
                     i.testPrice(i.price - 0.20);
                 }
                 else {
