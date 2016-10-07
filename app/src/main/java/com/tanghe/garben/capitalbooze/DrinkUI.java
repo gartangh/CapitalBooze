@@ -83,6 +83,8 @@ class DrinkUI extends Drink {
         mNameOrders.setText(name);
         mNameOrders.setTextSize(20);
         mNameOrders.setLayoutParams(params2);
+        // TODO: make this work
+        /*
         mNameOrders.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
@@ -97,6 +99,7 @@ class DrinkUI extends Drink {
                 return false;
             }
         });
+        */
 
         Button mRed = new Button(context);
         mRed.setText("-");
@@ -244,9 +247,6 @@ class DrinkUI extends Drink {
         MainActivity.ref2.child("countTotalDifference").setValue(countTotalDifference);
 
         calcPrises();
-
-        // TODO: remove this log
-        Log.d(TAG, "Task executed");
     }
 
     private static void calcPrises() throws IllegalArgumentException {

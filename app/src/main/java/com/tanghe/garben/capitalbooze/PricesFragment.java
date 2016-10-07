@@ -28,10 +28,12 @@ public class PricesFragment extends Fragment {
     static boolean seen = false;
     static Date updated;
     static String maxOrderName = "";
+    static String allTimeWolfName = "";
 
     static TextView mWolf;
     private LinearLayout verticalLayoutPrices;
     static TextView mUpdated;
+    static String wolf = "Wolf";
 
     public PricesFragment() {
         // Required empty public constructor
@@ -43,12 +45,19 @@ public class PricesFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_prices, container, false);
 
         mWolf = (TextView) view.findViewById(R.id.mWolf);
-        if (maxOrderName.equals("")) {
-            mWolf.setText(String.format(Locale.getDefault(), getString(R.string.wolf), getString(R.string.no_wolf), OrderFragment.maxOrder));
-        }
-        else {
-            mWolf.setText(String.format(Locale.getDefault(), getString(R.string.wolf), maxOrderName, OrderFragment.maxOrder));
-        }
+        setWolf();
+
+        mWolf.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (wolf.equals("Wolf")) {
+                    setWolf();
+                }
+                else {
+                    setAlltimeWolf();
+                }
+            }
+        });
 
         verticalLayoutPrices = (LinearLayout) view.findViewById(R.id.verticalLayoutPrices);
         for (DrinkUI i : DrinkUI.uidrinks) {
@@ -120,6 +129,26 @@ public class PricesFragment extends Fragment {
     public void onDestroyView() {
         verticalLayoutPrices.removeAllViews();
         super.onDestroyView();
+    }
+
+    public void setWolf() {
+        if (maxOrderName.equals("")) {
+            mWolf.setText(String.format(Locale.getDefault(), getString(R.string.wolf), getString(R.string.no_wolf), OrderFragment.maxOrder));
+        }
+        else {
+            mWolf.setText(String.format(Locale.getDefault(), getString(R.string.wolf), maxOrderName, OrderFragment.maxOrder));
+        }
+        wolf = "";
+    }
+
+    public void setAlltimeWolf() {
+        if (allTimeWolfName.equals("")) {
+            mWolf.setText(String.format(Locale.getDefault(), getString(R.string.all_time_wolf), getString(R.string.no_wolf), OrderFragment.allTimeWolf));
+        }
+        else {
+            mWolf.setText(String.format(Locale.getDefault(), getString(R.string.all_time_wolf), allTimeWolfName, OrderFragment.allTimeWolf));
+        }
+        wolf = "Wolf";
     }
 
     /**

@@ -32,6 +32,7 @@ public class OrderFragment extends Fragment {
     protected static int totalCount = 0;
     protected static int totalCountLast = 0;
     protected static long maxOrder = 0L;
+    protected static long allTimeWolf = 0l;
 
     private static LinearLayout verticalLayoutOrders;
     private static TextView mTotalPrice;
@@ -109,7 +110,12 @@ public class OrderFragment extends Fragment {
                     totalCountLast = totalCount;
                     if (totalCount > maxOrder) {
                         MainActivity.ref2.child("maxOrder").setValue(totalCount);
-                        Toast.makeText(getContext(), getString(R.string.new_wolf), Toast.LENGTH_LONG).show();
+                        if (totalCount > allTimeWolf) {
+                            MainActivity.ref2.child("allTimeWolf").setValue(totalCount);
+                            Toast.makeText(getContext(), getString(R.string.new_all_time_wolf), Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(getContext(), getString(R.string.new_wolf), Toast.LENGTH_LONG).show();
+                        }
                     }
                     totalCount = 0;
 

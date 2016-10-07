@@ -85,7 +85,7 @@ public class DrinkFragment extends Fragment {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 try {
-                    Double d = MainActivity.round(Double.parseDouble(mPrice.getText().toString()));
+                    double d = MainActivity.round(Double.parseDouble(mPrice.getText().toString()));
                     if (d > 60.00) {
                         mPrice.setText("");
                         mPrice.setHint(getString(R.string.invalid_max_price));
@@ -119,7 +119,7 @@ public class DrinkFragment extends Fragment {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 try {
-                    Double d = MainActivity.round(Double.parseDouble(mMin.getText().toString()));
+                    double d = MainActivity.round(Double.parseDouble(mMin.getText().toString()));
                     if (d < 1.00) {
                         mMin.setText("");
                         mMin.setHint(getString(R.string.invalid_min_price));
@@ -153,7 +153,7 @@ public class DrinkFragment extends Fragment {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 try {
-                    Double d = MainActivity.round(Double.parseDouble(mMax.getText().toString()));
+                    double d = MainActivity.round(Double.parseDouble(mMax.getText().toString()));
                     if (d > 60.00) {
                         mMax.setText("");
                         mMax.setHint(getString(R.string.invalid_max));

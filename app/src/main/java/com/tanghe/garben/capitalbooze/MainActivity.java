@@ -243,7 +243,7 @@ public class MainActivity extends AppCompatActivity implements
                     }
                 }
                 if (valid) {
-                    new DrinkUI((String) dataSnapshotDrink.child("name").getValue(), (Double) dataSnapshotDrink.child("price").getValue(), (Double) dataSnapshotDrink.child("min").getValue(), (Double) dataSnapshotDrink.child("max").getValue());
+                    new DrinkUI((String) dataSnapshotDrink.child("name").getValue(), (double) dataSnapshotDrink.child("price").getValue(), (double) dataSnapshotDrink.child("min").getValue(), (double) dataSnapshotDrink.child("max").getValue());
                     Log.d("FireBase", "new Drink: " + dataSnapshotDrink.child("name").getValue() + " added");
                 } else {
                     Log.d("FireBase","new Drink: " + dataSnapshotDrink.child("name").getValue() + " already in DrinkUI.uidrinks");
@@ -255,7 +255,7 @@ public class MainActivity extends AppCompatActivity implements
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for (DrinkUI i : DrinkUI.uidrinks) {
                             if (dataSnapshotDrink.child("name").getValue().toString().equals(i.getName())) {
-                                i.price = Double.parseDouble(dataSnapshot.getValue().toString());
+                                i.price = round((double) dataSnapshot.getValue());
                                 i.mPrice.setText(String.format(Locale.getDefault(), "€%.2f", i.price));
 
                                 // Adjust time in mPricesUpdated
@@ -279,7 +279,7 @@ public class MainActivity extends AppCompatActivity implements
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for (DrinkUI i : DrinkUI.uidrinks) {
                             if (dataSnapshotDrink.child("name").getValue().toString().equals(i.getName())) {
-                                i.priceDifference = Double.parseDouble(dataSnapshot.getValue().toString());
+                                i.priceDifference = round((double) dataSnapshot.getValue());
                                 if (i.priceDifference >= 0) {
                                     i.mPriceDifference.setText(String.format(Locale.getDefault(), "+%.2f", i.priceDifference));
                                 }
@@ -389,7 +389,7 @@ public class MainActivity extends AppCompatActivity implements
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             for (DrinkUI i : DrinkUI.uidrinks) {
                                 if (dataSnapshotDrink.child("name").getValue().toString().equals(i.getName())) {
-                                    i.min = (double) dataSnapshot.getValue();
+                                    i.min = round((double) dataSnapshot.getValue());
                                 }
                             }
                         }
@@ -404,7 +404,7 @@ public class MainActivity extends AppCompatActivity implements
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             for (DrinkUI i : DrinkUI.uidrinks) {
                                 if (dataSnapshotDrink.child("name").getValue().toString().equals(i.getName())) {
-                                    i.max = (double) dataSnapshot.getValue();
+                                    i.max = round((double) dataSnapshot.getValue());
                                 }
                             }
                         }
@@ -436,7 +436,7 @@ public class MainActivity extends AppCompatActivity implements
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             for (DrinkUI i : DrinkUI.uidrinks) {
                                 if (dataSnapshotDrink.child("name").getValue().toString().equals(i.getName())) {
-                                    i.partyRevenue = Double.parseDouble(dataSnapshot.getValue().toString());
+                                    i.partyRevenue = round((double) dataSnapshot.getValue());
                                     i.mPartyRevenue.setText(String.format(Locale.getDefault(), "€%.2f", i.partyRevenue));
                                 }
                             }
@@ -452,7 +452,7 @@ public class MainActivity extends AppCompatActivity implements
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             for (DrinkUI i : DrinkUI.uidrinks) {
                                 if (dataSnapshotDrink.child("name").getValue().toString().equals(i.getName())) {
-                                    i.priceLast = Double.parseDouble(dataSnapshot.getValue().toString());
+                                    i.priceLast = round((double) dataSnapshot.getValue());
                                 }
                             }
                         }
@@ -463,9 +463,6 @@ public class MainActivity extends AppCompatActivity implements
                         }
                     });
                 //}
-
-
-
             }
 
             @Override
@@ -483,7 +480,8 @@ public class MainActivity extends AppCompatActivity implements
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 for (DrinkUI i : DrinkUI.uidrinks) {
                     if (dataSnapshot.child("name").getValue().equals(i.name)) {
-                        DrinkUI.uidrinks.remove(i);
+                        // TODO: make this work
+                        //DrinkUI.uidrinks.remove(i);
 
                         // Adjust time in mPricesUpdated
                         PricesFragment.updated = new Date();
@@ -625,7 +623,7 @@ public class MainActivity extends AppCompatActivity implements
             ref2.child("partyRevenueTotal").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    Drink.partyRevenueTotal = Double.parseDouble(dataSnapshot.getValue().toString());
+                    Drink.partyRevenueTotal = round((double) dataSnapshot.getValue());
                     if (CountersFragment.mPartyRevenueTotal != null) {
                         CountersFragment.mPartyRevenueTotal.setText(String.format(Locale.getDefault(), "€%.2f", Drink.partyRevenueTotal));
                     }
@@ -721,6 +719,49 @@ public class MainActivity extends AppCompatActivity implements
                         if (PricesFragment.mWolf != null) {
                             PricesFragment.mWolf.setText(String.format(Locale.getDefault(), getString(R.string.wolf), PricesFragment.maxOrderName, OrderFragment.maxOrder));
                         }
+                    }
+
+                    // Adjust time in mPricesUpdated
+                    PricesFragment.updated = new Date();
+                    PricesFragment.seen = false;
+                    if (PricesFragment.mUpdated != null) {
+                        PricesFragment.mUpdated.setText(getString(R.string.updated, MainActivity.sdf.format(PricesFragment.updated)));
+                        PricesFragment.mUpdated.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
+                    }
+                }
+
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
+
+                }
+            });
+            ref2.child("allTimeWolf").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    OrderFragment.allTimeWolf = (long) dataSnapshot.getValue();
+
+                    // Adjust time in mPricesUpdated
+                    PricesFragment.updated = new Date();
+                    PricesFragment.seen = false;
+                    if (PricesFragment.mUpdated != null) {
+                        PricesFragment.mUpdated.setText(getString(R.string.updated, MainActivity.sdf.format(PricesFragment.updated)));
+                        PricesFragment.mUpdated.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
+                    }
+                }
+
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
+
+                }
+            });
+            ref2.child("allTimeWolfName").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.getValue() == null) {
+                        PricesFragment.allTimeWolfName = "";
+                    }
+                    else {
+                        PricesFragment.allTimeWolfName = (String) dataSnapshot.getValue();
                     }
 
                     // Adjust time in mPricesUpdated
