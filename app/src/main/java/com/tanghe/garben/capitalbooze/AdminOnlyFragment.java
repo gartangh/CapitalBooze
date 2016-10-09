@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -26,8 +27,9 @@ public class AdminOnlyFragment extends Fragment {
     private final static String TAG = "AdminOnlyFragment";
 
     protected static boolean partyStarted = false;
-    // TODO: set to 12min, there is a delay of 2min40s
-    private final static long INTERVAL = 15*60*1000L;
+    // TODO: set to 12min
+    // 2016: The first 2 intervals, there was a delay of 2 minutes and 40 seconds
+    private final static long INTERVAL = 1*60*1000L;
     private final static long[] PATTERN = {0L, 100L, 100L, 50L};
 
     public AdminOnlyFragment() {
@@ -40,6 +42,54 @@ public class AdminOnlyFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_admin_only, container, false);
 
         final Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+
+        final EditText mTypeWolfHere = (EditText) view.findViewById(R.id.mTypeWolfHere);
+        mTypeWolfHere.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mTypeWolfHere.setText("");
+            }
+        });
+        mTypeWolfHere.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (mTypeWolfHere.getText().toString().equals("")) {
+                    MainActivity.ref2.child("maxOrderName").setValue("");
+                }
+                else if (mTypeWolfHere.getText().length() > 1) {
+                    MainActivity.ref2.child("maxOrderName").setValue(mTypeWolfHere.getText().toString().toUpperCase(Locale.getDefault()));
+                }
+                else {
+                    Toast.makeText(getContext(), getString(R.string.invalid_length), Toast.LENGTH_LONG).show();
+                }
+                mTypeWolfHere.setText("");
+                return false;
+            }
+        });
+
+        final EditText mTypeAllTimeWolfHere = (EditText) view.findViewById(R.id.mTypeAllTimeWolfHere);
+        mTypeAllTimeWolfHere.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mTypeAllTimeWolfHere.setText("");
+            }
+        });
+        mTypeAllTimeWolfHere.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (mTypeAllTimeWolfHere.getText().toString().equals("")) {
+                    MainActivity.ref2.child("allTimeWolfName").setValue("");
+                }
+                else if (mTypeWolfHere.getText().length() > 1) {
+                    MainActivity.ref2.child("allTimeWolfName").setValue(mTypeWolfHere.getText().toString().toUpperCase(Locale.getDefault()));
+                }
+                else {
+                    Toast.makeText(getContext(), getString(R.string.invalid_length), Toast.LENGTH_LONG).show();
+                }
+                mTypeAllTimeWolfHere.setText("");
+                return false;
+            }
+        });
 
         final Button mStart = (Button) view.findViewById(R.id.mStart);
         mStart.setOnClickListener(new View.OnClickListener() {
@@ -66,6 +116,10 @@ public class AdminOnlyFragment extends Fragment {
                     MainActivity.ref2.child("maxOrderName").setValue("");
 
                     for (DrinkUI i : DrinkUI.uidrinks) {
+                        i.prices = new ArrayList<>();
+
+                        i.price = i.startPrice;
+                        MainActivity.ref2.child("Drinks").child(i.name).child("price").setValue(i.startPrice);
                         i.countCurrent = 0L;
                         MainActivity.ref2.child("Drinks").child(i.name).child("countCurrent").setValue(i.countCurrent);
                         i.partyRevenue = 0.00;
@@ -85,7 +139,6 @@ public class AdminOnlyFragment extends Fragment {
                     }
 
                     final Handler handler = new Handler();
-
                     final Runnable runnable = new Runnable() {
                         public void run() {
                             handler.post(new Runnable() {
@@ -109,7 +162,7 @@ public class AdminOnlyFragment extends Fragment {
                         }
                     };
 
-                    int min = (int) INTERVAL/1000/60;
+                    final int min = (int) INTERVAL/1000/60;
                     Toast.makeText(context, String.format(Locale.getDefault(), context.getString(R.string.timertask), min), Toast.LENGTH_LONG).show();
                     Log.d(TAG, String.format(Locale.getDefault(), context.getString(R.string.timertask), min));
                     timer.schedule(timerTask, INTERVAL, INTERVAL);
@@ -128,33 +181,8 @@ public class AdminOnlyFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (partyStarted) {
-                    //TODO: uncomment
-                    //DrinkUI.crash();
+                    DrinkUI.crash();
                 }
-            }
-        });
-
-        final EditText mTypeWolfHere = (EditText) view.findViewById(R.id.mTypeWolfHere);
-        mTypeWolfHere.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mTypeWolfHere.setText("");
-            }
-        });
-        mTypeWolfHere.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (mTypeWolfHere.getText().toString().equals("")) {
-                    MainActivity.ref2.child("maxOrderName").setValue("");
-                }
-                else if (mTypeWolfHere.getText().length() > 1) {
-                    MainActivity.ref2.child("maxOrderName").setValue(mTypeWolfHere.getText().toString().toUpperCase(Locale.getDefault()));
-                }
-                else {
-                    Toast.makeText(getContext(), getString(R.string.invalid_length), Toast.LENGTH_LONG).show();
-                }
-                mTypeWolfHere.setText("");
-                return false;
             }
         });
 

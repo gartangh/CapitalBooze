@@ -126,7 +126,7 @@ public class DrinkFragment extends Fragment {
                     }
                     else if (d > price) {
                         mMin.setText("");
-                        mMin.setHint(getString(R.string.invalid_min_price));
+                        mMin.setHint(getString(R.string.invalid_min));
                     }
                     else {
                         min = d;
@@ -156,11 +156,11 @@ public class DrinkFragment extends Fragment {
                     double d = MainActivity.round(Double.parseDouble(mMax.getText().toString()));
                     if (d > 60.00) {
                         mMax.setText("");
-                        mMax.setHint(getString(R.string.invalid_max));
+                        mMax.setHint(getString(R.string.invalid_max_price));
                     }
                     else if (d < price) {
                         mMax.setText("");
-                        mMax.setHint(getString(R.string.invalid_max_price));
+                        mMax.setHint(getString(R.string.invalid_max));
                     }
                     else {
                         max = d;
@@ -170,7 +170,7 @@ public class DrinkFragment extends Fragment {
                 }
                 catch (NumberFormatException e) {
                     mMax.setText("");
-                    mMax.setHint(getString(R.string.invalid_min_price));
+                    mMax.setHint(getString(R.string.invalid_max_price));
                 }
                 return false;
             }
@@ -183,7 +183,7 @@ public class DrinkFragment extends Fragment {
                     new DrinkUI(name, price, min, max);
                 }
                 else {
-                    Toast.makeText(getContext(), getString(R.string.could_not_add_drink), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), getString(R.string.could_not_add_drink_error), Toast.LENGTH_LONG).show();
                 }
                 name = "";
                 price = 0.00;

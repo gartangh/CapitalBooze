@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements
         PricesFragment.OnPricesFragmentInteractionListener {
 
     private final static String TAG = "MainActivity";
+    private final static String TAG2 = "Firebase";
 
     static SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
 
@@ -47,8 +48,8 @@ public class MainActivity extends AppCompatActivity implements
     FragmentManager fragmentManager = getSupportFragmentManager();
     private static ProgressDialog mProgressDialog;
 
-    public static Long accountType = 0L;
-    public static Firebase ref2;
+    static Long accountType = 0L;
+    static Firebase ref2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,15 +62,10 @@ public class MainActivity extends AppCompatActivity implements
         // Set a Toolbar to replace the ActionBar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        try {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-        catch (NullPointerException e) {
-            Log.d(TAG, "Did NOT set DisplayHomeAsUpEnabled to true");
-        }
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        // Find our drawer view
+        // Find drawer view
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         // Find our drawer view
         NavigationView nvDrawer = (NavigationView) findViewById(R.id.nvView);
@@ -84,7 +80,6 @@ public class MainActivity extends AppCompatActivity implements
         setTitle(getString(R.string.nav_about));
 
         Firebase.setAndroidContext(this);
-
         ref2 = new Firebase(getString(R.string.url));
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
@@ -93,7 +88,6 @@ public class MainActivity extends AppCompatActivity implements
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         if (activeNetwork != null) {
-            // User
             if (user != null) {
                 ref2.child("Users").child(user.getUid()).child("accountType").addValueEventListener(new ValueEventListener() {
                     @Override
@@ -117,14 +111,13 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
-        navigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                        selectDrawerItem(menuItem);
-                        return true;
-                    }
-                });
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                selectDrawerItem(menuItem);
+                return true;
+            }
+        });
     }
 
     private void selectDrawerItem(MenuItem menuItem) {
@@ -226,11 +219,11 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-    public void notConnectedError() {
+    void notConnectedError() {
         Toast.makeText(getApplicationContext(), getString(R.string.not_connected_error), Toast.LENGTH_LONG).show();
     }
 
-    public void setValueEventListeners() {
+    void setValueEventListeners() {
 
         // Drinks
         ref2.child("Drinks").addChildEventListener(new ChildEventListener() {
@@ -257,14 +250,9 @@ public class MainActivity extends AppCompatActivity implements
                             if (dataSnapshotDrink.child("name").getValue().toString().equals(i.getName())) {
                                 i.price = round((double) dataSnapshot.getValue());
                                 i.mPrice.setText(String.format(Locale.getDefault(), "€%.2f", i.price));
-
-                                // Adjust time in mPricesUpdated
-                                PricesFragment.updated = new Date();
-                                PricesFragment.seen = false;
-                                if (PricesFragment.mUpdated != null) {
-                                    PricesFragment.mUpdated.setText(getString(R.string.updated, MainActivity.sdf.format(PricesFragment.updated)));
-                                    PricesFragment.mUpdated.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
-                                }
+                                i.prices.add(i.price);
+                                Log.d(TAG, i.name + ": " + i.prices.toString());
+                                updatePrices();
                             }
                         }
                     }
@@ -296,14 +284,7 @@ public class MainActivity extends AppCompatActivity implements
                                 else {
                                     i.mPriceDifference.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.grey));
                                 }
-
-                                // Adjust time in mPricesUpdated
-                                PricesFragment.updated = new Date();
-                                PricesFragment.seen = false;
-                                if (PricesFragment.mUpdated != null) {
-                                    PricesFragment.mUpdated.setText(getString(R.string.updated, MainActivity.sdf.format(PricesFragment.updated)));
-                                    PricesFragment.mUpdated.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
-                                }
+                                updatePrices();
                             }
                         }
                     }
@@ -317,6 +298,26 @@ public class MainActivity extends AppCompatActivity implements
                 // TODO: reduce internet use
                 // Admin only
                 //if (accountType == 2) {
+                    ref2.child("Drinks").child(dataSnapshotDrink.child("name").getValue().toString()).child("startPrice").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            for (DrinkUI i : DrinkUI.uidrinks) {
+                                if (dataSnapshotDrink.child("name").getValue().toString().equals(i.getName())) {
+                                    try {
+                                        i.startPrice = (double) dataSnapshot.getValue();
+                                    }
+                                    catch (NullPointerException e) {
+                                        Log.d(TAG, "" + e);
+                                    }
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(FirebaseError firebaseError) {
+
+                        }
+                    });
                     ref2.child("Drinks").child(dataSnapshotDrink.child("name").getValue().toString()).child("countCurrent").addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -327,8 +328,9 @@ public class MainActivity extends AppCompatActivity implements
                                         i.mCountCurrent.setText(String.format(Locale.getDefault(), "%1d", i.countCurrent));
                                     }
                                     catch (NullPointerException e) {
-                                        Log.d(TAG, "" + e);
+                                        Log.d(TAG, e.toString());
                                     }
+                                    updateCounters();
                                 }
                             }
                         }
@@ -361,6 +363,7 @@ public class MainActivity extends AppCompatActivity implements
                                     i.countLast = (long) dataSnapshot.getValue();
                                     i.mCountLast.setText(String.format(Locale.getDefault(), "(%1d)", i.countLast));
                                 }
+                                updateCounters();
                             }
                         }
 
@@ -423,6 +426,7 @@ public class MainActivity extends AppCompatActivity implements
                                     i.partyCount = (long) dataSnapshot.getValue();
                                     i.mPartyCount.setText(String.format(Locale.getDefault(), "%1d", i.partyCount));
                                 }
+                                updateCounters();
                             }
                         }
 
@@ -439,6 +443,7 @@ public class MainActivity extends AppCompatActivity implements
                                     i.partyRevenue = round((double) dataSnapshot.getValue());
                                     i.mPartyRevenue.setText(String.format(Locale.getDefault(), "€%.2f", i.partyRevenue));
                                 }
+                                updateCounters();
                             }
                         }
 
@@ -523,14 +528,7 @@ public class MainActivity extends AppCompatActivity implements
                     if (CountersFragment.mCountTotalCurrent != null) {
                         CountersFragment.mCountTotalCurrent.setText(String.format(Locale.getDefault(), "%1d", Drink.countTotalCurrent));
                     }
-
-                    // Adjust time in mCountersUpdated
-                    CountersFragment.updated = new Date();
-                    CountersFragment.seen = false;
-                    if (CountersFragment.mUpdated != null) {
-                        CountersFragment.mUpdated.setText(getString(R.string.updated, MainActivity.sdf.format(CountersFragment.updated)));
-                        CountersFragment.mUpdated.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
-                    }
+                    updateCounters();
                 }
 
                 @Override
@@ -542,14 +540,6 @@ public class MainActivity extends AppCompatActivity implements
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     Drink.countTotalDifference = (long) dataSnapshot.getValue();
-
-                    // Adjust time in mCountersUpdated
-                    CountersFragment.updated = new Date();
-                    CountersFragment.seen = false;
-                    if (CountersFragment.mUpdated != null) {
-                        CountersFragment.mUpdated.setText(getString(R.string.updated, MainActivity.sdf.format(CountersFragment.updated)));
-                        CountersFragment.mUpdated.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
-                    }
                 }
 
                 @Override
@@ -564,14 +554,7 @@ public class MainActivity extends AppCompatActivity implements
                     if (CountersFragment.mCountTotalLast != null) {
                         CountersFragment.mCountTotalLast.setText(String.format(Locale.getDefault(), "(%1d)", Drink.countTotalLast));
                     }
-
-                    // Adjust time in mCountersUpdated
-                    CountersFragment.updated = new Date();
-                    CountersFragment.seen = false;
-                    if (CountersFragment.mUpdated != null) {
-                        CountersFragment.mUpdated.setText(getString(R.string.updated, MainActivity.sdf.format(CountersFragment.updated)));
-                        CountersFragment.mUpdated.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
-                    }
+                    updateCounters();
                 }
 
                 @Override
@@ -583,14 +566,6 @@ public class MainActivity extends AppCompatActivity implements
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     Drink.countTotalSecondLast = (long) dataSnapshot.getValue();
-
-                    // Adjust time in mCountersUpdated
-                    CountersFragment.updated = new Date();
-                    CountersFragment.seen = false;
-                    if (CountersFragment.mUpdated != null) {
-                        CountersFragment.mUpdated.setText(getString(R.string.updated, MainActivity.sdf.format(CountersFragment.updated)));
-                        CountersFragment.mUpdated.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
-                    }
                 }
 
                 @Override
@@ -605,14 +580,7 @@ public class MainActivity extends AppCompatActivity implements
                     if (CountersFragment.mPartyCountTotal != null) {
                         CountersFragment.mPartyCountTotal.setText(String.format(Locale.getDefault(), "%1d", Drink.partyCountTotal));
                     }
-
-                    // Adjust time in mCountersUpdated
-                    CountersFragment.updated = new Date();
-                    CountersFragment.seen = false;
-                    if (CountersFragment.mUpdated != null) {
-                        CountersFragment.mUpdated.setText(getString(R.string.updated, MainActivity.sdf.format(CountersFragment.updated)));
-                        CountersFragment.mUpdated.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
-                    }
+                    updateCounters();
                 }
 
                 @Override
@@ -627,14 +595,7 @@ public class MainActivity extends AppCompatActivity implements
                     if (CountersFragment.mPartyRevenueTotal != null) {
                         CountersFragment.mPartyRevenueTotal.setText(String.format(Locale.getDefault(), "€%.2f", Drink.partyRevenueTotal));
                     }
-
-                    // Adjust time in mCountersUpdated
-                    CountersFragment.updated = new Date();
-                    CountersFragment.seen = false;
-                    if (CountersFragment.mUpdated != null) {
-                        CountersFragment.mUpdated.setText(getString(R.string.updated, MainActivity.sdf.format(CountersFragment.updated)));
-                        CountersFragment.mUpdated.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
-                    }
+                    updateCounters();
                 }
 
                 @Override
@@ -646,14 +607,6 @@ public class MainActivity extends AppCompatActivity implements
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     AdminOnlyFragment.partyStarted = (boolean) dataSnapshot.getValue();
-
-                    // Adjust time in mCountersUpdated
-                    CountersFragment.updated = new Date();
-                    CountersFragment.seen = false;
-                    if (CountersFragment.mUpdated != null) {
-                        CountersFragment.mUpdated.setText(getString(R.string.updated, MainActivity.sdf.format(CountersFragment.updated)));
-                        CountersFragment.mUpdated.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
-                    }
                 }
 
                 @Override
@@ -687,13 +640,7 @@ public class MainActivity extends AppCompatActivity implements
                         }
                     }
 
-                    // Adjust time in mPricesUpdated
-                    PricesFragment.updated = new Date();
-                    PricesFragment.seen = false;
-                    if (PricesFragment.mUpdated != null) {
-                        PricesFragment.mUpdated.setText(getString(R.string.updated, MainActivity.sdf.format(PricesFragment.updated)));
-                        PricesFragment.mUpdated.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
-                    }
+                    updatePrices();
                 }
 
                 @Override
@@ -721,13 +668,7 @@ public class MainActivity extends AppCompatActivity implements
                         }
                     }
 
-                    // Adjust time in mPricesUpdated
-                    PricesFragment.updated = new Date();
-                    PricesFragment.seen = false;
-                    if (PricesFragment.mUpdated != null) {
-                        PricesFragment.mUpdated.setText(getString(R.string.updated, MainActivity.sdf.format(PricesFragment.updated)));
-                        PricesFragment.mUpdated.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
-                    }
+                    updatePrices();
                 }
 
                 @Override
@@ -739,14 +680,7 @@ public class MainActivity extends AppCompatActivity implements
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     OrderFragment.allTimeWolf = (long) dataSnapshot.getValue();
-
-                    // Adjust time in mPricesUpdated
-                    PricesFragment.updated = new Date();
-                    PricesFragment.seen = false;
-                    if (PricesFragment.mUpdated != null) {
-                        PricesFragment.mUpdated.setText(getString(R.string.updated, MainActivity.sdf.format(PricesFragment.updated)));
-                        PricesFragment.mUpdated.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
-                    }
+                    updatePrices();
                 }
 
                 @Override
@@ -763,14 +697,7 @@ public class MainActivity extends AppCompatActivity implements
                     else {
                         PricesFragment.allTimeWolfName = (String) dataSnapshot.getValue();
                     }
-
-                    // Adjust time in mPricesUpdated
-                    PricesFragment.updated = new Date();
-                    PricesFragment.seen = false;
-                    if (PricesFragment.mUpdated != null) {
-                        PricesFragment.mUpdated.setText(getString(R.string.updated, MainActivity.sdf.format(PricesFragment.updated)));
-                        PricesFragment.mUpdated.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
-                    }
+                    updatePrices();
                 }
 
                 @Override
@@ -779,6 +706,26 @@ public class MainActivity extends AppCompatActivity implements
                 }
             });
         //}
+    }
+
+    void updatePrices() {
+        // Adjust time in mPricesUpdated
+        PricesFragment.updated = new Date();
+        PricesFragment.seen = false;
+        if (PricesFragment.mUpdated != null) {
+            PricesFragment.mUpdated.setText(getString(R.string.updated, MainActivity.sdf.format(PricesFragment.updated)));
+            PricesFragment.mUpdated.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
+        }
+    }
+
+    void updateCounters() {
+        // Adjust time in mCountersUpdated
+        CountersFragment.updated = new Date();
+        CountersFragment.seen = false;
+        if (CountersFragment.mUpdated != null) {
+            CountersFragment.mUpdated.setText(getString(R.string.updated, MainActivity.sdf.format(CountersFragment.updated)));
+            CountersFragment.mUpdated.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
+        }
     }
 
     // Navigation

@@ -9,7 +9,11 @@ import com.firebase.client.ValueEventListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
+
 class Drink {
+
+    final static String TAG = "Drink";
 
     // B = Big, S = Small, I = Increase, D = Decrease
     final static double BI = 1.3;
@@ -27,6 +31,8 @@ class Drink {
 
     // drinks
     String name;
+    double startPrice;
+    ArrayList<Double> prices = new ArrayList<>();
     double price;
     double min;
     double max;
@@ -37,7 +43,7 @@ class Drink {
     long countSecondLast;
     long countDifference;
     long partyCount = 0;
-    double partyRevenue = 0.0;
+    double partyRevenue = 0.00;
 
     public Drink() {
         // Default constructor required for calls to DataSnapshot.getValue(Drink.class)
@@ -45,6 +51,7 @@ class Drink {
 
     Drink(final String name, double price, double min, double max) {
         this.name = name;
+        this.startPrice = price;
         this.price = price;
         this.min = min;
         this.max = max;
@@ -69,7 +76,11 @@ class Drink {
         return name;
     }
 
-    // Not used, but necessary for firebase
+    // Not used, but necessary for Firebase
+    public double getStartPrice() {
+        return startPrice;
+    }
+
     public double getPrice() {
         return price;
     }

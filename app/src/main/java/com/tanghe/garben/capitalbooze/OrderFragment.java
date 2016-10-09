@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.util.Locale;
 
 /**
@@ -121,6 +120,9 @@ public class OrderFragment extends Fragment {
 
                     setTotals();
                     setTotalsLast();
+                }
+                else {
+                    Toast.makeText(getContext(), getString(R.string.nothing_to_order), Toast.LENGTH_LONG).show();
                 }
             }
         });

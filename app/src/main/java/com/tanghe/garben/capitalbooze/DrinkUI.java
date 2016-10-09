@@ -53,23 +53,7 @@ class DrinkUI extends Drink {
 
     DrinkUI(final String name, double price, double min, double max) {
         super(name, price, min, max);
-
-        MainActivity.ref2.child("Drinks").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                countCurrent = (long) dataSnapshot.child(name).child("countCurrent").getValue();
-                partyCount = (long) dataSnapshot.child(name).child("partyCount").getValue();
-                countLast = (long) dataSnapshot.child(name).child("countLast").getValue();
-                partyRevenue = (double) dataSnapshot.child(name).child("partyRevenue").getValue();
-
-                makeUIElements();
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
-        });
+        makeUIElements();
     }
 
     private void makeUIElements() {
@@ -83,23 +67,6 @@ class DrinkUI extends Drink {
         mNameOrders.setText(name);
         mNameOrders.setTextSize(20);
         mNameOrders.setLayoutParams(params2);
-        // TODO: make this work
-        /*
-        mNameOrders.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                for (DrinkUI i : uidrinks) {
-                    if (i.name.equals(mNameOrders.getText().toString()) && MainActivity.accountType == 2) {
-                        DrinkUI.uidrinks.remove(i);
-                        MainActivity.ref2.child("Drinks").child(i.name).removeValue();
-                        Log.d(TAG, "Drink " + i.name + " removed");
-                        break;
-                    }
-                }
-                return false;
-            }
-        });
-        */
 
         Button mRed = new Button(context);
         mRed.setText("-");
@@ -156,6 +123,22 @@ class DrinkUI extends Drink {
         mNameCounters.setText(name);
         mNameCounters.setTextSize(20);
         mNameCounters.setLayoutParams(params2);
+        mNameCounters.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                final Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+                v.vibrate(500L);
+                for (DrinkUI i : uidrinks) {
+                    if (i.name.equals(mNameOrders.getText().toString()) && MainActivity.accountType == 2) {
+                        DrinkUI.uidrinks.remove(i);
+                        MainActivity.ref2.child("Drinks").child(i.name).removeValue();
+                        Log.d(TAG, "Drink " + i.name + " removed");
+                        break;
+                    }
+                }
+                return false;
+            }
+        });
 
         mCountCurrent = new TextView(context);
         mCountCurrent.setText(String.format(Locale.getDefault(), "%1d", countCurrent));
@@ -299,6 +282,7 @@ class DrinkUI extends Drink {
             price = MainActivity.round(testPrice);
         }
         MainActivity.ref2.child("Drinks").child(name).child("price").setValue(price);
+        Log.d(TAG, prices.toString());
 
         // priceDifference
         priceDifference = price - priceLast;
@@ -310,7 +294,12 @@ class DrinkUI extends Drink {
 
         if (System.currentTimeMillis() - timeCrashLast >= 60*60*1000L) {
             for (DrinkUI i : uidrinks) {
-                i.testPrice(0.75 * i.price);
+                if (i.name.equals("Stella") || i.name.equals("Water")) {
+                    i.testPrice(1.00);
+                }
+                else {
+                    i.testPrice(2.00);
+                }
             }
             MainActivity.ref2.child("timeCrashLast").setValue(System.currentTimeMillis());
 
