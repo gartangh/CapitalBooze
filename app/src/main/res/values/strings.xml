@@ -35,6 +35,8 @@
     <string name="wolf">Wolf of Capital Booze:\n%1$s\n%2$d drinks</string>
     <string name="all_time_wolf">All time wolf:\n%1$s\n%2$d drinks</string>
     <string name="no_wolf">To be determined…</string>
+    <string name="sold">SOLD</string>
+    <string name="out">OUT</string>
 
     <!-- fragment_log_in-->
     <string name="logged_out">Logged out</string>
@@ -83,7 +85,8 @@
     <string name="crash">Crash</string>
     <string name="crash_executed">Crash executed!</string>
     <string name="crash_not_executed_error">Error: crash not executed!\nWait %d more minutes.</string>
-    <string name="party_already_started">Party Already started!</string>
+    <string name="party_already_started_error">Error: party already started!</string>
+    <string name="party_not_started_error">Error: party not started!</string>
     <string name="type_wolf_here">Type new wolf here</string>
     <string name="type_allTimeWolf_here">Type all time wolf here</string>
 

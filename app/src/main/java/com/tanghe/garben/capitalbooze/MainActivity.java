@@ -106,7 +106,8 @@ public class MainActivity extends AppCompatActivity implements
             setValueEventListeners();
         }
         else {
-            notConnectedError();
+            Toast.makeText(getApplicationContext(), getString(R.string.not_connected_error), Toast.LENGTH_LONG).show();
+            Log.d(TAG, getString(R.string.not_connected_error));
         }
     }
 
@@ -124,6 +125,7 @@ public class MainActivity extends AppCompatActivity implements
         // Create a new fragment and specify the fragment to show based on nav item clicked
         Fragment fragment = null;
         Class fragmentClass;
+
         switch(menuItem.getItemId()) {
             case R.id.nav_drink_fragment:
                 fragmentClass = DrinkFragment.class;
@@ -219,16 +221,11 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-    void notConnectedError() {
-        Toast.makeText(getApplicationContext(), getString(R.string.not_connected_error), Toast.LENGTH_LONG).show();
-    }
-
     void setValueEventListeners() {
 
         // Drinks
         ref2.child("Drinks").addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(final DataSnapshot dataSnapshotDrink, String s) {
+            @Override public void onChildAdded(final DataSnapshot dataSnapshotDrink, String s) {
                 boolean valid = true;
                 for (DrinkUI i : DrinkUI.uidrinks) {
                     if (dataSnapshotDrink.child("name").getValue().equals(i.name)) {
@@ -243,15 +240,24 @@ public class MainActivity extends AppCompatActivity implements
                 }
 
                 // Public
-                ref2.child("Drinks").child(dataSnapshotDrink.child("name").getValue().toString()).child("price").addValueEventListener(new ValueEventListener() {
+                ref2.child("Drinks").child(dataSnapshotDrink.child("name").getValue().toString()).child("priceDifference").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for (DrinkUI i : DrinkUI.uidrinks) {
                             if (dataSnapshotDrink.child("name").getValue().toString().equals(i.getName())) {
-                                i.price = round((double) dataSnapshot.getValue());
-                                i.mPrice.setText(String.format(Locale.getDefault(), "€%.2f", i.price));
-                                i.prices.add(i.price);
-                                Log.d(TAG, i.name + ": " + i.prices.toString());
+                                i.priceDifference = round((double) dataSnapshot.getValue());
+                                if (i.priceDifference < 0) {
+                                    i.mPriceDifference.setText(String.format(Locale.getDefault(), "%.2f", i.priceDifference));
+                                    i.mPriceDifference.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.green));
+                                }
+                                else if (i.priceDifference > 0) {
+                                    i.mPriceDifference.setText(String.format(Locale.getDefault(), "+%.2f", i.priceDifference));
+                                    i.mPriceDifference.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.red));
+                                }
+                                else {
+                                    i.mPriceDifference.setText(String.format(Locale.getDefault(), "+%.2f", i.priceDifference));
+                                    i.mPriceDifference.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.grey));
+                                }
                                 updatePrices();
                             }
                         }
@@ -262,27 +268,34 @@ public class MainActivity extends AppCompatActivity implements
 
                     }
                 });
-                ref2.child("Drinks").child(dataSnapshotDrink.child("name").getValue().toString()).child("priceDifference").addValueEventListener(new ValueEventListener() {
+                ref2.child("Drinks").child(dataSnapshotDrink.child("name").getValue().toString()).child("price").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for (DrinkUI i : DrinkUI.uidrinks) {
                             if (dataSnapshotDrink.child("name").getValue().toString().equals(i.getName())) {
-                                i.priceDifference = round((double) dataSnapshot.getValue());
-                                if (i.priceDifference >= 0) {
-                                    i.mPriceDifference.setText(String.format(Locale.getDefault(), "+%.2f", i.priceDifference));
-                                }
-                                else {
-                                    i.mPriceDifference.setText(String.format(Locale.getDefault(), "%.2f", i.priceDifference));
-                                }
-
-                                if (i.priceDifference < 0) {
-                                    i.mPriceDifference.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.green));
-                                }
-                                else if (i.priceDifference > 0) {
-                                    i.mPriceDifference.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.red));
-                                }
-                                else {
-                                    i.mPriceDifference.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.grey));
+                                i.price = round((double) dataSnapshot.getValue());
+                                if (i.price > 0.00) {
+                                    i.mPrice.setText(String.format(Locale.getDefault(), "€%.2f", i.price));
+                                    i.prices.add(i.price);
+                                    Log.d(TAG, i.name + ": " + i.prices.toString());
+                                    if (i.priceDifference < 0) {
+                                        i.mPriceDifference.setText(String.format(Locale.getDefault(), "%.2f", i.priceDifference));
+                                        i.mPriceDifference.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.green));
+                                    }
+                                    else if (i.priceDifference > 0) {
+                                        i.mPriceDifference.setText(String.format(Locale.getDefault(), "+%.2f", i.priceDifference));
+                                        i.mPriceDifference.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.red));
+                                    }
+                                    else {
+                                        i.mPriceDifference.setText(String.format(Locale.getDefault(), "+%.2f", i.priceDifference));
+                                        i.mPriceDifference.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.grey));
+                                    }
+                                } else {
+                                    i.price = 0.00;
+                                    i.mPrice.setText(getString(R.string.sold));
+                                    i.priceDifference = 0.00;
+                                    i.mPriceDifference.setText(getString(R.string.out));
+                                    i.mPriceDifference.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.grey));
                                 }
                                 updatePrices();
                             }
@@ -472,13 +485,7 @@ public class MainActivity extends AppCompatActivity implements
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                // Adjust time in mCountersUpdated
-                CountersFragment.updated = new Date();
-                CountersFragment.seen = false;
-                if (CountersFragment.mUpdated != null) {
-                    CountersFragment.mUpdated.setText(getString(R.string.updated, MainActivity.sdf.format(CountersFragment.updated)));
-                    CountersFragment.mUpdated.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
-                }
+                updateCounters();
             }
 
             @Override

@@ -272,21 +272,21 @@ class DrinkUI extends Drink {
         priceLast = price;
         MainActivity.ref2.child("Drinks").child(name).child("priceLast").setValue(priceLast);
 
-        if (testPrice > max) {
-            price = max;
-        }
-        else if (testPrice < min) {
-            price = min;
-        }
-        else {
-            price = MainActivity.round(testPrice);
-        }
-        MainActivity.ref2.child("Drinks").child(name).child("price").setValue(price);
-        Log.d(TAG, prices.toString());
+        if (price != 0.00) {
+            if (testPrice > max) {
+                price = max;
+            } else if (testPrice < min) {
+                price = min;
+            } else {
+                price = MainActivity.round(testPrice);
+            }
+            MainActivity.ref2.child("Drinks").child(name).child("price").setValue(price);
+            Log.d(TAG, prices.toString());
 
-        // priceDifference
-        priceDifference = price - priceLast;
-        MainActivity.ref2.child("Drinks").child(name).child("priceDifference").setValue(priceDifference);
+            // priceDifference
+            priceDifference = price - priceLast;
+            MainActivity.ref2.child("Drinks").child(name).child("priceDifference").setValue(priceDifference);
+        }
     }
 
     static void crash() {
@@ -295,10 +295,10 @@ class DrinkUI extends Drink {
         if (System.currentTimeMillis() - timeCrashLast >= 60*60*1000L) {
             for (DrinkUI i : uidrinks) {
                 if (i.name.equals("Stella") || i.name.equals("Water")) {
-                    i.testPrice(1.00);
+                    i.crashPrice(1.00);
                 }
                 else {
-                    i.testPrice(2.00);
+                    i.crashPrice(2.00);
                 }
             }
             MainActivity.ref2.child("timeCrashLast").setValue(System.currentTimeMillis());
@@ -312,6 +312,21 @@ class DrinkUI extends Drink {
             int min = (int) ((60*60*1000L - (System.currentTimeMillis() - timeCrashLast))/(60*1000L));
             Toast.makeText(context, String.format(Locale.getDefault(), context.getString(R.string.crash_not_executed_error), min), Toast.LENGTH_LONG).show();
             Log.d(TAG, String.format(Locale.getDefault(), context.getString(R.string.crash_not_executed_error), min));
+        }
+    }
+
+    private void crashPrice(double crashPrice) {
+        // price
+        priceLast = price;
+        MainActivity.ref2.child("Drinks").child(name).child("priceLast").setValue(priceLast);
+
+        if (price != 0.00) {
+            price = MainActivity.round(crashPrice);
+            MainActivity.ref2.child("Drinks").child(name).child("price").setValue(price);
+
+            // priceDifference
+            priceDifference = price - priceLast;
+            MainActivity.ref2.child("Drinks").child(name).child("priceDifference").setValue(priceDifference);
         }
     }
 

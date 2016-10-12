@@ -3,6 +3,7 @@ package com.tanghe.garben.capitalbooze;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,7 @@ import java.util.Locale;
 public class DrinkFragment extends Fragment {
 
     private OnDrinkFragmentInteractionListener mListener;
+    private final static String TAG = "Drink";
 
     private String name = "";
     private double price = 0.00;
@@ -184,6 +186,7 @@ public class DrinkFragment extends Fragment {
                 }
                 else {
                     Toast.makeText(getContext(), getString(R.string.could_not_add_drink_error), Toast.LENGTH_LONG).show();
+                    Log.d(TAG, getString(R.string.could_not_add_drink_error));
                 }
                 name = "";
                 price = 0.00;

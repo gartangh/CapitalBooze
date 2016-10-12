@@ -171,7 +171,8 @@ public class AdminOnlyFragment extends Fragment {
                     MainActivity.ref2.child("partyStarted").setValue(partyStarted);
                 }
                 else {
-                    Toast.makeText(getContext(), getString(R.string.party_already_started), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), getString(R.string.party_already_started_error), Toast.LENGTH_LONG).show();
+                    Log.d(TAG, getString(R.string.party_already_started_error));
                 }
             }
         });
@@ -182,6 +183,9 @@ public class AdminOnlyFragment extends Fragment {
             public void onClick(View view) {
                 if (partyStarted) {
                     DrinkUI.crash();
+                }
+                else {
+                    Toast.makeText(getContext(), getString(R.string.party_not_started_error), Toast.LENGTH_LONG).show();
                 }
             }
         });

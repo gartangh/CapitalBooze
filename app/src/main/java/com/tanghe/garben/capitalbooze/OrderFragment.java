@@ -112,8 +112,10 @@ public class OrderFragment extends Fragment {
                         if (totalCount > allTimeWolf) {
                             MainActivity.ref2.child("allTimeWolf").setValue(totalCount);
                             Toast.makeText(getContext(), getString(R.string.new_all_time_wolf), Toast.LENGTH_LONG).show();
+                            Log.d(TAG, getString(R.string.new_all_time_wolf));
                         } else {
                             Toast.makeText(getContext(), getString(R.string.new_wolf), Toast.LENGTH_LONG).show();
+                            Log.d(TAG, getString(R.string.new_wolf));
                         }
                     }
                     totalCount = 0;
@@ -123,6 +125,7 @@ public class OrderFragment extends Fragment {
                 }
                 else {
                     Toast.makeText(getContext(), getString(R.string.nothing_to_order), Toast.LENGTH_LONG).show();
+                    Log.d(TAG, getString(R.string.nothing_to_order));
                 }
             }
         });
