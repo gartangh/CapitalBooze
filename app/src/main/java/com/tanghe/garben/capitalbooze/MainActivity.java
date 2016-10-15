@@ -31,12 +31,13 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements
         AboutFragment.OnAboutFragmentInteractionListener,
+        PricesFragment.OnPricesFragmentInteractionListener,
+        ExplanationFragment.OnExplanationFragmentInteractionListener,
         LogInFragment.OnLogInFragmentInteractionListener,
         DrinkFragment.OnDrinkFragmentInteractionListener,
         OrderFragment.OnOrderFragmentInteractionListener,
         CountersFragment.OnCountersFragmentInteractionListener,
-        AdminOnlyFragment.OnAdminOnlyFragmentInteractionListener,
-        PricesFragment.OnPricesFragmentInteractionListener {
+        AdminOnlyFragment.OnAdminOnlyFragmentInteractionListener {
 
     private final static String TAG = "MainActivity";
     private final static String TAG2 = "Firebase";
@@ -93,12 +94,12 @@ public class MainActivity extends AppCompatActivity implements
                     @Override
                     public void onDataChange(DataSnapshot snapshot) {
                         accountType = (Long) snapshot.getValue();
-                        Log.d("FireBase", "Data changed: accountType = " + accountType);
+                        Log.d(TAG2, "Data changed: accountType = " + accountType);
                     }
 
                     @Override
                     public void onCancelled(FirebaseError firebaseError) {
-                        Log.d("FireBase", "The read failed: " + firebaseError.getMessage());
+                        Log.d(TAG2, "The read failed: " + firebaseError.getMessage());
                     }
                 });
             }
@@ -127,9 +128,21 @@ public class MainActivity extends AppCompatActivity implements
         Class fragmentClass;
 
         switch(menuItem.getItemId()) {
-            case R.id.nav_drink_fragment:
-                fragmentClass = DrinkFragment.class;
+            case R.id.nav_prices_fragment:
+                fragmentClass = PricesFragment.class;
                 break;
+            case R.id.nav_about_fragment:
+                fragmentClass = AboutFragment.class;
+                break;
+            case R.id.nav_explanation_fragment:
+                fragmentClass = ExplanationFragment.class;
+                break;
+            case R.id.nav_log_in_fragment:
+                fragmentClass = LogInFragment.class;
+                break;
+            case R.id.nav_exit:
+                finish();
+                System.exit(0);
             case R.id.nav_order_fragment:
                 fragmentClass = OrderFragment.class;
                 break;
@@ -139,27 +152,18 @@ public class MainActivity extends AppCompatActivity implements
             case R.id.nav_admin_only_fragment:
                 fragmentClass  = AdminOnlyFragment.class;
                 break;
-            case R.id.nav_prices_fragment:
-                fragmentClass = PricesFragment.class;
+            case R.id.nav_drink_fragment:
+                fragmentClass = DrinkFragment.class;
                 break;
-            case R.id.nav_about_fragment:
-                fragmentClass = AboutFragment.class;
-                break;
-            case R.id.nav_log_in_fragment:
-                fragmentClass = LogInFragment.class;
-                break;
-            case R.id.nav_exit:
-                finish();
-                System.exit(0);
             default:
                 fragmentClass = AboutFragment.class;
         }
 
         try {
-            if (accountType == 0 && (fragmentClass == DrinkFragment.class || fragmentClass == OrderFragment.class || fragmentClass == CountersFragment.class || fragmentClass == AdminOnlyFragment.class)) {
+            if (accountType == 0 && (fragmentClass == OrderFragment.class || fragmentClass == CountersFragment.class || fragmentClass == AdminOnlyFragment.class || fragmentClass == DrinkFragment.class)) {
                 fragmentClass = AboutFragment.class;
             }
-            if (accountType == 1 && (fragmentClass == AdminOnlyFragment.class || fragmentClass == DrinkFragment.class || fragmentClass == CountersFragment.class)) {
+            if (accountType == 1 && (fragmentClass == CountersFragment.class || fragmentClass == AdminOnlyFragment.class || fragmentClass == DrinkFragment.class)) {
                 fragmentClass = AboutFragment.class;
             }
             fragment = (Fragment) fragmentClass.newInstance();
@@ -234,9 +238,9 @@ public class MainActivity extends AppCompatActivity implements
                 }
                 if (valid) {
                     new DrinkUI((String) dataSnapshotDrink.child("name").getValue(), (double) dataSnapshotDrink.child("price").getValue(), (double) dataSnapshotDrink.child("min").getValue(), (double) dataSnapshotDrink.child("max").getValue());
-                    Log.d("FireBase", "new Drink: " + dataSnapshotDrink.child("name").getValue() + " added");
+                    Log.d(TAG2, "new Drink: " + dataSnapshotDrink.child("name").getValue() + " added");
                 } else {
-                    Log.d("FireBase","new Drink: " + dataSnapshotDrink.child("name").getValue() + " already in DrinkUI.uidrinks");
+                    Log.d(TAG2,"new Drink: " + dataSnapshotDrink.child("name").getValue() + " already in DrinkUI.uidrinks");
                 }
 
                 // Public
@@ -739,7 +743,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onAboutNextPressed() {
         fragmentManager.beginTransaction().replace(R.id.container, new PricesFragment()).commit();
-        setTitle(getString(R.string.nav_prices));
+        setTitle(R.string.nav_prices);
     }
 
     @Override
@@ -750,8 +754,30 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onPricesNextPressed() {
-        fragmentManager.beginTransaction().replace(R.id.container, new LogInFragment()).commit();
-        setTitle(getString(R.string.nav_log_in));
+        if (accountType != 0) {
+            fragmentManager.beginTransaction().replace(R.id.container, new OrderFragment()).commit();
+            setTitle(getString(R.string.nav_order));
+        } else {
+            fragmentManager.beginTransaction().replace(R.id.container, new AboutFragment()).commit();
+            setTitle(getString(R.string.nav_about));
+        }
+    }
+
+    @Override
+    public void onExplanationBackPressed() {
+        fragmentManager.beginTransaction().replace(R.id.container, new PricesFragment()).commit();
+        setTitle(R.string.nav_prices);
+    }
+
+    @Override
+    public void onExplanationNextPressed() {
+        if (accountType != 0) {
+            fragmentManager.beginTransaction().replace(R.id.container, new OrderFragment()).commit();
+            setTitle(getString(R.string.nav_order));
+        } else {
+            fragmentManager.beginTransaction().replace(R.id.container, new AboutFragment()).commit();
+            setTitle(getString(R.string.nav_about));
+        }
     }
 
     @Override
@@ -773,15 +799,15 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onOrderBackPressed() {
-        fragmentManager.beginTransaction().replace(R.id.container, new LogInFragment()).commit();
-        setTitle(getString(R.string.nav_log_in));
+        fragmentManager.beginTransaction().replace(R.id.container, new PricesFragment()).commit();
+        setTitle(R.string.nav_prices);
     }
 
     @Override
     public void onOrderNextPressed() {
         if (accountType == 2) {
-            fragmentManager.beginTransaction().replace(R.id.container, new DrinkFragment()).commit();
-            setTitle(getString(R.string.nav_drink));
+            fragmentManager.beginTransaction().replace(R.id.container, new CountersFragment()).commit();
+            setTitle(R.string.nav_counters);
         }
         else {
             fragmentManager.beginTransaction().replace(R.id.container, new AboutFragment()).commit();
@@ -790,21 +816,9 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onDrinkBackPressed() {
-        fragmentManager.beginTransaction().replace(R.id.container, new OrderFragment()).commit();
-        setTitle(getString(R.string.nav_order));
-    }
-
-    @Override
-    public void onDrinkNextPressed() {
-        fragmentManager.beginTransaction().replace(R.id.container, new CountersFragment()).commit();
-        setTitle(getString(R.string.nav_counters));
-    }
-
-    @Override
     public void onCountersBackPressed() {
-        fragmentManager.beginTransaction().replace(R.id.container, new DrinkFragment()).commit();
-        setTitle(getString(R.string.nav_drink));
+        fragmentManager.beginTransaction().replace(R.id.container, new OrderFragment()).commit();
+        setTitle(R.string.nav_order);
     }
 
     @Override
@@ -823,5 +837,18 @@ public class MainActivity extends AppCompatActivity implements
     public void onAdminOnlyNextPressed() {
         fragmentManager.beginTransaction().replace(R.id.container, new AboutFragment()).commit();
         setTitle(getString(R.string.nav_about));
+    }
+
+
+    @Override
+    public void onDrinkBackPressed() {
+        fragmentManager.beginTransaction().replace(R.id.container, new AdminOnlyFragment()).commit();
+        setTitle(R.string.nav_admin_only);
+    }
+
+    @Override
+    public void onDrinkNextPressed() {
+        fragmentManager.beginTransaction().replace(R.id.container, new AboutFragment()).commit();
+        setTitle(R.string.nav_about);
     }
 }

@@ -27,7 +27,7 @@ public class AdminOnlyFragment extends Fragment {
     private final static String TAG = "AdminOnlyFragment";
 
     protected static boolean partyStarted = false;
-    // TODO: set to 12min
+    // TODO: set to 12 minutes
     // 2016: The first 2 intervals, there was a delay of 2 minutes and 40 seconds
     private final static long INTERVAL = 1*60*1000L;
     private final static long[] PATTERN = {0L, 100L, 100L, 50L};

@@ -193,7 +193,7 @@ public class LogInFragment extends Fragment {
                 // the auth state listener will be notified and logic to handle the
                 // signed in user can be handled in the listener.
                 if (!task.isSuccessful()) {
-                    Toast.makeText(getContext(), R.string.auth_failed, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), R.string.auth_failed_error, Toast.LENGTH_LONG).show();
                 }
                 else {
                     final FirebaseUser user = mAuth.getCurrentUser();
@@ -240,8 +240,8 @@ public class LogInFragment extends Fragment {
                 // signed in user can be handled in the listener.
                 if (!task.isSuccessful()) {
                     Log.w(TAG, "signInWithEmail:failed", task.getException());
-                    Toast.makeText(getContext(), R.string.auth_failed, Toast.LENGTH_LONG).show();
-                    mStatus.setText(R.string.auth_failed);
+                    Toast.makeText(getContext(), R.string.auth_failed_error, Toast.LENGTH_LONG).show();
+                    mStatus.setText(R.string.auth_failed_error);
                 }
                 else {
                     final FirebaseUser user = mAuth.getCurrentUser();
