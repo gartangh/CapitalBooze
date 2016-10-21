@@ -12,9 +12,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -23,6 +20,7 @@ class DrinkUI extends Drink {
     private static Context context;
     private static String TAG = "DinkUI";
 
+    static boolean crash = false;
     static long timeCrashLast = 0L;
 
     int orderCount = 0;
@@ -113,6 +111,8 @@ class DrinkUI extends Drink {
         horizontalLayoutOrders.addView(mGreen);
         // Orders end
 
+        final Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+
         // Counters
         horizontalLayoutCounters = new LinearLayout(context);
         horizontalLayoutCounters.setOrientation(LinearLayout.HORIZONTAL);
@@ -126,10 +126,9 @@ class DrinkUI extends Drink {
         mNameCounters.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                final Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
                 v.vibrate(500L);
                 for (DrinkUI i : uidrinks) {
-                    if (i.name.equals(mNameOrders.getText().toString()) && MainActivity.accountType == 2) {
+                    if (i.name.equals(mNameOrders.getText().toString())) {
                         DrinkUI.uidrinks.remove(i);
                         MainActivity.ref2.child("Drinks").child(i.name).removeValue();
                         Log.d(TAG, "Drink " + i.name + " removed");
@@ -159,6 +158,20 @@ class DrinkUI extends Drink {
         mPartyRevenue.setText(String.format(Locale.getDefault(), "€%.2f", partyRevenue));
         mPartyRevenue.setTextSize(20);
         mPartyRevenue.setLayoutParams(params5);
+        mPartyRevenue.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                v.vibrate(500L);
+                for (DrinkUI i : uidrinks) {
+                    if (i.name.equals(mNameOrders.getText().toString())) {
+                        MainActivity.ref2.child("Drinks").child(i.name).child("price").setValue(0.00);
+                        Log.d(TAG, "Drink " + i.name + " SOLD OUT");
+                        break;
+                    }
+                }
+                return false;
+            }
+        });
 
         horizontalLayoutCounters.addView(mNameCounters);
         horizontalLayoutCounters.addView(mCountCurrent);
@@ -203,67 +216,77 @@ class DrinkUI extends Drink {
     }
 
     static void task() {
-        for (DrinkUI i : uidrinks) {
-            i.countSecondLast = i.countLast;
-            MainActivity.ref2.child("Drinks").child(i.name).child("countSecondLast").setValue(i.countSecondLast);
+        if (!crash) {
+            for (DrinkUI i : uidrinks) {
+                i.countSecondLast = i.countLast;
+                MainActivity.ref2.child("Drinks").child(i.name).child("countSecondLast").setValue(i.countSecondLast);
 
-            i.countLast = i.countCurrent;
-            MainActivity.ref2.child("Drinks").child(i.name).child("countLast").setValue(i.countLast);
+                i.countLast = i.countCurrent;
+                MainActivity.ref2.child("Drinks").child(i.name).child("countLast").setValue(i.countLast);
 
-            i.countCurrent = 0;
-            MainActivity.ref2.child("Drinks").child(i.name).child("countCurrent").setValue(i.countCurrent);
+                i.countCurrent = 0;
+                MainActivity.ref2.child("Drinks").child(i.name).child("countCurrent").setValue(i.countCurrent);
 
-            i.countDifference = i.countLast - i.countSecondLast;
-            MainActivity.ref2.child("Drinks").child(i.name).child("countDifference").setValue(i.countDifference);
+                i.countDifference = i.countLast - i.countSecondLast;
+                MainActivity.ref2.child("Drinks").child(i.name).child("countDifference").setValue(i.countDifference);
+            }
+
+            countTotalSecondLast = countTotalLast;
+            MainActivity.ref2.child("countTotalSecondLast").setValue(countTotalSecondLast);
+
+            countTotalLast = countTotalCurrent;
+            MainActivity.ref2.child("countTotalLast").setValue(countTotalLast);
+
+            countTotalCurrent = 0;
+            MainActivity.ref2.child("countTotalCurrent").setValue(countTotalCurrent);
+
+            countTotalDifference = countTotalLast - countTotalSecondLast;
+            MainActivity.ref2.child("countTotalDifference").setValue(countTotalDifference);
         }
-
-        countTotalSecondLast = countTotalLast;
-        MainActivity.ref2.child("countTotalSecondLast").setValue(countTotalSecondLast);
-
-        countTotalLast = countTotalCurrent;
-        MainActivity.ref2.child("countTotalLast").setValue(countTotalLast);
-
-        countTotalCurrent = 0;
-        MainActivity.ref2.child("countTotalCurrent").setValue(countTotalCurrent);
-
-        countTotalDifference = countTotalLast - countTotalSecondLast;
-        MainActivity.ref2.child("countTotalDifference").setValue(countTotalDifference);
 
         calcPrises();
     }
 
     private static void calcPrises() throws IllegalArgumentException {
-        for (DrinkUI i : uidrinks) {
-            try {
-                double rate = i.countLast*1.0/countTotalLast - i.countSecondLast*1.0/countTotalSecondLast;
-                if (i.countLast == 0) {
-                    // TODO: fix this bug in begin of party
-                    i.testPrice(i.price - 0.20);
-                }
-                else {
-                    if (countTotalDifference >= 0) {
-                        if (rate >= 0) {
-                            i.testPrice(BI *i.price);
-                        } else {
-                            i.testPrice(SD *i.price);
-                        }
+        if (!crash) {
+            for (DrinkUI i : uidrinks) {
+                try {
+                    double rate = i.countLast*1.0/countTotalLast - i.countSecondLast*1.0/countTotalSecondLast;
+                    if (i.countLast == 0) {
+                        // TODO: fix this bug in begin of party
+                        i.testPrice(i.price - 0.20);
                     }
                     else {
-                        if (rate > 0) {
-                            i.testPrice(SI *i.price);
-                        } else {
-                            i.testPrice(BD *i.price);
+                        if (countTotalDifference >= 0) {
+                            if (rate >= 0) {
+                                i.testPrice(BI *i.price);
+                            } else {
+                                i.testPrice(SD *i.price);
+                            }
+                        }
+                        else {
+                            if (rate > 0) {
+                                i.testPrice(SI *i.price);
+                            } else {
+                                i.testPrice(BD *i.price);
+                            }
                         }
                     }
                 }
-            }
-            catch (IllegalArgumentException e) {
-                if (countTotalLast == 0) {
-                    i.testPrice(i.price - 0.10);
-                } else {
-                    i.testPrice(i.price);
+                catch (IllegalArgumentException e) {
+                    if (countTotalLast == 0) {
+                        i.testPrice(i.price - 0.10);
+                    } else {
+                        i.testPrice(i.price);
+                    }
                 }
             }
+        }
+        else {
+            for (DrinkUI i : uidrinks) {
+                i.testPrice(i.startPrice + 0.30);
+            }
+            crash = false;
         }
     }
 
@@ -291,10 +314,11 @@ class DrinkUI extends Drink {
 
     static void crash() {
         final Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        crash = true;
 
         if (System.currentTimeMillis() - timeCrashLast >= 60*60*1000L) {
             for (DrinkUI i : uidrinks) {
-                if (i.name.equals("Stella") || i.name.equals("Water")) {
+                if (i.name.equals("Stella") || i.name.equals("Water") || i.name.equals("Cola")) {
                     i.crashPrice(1.00);
                 }
                 else {

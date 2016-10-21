@@ -80,8 +80,8 @@ public class AdminOnlyFragment extends Fragment {
                 if (mTypeAllTimeWolfHere.getText().toString().equals("")) {
                     MainActivity.ref2.child("allTimeWolfName").setValue("");
                 }
-                else if (mTypeWolfHere.getText().length() > 1) {
-                    MainActivity.ref2.child("allTimeWolfName").setValue(mTypeWolfHere.getText().toString().toUpperCase(Locale.getDefault()));
+                else if (mTypeAllTimeWolfHere.getText().length() > 1) {
+                    MainActivity.ref2.child("allTimeWolfName").setValue(mTypeAllTimeWolfHere.getText().toString().toUpperCase(Locale.getDefault()));
                 }
                 else {
                     Toast.makeText(getContext(), getString(R.string.invalid_length), Toast.LENGTH_LONG).show();
