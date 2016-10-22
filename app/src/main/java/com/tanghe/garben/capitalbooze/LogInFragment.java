@@ -19,6 +19,7 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -158,23 +159,6 @@ public class LogInFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnLogInFragmentInteractionListener {
-        void onLogInBackPressed();
-        void onLogInNextPressed();
-        void showProgressDialog();
-        void hideProgressDialog();
-    }
-
     private void createAccount(String email, String password) {
         Log.d(TAG, "createAccount:" + email);
         if (!validateForm()) {
@@ -306,5 +290,12 @@ public class LogInFragment extends Fragment {
             mFields.setVisibility(View.VISIBLE);
             mSignOut.setVisibility(View.GONE);
         }
+    }
+
+    public interface OnLogInFragmentInteractionListener {
+        void onLogInBackPressed();
+        void onLogInNextPressed();
+        void showProgressDialog();
+        void hideProgressDialog();
     }
 }

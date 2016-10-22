@@ -20,7 +20,7 @@ class DrinkUI extends Drink {
     private static Context context;
     private static String TAG = "DinkUI";
 
-    static boolean crash = false;
+    private static boolean crash = false;
     static long timeCrashLast = 0L;
 
     int orderCount = 0;
@@ -70,7 +70,8 @@ class DrinkUI extends Drink {
         mRed.setText("-");
         mRed.setTextSize(20);
         mRed.setBackgroundResource(R.drawable.round_red);
-        mRed.setTextColor(ContextCompat.getColor(context, android.R.color.primary_text_dark));
+        mRed.setTextColor(ContextCompat.getColor(context, R.color.white));
+        mRed.setLayoutParams(params4);
         mRed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -93,7 +94,8 @@ class DrinkUI extends Drink {
         mGreen.setText("+");
         mGreen.setTextSize(20);
         mGreen.setBackgroundResource(R.drawable.round_green);
-        mGreen.setTextColor(ContextCompat.getColor(context, android.R.color.primary_text_dark));
+        mGreen.setTextColor(ContextCompat.getColor(context, R.color.white));
+        mGreen.setLayoutParams(params4);
         mGreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

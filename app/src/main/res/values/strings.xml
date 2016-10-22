@@ -1,11 +1,11 @@
 <resources>
     <!-- App-->
     <string name="app_name" translatable="false">Capital Booze</string>
-    <string name="version">30/09/2017</string>
+    <string name="version_name" translatable="false">30/09/2017</string>
 
     <!-- Navigation (drawer and toolbar)-->
-    <string name="drawer_open">Open fragment navigation drawer.</string>
-    <string name="drawer_close">Close fragment navigation drawer.</string>
+    <string name="drawer_open" translatable="false">Open fragment navigation drawer.</string>
+    <string name="drawer_close" translatable="false">Close fragment navigation drawer.</string>
 
     <string name="nav_next">Next</string>
     <string name="nav_back">Back</string>
@@ -16,10 +16,10 @@
     <string name="nav_log_in">Log in/out</string>
     <string name="nav_exit">Exit app</string>
 
-    <string name="crew_only">Crew only</string>
+    <string name="crew_only" translatable="false">Crew only</string>
     <string name="nav_order">Place orders</string>
 
-    <string name="nav_admin_only">Admin only</string>
+    <string name="nav_admin_only" translatable="false">Admin only</string>
     <string name="nav_drink">Add drinks</string>
     <string name="nav_counters">Counters and statistics</string>
 
@@ -27,37 +27,37 @@
     <string name="not_connected_error">Error: not connected!\nConnect to internet and restart the app.</string>
 
     <!-- Firebase-->
-    <string name="url">https://capital-booze.firebaseio.com/</string>
+    <string name="url" translatable="false">https://capital-booze.firebaseio.com/</string>
 
     <!-- fragment_about-->
     <string name="about">a\nMoeder\nPeerdevisscher\ninitiative</string>
-    <string name="developer">Developer\ng-tanghe\ngarben.tanghe@gmail.com</string>
+    <string name="developer" translatable="false">Developer\ng-tanghe\ngarben.tanghe@gmail.com</string>
     <string name="logo_of_MP">Logo of Moeder Peerdevisscher.</string>
 
     <!-- fragment_prices-->
     <string name="updated">Updated at %s</string>
     <string name="no_data_yet">No data yet</string>
     <string name="wolf">Wolf of Capital Booze:\n%1$s\n%2$d drinks</string>
-    <string name="all_time_wolf">All time wolf:\n%1$s\n%2$d drinks</string>
+    <string name="all_time_wolf" translatable="false">All time wolf:\n%1$s\n%2$d drinks</string>
     <string name="no_wolf">To be determined…</string>
-    <string name="sold">SOLD</string>
-    <string name="out">OUT</string>
+    <string name="sold" translatable="false">SOLD</string>
+    <string name="out" translatable="false">OUT</string>
 
     <!--fragment_explanation-->
     <string name="explanation">Explanation comes here…</string>
 
     <!-- fragment_log_in-->
     <string name="logged_out">Logged out</string>
-    <string name="loading">Loading…</string>
-    <string name="firebase_status_fmt">ID: %s</string>
-    <string name="get_custom_token">Get token</string>
+    <string name="loading" translatable="false">Loading…</string>
+    <string name="firebase_status_fmt" translatable="false">ID: %s</string>
+    <string name="get_custom_token" translatable="false">Get token</string>
     <string name="log_in">Log in</string>
     <string name="create_account">Create account</string>
     <string name="log_out">Log out</string>
-    <string name="hint_email">E-mail</string>
+    <string name="hint_email" translatable="false">E-mail</string>
     <string name="hint_password">Password</string>
     <string name="auth_failed_error">Error: authentication failed!\nTry again.</string>
-    <string name="emailpassword_status_fmt">E-mail: %s</string>
+    <string name="emailpassword_status_fmt" translatable="false">E-mail: %s</string>
     <string name="emailpassword_title_text">E-mail and password</string>
 
     <!-- fragment_order-->
@@ -72,16 +72,16 @@
     <!-- fragment_drink-->
     <string name="name">Name</string>
     <string name="price">Price</string>
-    <string name="min">Minimum</string>
-    <string name="max">Maximum</string>
-    <string name="invalid_length">Min 2 letters</string>
+    <string name="min" translatable="false">Minimum</string>
+    <string name="max" translatable="false">Maximum</string>
+    <string name="invalid_length" translatable="false">Min 2 letters</string>
     <string name="already_used">Already in use</string>
-    <string name="invalid_min_price">Min €1.00</string>
+    <string name="invalid_min_price" translatable="false">Min €1.00</string>
     <string name="invalid_min">Min smaller than price</string>
-    <string name="invalid_max_price">Max €60.00</string>
+    <string name="invalid_max_price" translatable="false">Max €60.00</string>
     <string name="invalid_max">Max greater than price</string>
     <string name="add">Add</string>
-    <string name="could_not_add_drink_error">Error: could not add drink!\nSome of the qualifiers are wrong\nor the party has already begun.</string>
+    <string name="could_not_add_drink_error">Error: could not add drink!\nSome properties are wrong\nor the party has already begun.</string>
 
     <!-- fragment_counters-->
     <string name="total">Total</string>
@@ -90,11 +90,11 @@
     <string name="start">Start</string>
     <string name="timertask">TimerTask set, interval set for %d minutes.</string>
     <string name="task_executed">Task executed.</string>
-    <string name="crash">Crash</string>
+    <string name="crash" translatable="false">Crash</string>
     <string name="crash_executed">Crash executed!</string>
     <string name="crash_not_executed_error">Error: crash not executed!\nWait %d more minutes.</string>
     <string name="party_already_started_error">Error: party already started!</string>
-    <string name="party_not_started_error">Error: party not started!</string>
+    <string name="party_not_started_error">Error: party not started yet!</string>
     <string name="type_wolf_here">New wolf</string>
     <string name="type_allTimeWolf_here">New all time wolf</string>
 

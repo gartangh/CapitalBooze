@@ -17,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements
         AdminOnlyFragment.OnAdminOnlyFragmentInteractionListener {
 
     private final static String TAG = "MainActivity";
-    private final static String TAG2 = "Firebase";
+    private final static String FIREBASE = "Firebase";
 
     static SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
 
@@ -57,8 +58,46 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        View decorView = getWindow().getDecorView();
+        // Hide navigation buttons
+        // When swiping inwards, show them temporary
+        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+        decorView.setSystemUiVisibility(uiOptions);
+
         DrinkUI.setArgument(MainActivity.this);
         AdminOnlyFragment.setArgument(MainActivity.this);
+
+        Firebase.setAndroidContext(this);
+        ref2 = new Firebase(getString(R.string.url));
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+
+        // if internet, set valueEvenListeners
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        if (activeNetwork != null) {
+            if (user != null) {
+                ref2.child("Users").child(user.getUid()).child("accountType").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot snapshot) {
+                        accountType = (Long) snapshot.getValue();
+                        Log.d(FIREBASE, "Data changed: accountType = " + accountType);
+                    }
+
+                    @Override
+                    public void onCancelled(FirebaseError firebaseError) {
+                        Log.d(FIREBASE, "The read failed: " + firebaseError.getMessage());
+                    }
+                });
+            }
+
+            setValueEventListeners();
+        }
+        else {
+            Toast.makeText(getApplicationContext(), getString(R.string.not_connected_error), Toast.LENGTH_LONG).show();
+            Log.d(TAG, getString(R.string.not_connected_error));
+        }
 
         // Set a Toolbar to replace the ActionBar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -79,37 +118,6 @@ public class MainActivity extends AppCompatActivity implements
         // Default fragment
         fragmentManager.beginTransaction().replace(R.id.container, new AboutFragment()).commit();
         setTitle(getString(R.string.nav_about));
-
-        Firebase.setAndroidContext(this);
-        ref2 = new Firebase(getString(R.string.url));
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        FirebaseUser user = mAuth.getCurrentUser();
-
-        // if internet, set valueEvenListeners
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        if (activeNetwork != null) {
-            if (user != null) {
-                ref2.child("Users").child(user.getUid()).child("accountType").addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot snapshot) {
-                        accountType = (Long) snapshot.getValue();
-                        Log.d(TAG2, "Data changed: accountType = " + accountType);
-                    }
-
-                    @Override
-                    public void onCancelled(FirebaseError firebaseError) {
-                        Log.d(TAG2, "The read failed: " + firebaseError.getMessage());
-                    }
-                });
-            }
-
-            setValueEventListeners();
-        }
-        else {
-            Toast.makeText(getApplicationContext(), getString(R.string.not_connected_error), Toast.LENGTH_LONG).show();
-            Log.d(TAG, getString(R.string.not_connected_error));
-        }
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
@@ -238,9 +246,9 @@ public class MainActivity extends AppCompatActivity implements
                 }
                 if (valid) {
                     new DrinkUI((String) dataSnapshotDrink.child("name").getValue(), (double) dataSnapshotDrink.child("price").getValue(), (double) dataSnapshotDrink.child("min").getValue(), (double) dataSnapshotDrink.child("max").getValue());
-                    Log.d(TAG2, "new Drink: " + dataSnapshotDrink.child("name").getValue() + " added");
+                    Log.d(FIREBASE, "new Drink: " + dataSnapshotDrink.child("name").getValue() + " added");
                 } else {
-                    Log.d(TAG2,"new Drink: " + dataSnapshotDrink.child("name").getValue() + " already in DrinkUI.uidrinks");
+                    Log.d(FIREBASE,"new Drink: " + dataSnapshotDrink.child("name").getValue() + " already in DrinkUI.uidrinks");
                 }
 
                 // Public
