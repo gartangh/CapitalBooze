@@ -27,16 +27,17 @@ import com.firebase.client.ValueEventListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements
         AboutFragment.OnAboutFragmentInteractionListener,
         PricesFragment.OnPricesFragmentInteractionListener,
+        GraphFragment.OnGraphFragmentInteractionListener,
         ExplanationFragment.OnExplanationFragmentInteractionListener,
         LogInFragment.OnLogInFragmentInteractionListener,
         DrinkFragment.OnDrinkFragmentInteractionListener,
-        OrderFragment.OnOrderFragmentInteractionListener,
         CountersFragment.OnCountersFragmentInteractionListener,
         AdminOnlyFragment.OnAdminOnlyFragmentInteractionListener {
 
@@ -58,12 +59,17 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        View decorView = getWindow().getDecorView();
         // Hide navigation buttons
         // When swiping inwards, show them temporary
-        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+        final View decorView = getWindow().getDecorView();
+        final int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
         decorView.setSystemUiVisibility(uiOptions);
+        decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
+            @Override
+            public void onSystemUiVisibilityChange(int i) {
+                decorView.setSystemUiVisibility(uiOptions);
+            }
+        });
 
         DrinkUI.setArgument(MainActivity.this);
         AdminOnlyFragment.setArgument(MainActivity.this);
@@ -139,8 +145,8 @@ public class MainActivity extends AppCompatActivity implements
             case R.id.nav_prices_fragment:
                 fragmentClass = PricesFragment.class;
                 break;
-            case R.id.nav_about_fragment:
-                fragmentClass = AboutFragment.class;
+            case R.id.nav_graph_fragment:
+                fragmentClass = GraphFragment.class;
                 break;
             case R.id.nav_explanation_fragment:
                 fragmentClass = ExplanationFragment.class;
@@ -310,6 +316,21 @@ public class MainActivity extends AppCompatActivity implements
                                     i.mPriceDifference.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.grey));
                                 }
                                 updatePrices();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(FirebaseError firebaseError) {
+
+                    }
+                });
+                ref2.child("Drinks").child(dataSnapshotDrink.child("name").getValue().toString()).child("prices").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DrinkUI i : DrinkUI.uidrinks) {
+                            if (i.name.equals(dataSnapshotDrink.child("name").getValue().toString())) {
+                                i.prices = (ArrayList<Double>) dataSnapshot.getValue();
                             }
                         }
                     }
@@ -750,83 +771,32 @@ public class MainActivity extends AppCompatActivity implements
     // Navigation
     @Override
     public void onAboutNextPressed() {
-        fragmentManager.beginTransaction().replace(R.id.container, new PricesFragment()).commit();
-        setTitle(R.string.nav_prices);
-    }
-
-    @Override
-    public void onPricesBackPressed() {
-        fragmentManager.beginTransaction().replace(R.id.container, new AboutFragment()).commit();
-        setTitle(getString(R.string.nav_about));
-    }
-
-    @Override
-    public void onPricesNextPressed() {
-        if (accountType != 0) {
-            fragmentManager.beginTransaction().replace(R.id.container, new OrderFragment()).commit();
-            setTitle(getString(R.string.nav_order));
-        } else {
-            fragmentManager.beginTransaction().replace(R.id.container, new AboutFragment()).commit();
-            setTitle(getString(R.string.nav_about));
-        }
-    }
-
-    @Override
-    public void onExplanationBackPressed() {
-        fragmentManager.beginTransaction().replace(R.id.container, new PricesFragment()).commit();
-        setTitle(R.string.nav_prices);
+        fragmentManager.beginTransaction().replace(R.id.container, new ExplanationFragment()).commit();
+        setTitle(R.string.nav_explanation);
     }
 
     @Override
     public void onExplanationNextPressed() {
-        if (accountType != 0) {
-            fragmentManager.beginTransaction().replace(R.id.container, new OrderFragment()).commit();
-            setTitle(getString(R.string.nav_order));
-        } else {
-            fragmentManager.beginTransaction().replace(R.id.container, new AboutFragment()).commit();
-            setTitle(getString(R.string.nav_about));
-        }
+        fragmentManager.beginTransaction().replace(R.id.container, new PricesFragment()).commit();
+        setTitle(R.string.nav_prices);
+    }
+
+    @Override
+    public void onPricesNextPressed() {
+        fragmentManager.beginTransaction().replace(R.id.container, new GraphFragment()).commit();
+        setTitle(R.string.nav_graph);
+    }
+
+    @Override
+    public void onGraphBackPressed() {
+        fragmentManager.beginTransaction().replace(R.id.container, new PricesFragment()).commit();
+        setTitle(R.string.nav_prices);
     }
 
     @Override
     public void onLogInBackPressed() {
         fragmentManager.beginTransaction().replace(R.id.container, new PricesFragment()).commit();
         setTitle(getString(R.string.nav_prices));
-    }
-
-    @Override
-    public void onLogInNextPressed() {
-        if (accountType != 0) {
-            fragmentManager.beginTransaction().replace(R.id.container, new OrderFragment()).commit();
-            setTitle(getString(R.string.nav_order));
-        } else {
-            fragmentManager.beginTransaction().replace(R.id.container, new AboutFragment()).commit();
-            setTitle(getString(R.string.nav_about));
-        }
-    }
-
-    @Override
-    public void onOrderBackPressed() {
-        fragmentManager.beginTransaction().replace(R.id.container, new PricesFragment()).commit();
-        setTitle(R.string.nav_prices);
-    }
-
-    @Override
-    public void onOrderNextPressed() {
-        if (accountType == 2) {
-            fragmentManager.beginTransaction().replace(R.id.container, new CountersFragment()).commit();
-            setTitle(R.string.nav_counters);
-        }
-        else {
-            fragmentManager.beginTransaction().replace(R.id.container, new AboutFragment()).commit();
-            setTitle(getString(R.string.nav_about));
-        }
-    }
-
-    @Override
-    public void onCountersBackPressed() {
-        fragmentManager.beginTransaction().replace(R.id.container, new OrderFragment()).commit();
-        setTitle(R.string.nav_order);
     }
 
     @Override
@@ -843,20 +813,13 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onAdminOnlyNextPressed() {
-        fragmentManager.beginTransaction().replace(R.id.container, new AboutFragment()).commit();
-        setTitle(getString(R.string.nav_about));
+        fragmentManager.beginTransaction().replace(R.id.container, new PricesFragment()).commit();
+        setTitle(getString(R.string.nav_prices));
     }
-
 
     @Override
     public void onDrinkBackPressed() {
-        fragmentManager.beginTransaction().replace(R.id.container, new AdminOnlyFragment()).commit();
-        setTitle(R.string.nav_admin_only);
-    }
-
-    @Override
-    public void onDrinkNextPressed() {
-        fragmentManager.beginTransaction().replace(R.id.container, new AboutFragment()).commit();
-        setTitle(R.string.nav_about);
+        fragmentManager.beginTransaction().replace(R.id.container, new CountersFragment()).commit();
+        setTitle(R.string.nav_counters);
     }
 }

@@ -100,26 +100,27 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <Button
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/counters_back"
-            android:text="@string/nav_back" />
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            tools:ignore="UselessLeaf"/>
 
         <TextView
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:id="@+id/mCountersUpdated"
             android:text="@string/updated"
-            android:textAlignment="center">
+            android:textAlignment="center"
+            android:layout_margin="2dp">
         </TextView>
 
         <Button
             style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:id="@+id/counters_next"
             android:text="@string/nav_next" />
     </LinearLayout>

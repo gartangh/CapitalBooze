@@ -29,14 +29,6 @@ public class ExplanationFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_explanation, container, false);
 
-        Button back = (Button) view.findViewById(R.id.explanation_back);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mListener.onExplanationBackPressed();
-            }
-        });
-
         Button next = (Button) view.findViewById(R.id.explanation_next);
         next.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,7 +67,6 @@ public class ExplanationFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnExplanationFragmentInteractionListener {
-        void onExplanationBackPressed();
         void onExplanationNextPressed();
     }
 }

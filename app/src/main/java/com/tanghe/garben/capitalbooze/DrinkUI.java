@@ -1,6 +1,7 @@
 package com.tanghe.garben.capitalbooze;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.os.Vibrator;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -64,11 +65,15 @@ class DrinkUI extends Drink {
         final TextView mNameOrders = new TextView(context);
         mNameOrders.setText(name);
         mNameOrders.setTextSize(20);
+        if (name.equals("Stella")) {
+            mNameOrders.setTypeface(Typeface.DEFAULT_BOLD);
+        }
         mNameOrders.setLayoutParams(params2);
 
         Button mRed = new Button(context);
         mRed.setText("-");
         mRed.setTextSize(20);
+        mRed.setTypeface(Typeface.DEFAULT_BOLD);
         mRed.setBackgroundResource(R.drawable.round_red);
         mRed.setTextColor(ContextCompat.getColor(context, R.color.white));
         mRed.setLayoutParams(params4);
@@ -93,6 +98,7 @@ class DrinkUI extends Drink {
         Button mGreen = new Button(context);
         mGreen.setText("+");
         mGreen.setTextSize(20);
+        mRed.setTypeface(Typeface.DEFAULT_BOLD);
         mGreen.setBackgroundResource(R.drawable.round_green);
         mGreen.setTextColor(ContextCompat.getColor(context, R.color.white));
         mGreen.setLayoutParams(params4);
@@ -124,6 +130,9 @@ class DrinkUI extends Drink {
         TextView mNameCounters = new TextView(context);
         mNameCounters.setText(name);
         mNameCounters.setTextSize(20);
+        if (name.equals("Stella")) {
+            mNameCounters.setTypeface(Typeface.DEFAULT_BOLD);
+        }
         mNameCounters.setLayoutParams(params2);
         mNameCounters.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -191,6 +200,9 @@ class DrinkUI extends Drink {
         TextView mNamePrices = new TextView(context);
         mNamePrices.setText(name);
         mNamePrices.setTextSize(24);
+        if (name.equals("Stella")) {
+            mNamePrices.setTypeface(Typeface.DEFAULT_BOLD);
+        }
         mNamePrices.setLayoutParams(params2);
 
         mPrice = new TextView(context);

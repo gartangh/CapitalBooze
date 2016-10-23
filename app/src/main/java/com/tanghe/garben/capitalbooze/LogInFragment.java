@@ -132,13 +132,6 @@ public class LogInFragment extends Fragment {
                 mListener.onLogInBackPressed();
             }
         });
-        final Button next = (Button) view.findViewById(R.id.log_in_next);
-        next.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mListener.onLogInNextPressed();
-            }
-        });
 
         return view;
     }
@@ -294,7 +287,6 @@ public class LogInFragment extends Fragment {
 
     public interface OnLogInFragmentInteractionListener {
         void onLogInBackPressed();
-        void onLogInNextPressed();
         void showProgressDialog();
         void hideProgressDialog();
     }

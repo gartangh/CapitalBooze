@@ -69,14 +69,6 @@ public class PricesFragment extends Fragment {
             }
         }
 
-        final Button back = (Button) view.findViewById(R.id.prices_back);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mListener.onPricesBackPressed();
-            }
-        });
-
         mUpdated = (TextView) view.findViewById(R.id.mPricesUpdated);
         if (updated == null) {
             mUpdated.setText(getContext().getString(R.string.no_data_yet));
@@ -162,7 +154,6 @@ public class PricesFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnPricesFragmentInteractionListener {
-        void onPricesBackPressed();
         void onPricesNextPressed();
     }
 }

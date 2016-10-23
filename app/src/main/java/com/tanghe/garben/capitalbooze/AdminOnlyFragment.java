@@ -197,13 +197,6 @@ public class AdminOnlyFragment extends Fragment {
                 mListener.onAdminOnlyBackPressed();
             }
         });
-        final Button next = (Button) view.findViewById(R.id.admin_only_next);
-        next.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mListener.onAdminOnlyNextPressed();
-            }
-        });
 
         return view;
     }

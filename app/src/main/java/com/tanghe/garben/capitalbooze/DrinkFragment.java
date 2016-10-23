@@ -206,13 +206,6 @@ public class DrinkFragment extends Fragment {
                 mListener.onDrinkBackPressed();
             }
         });
-        final Button next = (Button) view.findViewById(R.id.drink_next);
-        next.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mListener.onDrinkNextPressed();
-            }
-        });
 
         return view;
     }
@@ -245,6 +238,5 @@ public class DrinkFragment extends Fragment {
      */
     public interface OnDrinkFragmentInteractionListener {
         void onDrinkBackPressed();
-        void onDrinkNextPressed();
     }
 }

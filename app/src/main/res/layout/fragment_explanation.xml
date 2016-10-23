@@ -10,26 +10,20 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:id="@+id/scrollView"
-        android:layout_gravity="right">
+        android:id="@+id/scrollView">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/explanation" />
+            android:text="@string/explanation"
+            android:textSize="20sp"/>
+
     </ScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
-
-        <Button
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/explanation_back"
-            android:text="@string/nav_back" />
 
         <RelativeLayout
             android:layout_width="0dp"

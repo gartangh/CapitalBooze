@@ -31,7 +31,7 @@
         <!--TODO: Make this EditText an AutoCompleteTextView-->
         <EditText
             android:id="@+id/mEmail"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:hint="@string/hint_email"
@@ -39,7 +39,7 @@
 
         <EditText
             android:id="@+id/mPassword"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:hint="@string/hint_password"
@@ -48,7 +48,7 @@
 
     <LinearLayout
         android:id="@+id/mButtons"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:paddingLeft="16dp"
@@ -97,18 +97,6 @@
             android:id="@+id/log_in_back"
             android:text="@string/nav_back" />
 
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            tools:ignore="UselessLeaf"/>
-
-        <Button
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/log_in_next"
-            android:text="@string/nav_next" />
     </LinearLayout>
 
 </LinearLayout>

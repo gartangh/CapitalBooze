@@ -23,7 +23,7 @@
         android:inputType="numberDecimal"
         android:ems="10"
         android:id="@+id/mPrice"
-        android:hint="@string/price"
+        android:hint="@string/starting_price"
         android:textSize="24sp"
         android:textAlignment="center" />
 
@@ -60,36 +60,25 @@
 
         <Button
             style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:id="@+id/drink_back"
             android:text="@string/nav_back" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            tools:ignore="UselessLeaf"/>
-
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:id="@+id/add"
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_gravity="center_horizontal"
             android:text="@string/add"/>
 
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             tools:ignore="UselessLeaf"/>
-
-        <Button
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/drink_next"
-            android:text="@string/nav_next" />
     </LinearLayout>
 </LinearLayout>

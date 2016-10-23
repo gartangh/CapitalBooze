@@ -9,7 +9,7 @@
     <string name="crash_not_executed_error">Error: crash niet uitgevoerd!\nWacht nog %d minuten.</string>
     <string name="create_account">Creëer account</string>
     <string name="emailpassword_title_text">E-mail en wachtwoord</string>
-    <string name="explanation">Uitleg komt hier...</string>
+    <string name="explanation">Als u nog nooit van een beursfuif \ngehoord heeft:\ndeze fuif is een fuif zoals een ander, \nmet 1 groot verschil.\nDe prijzen van de drankjes zijn variabel!\n\nVolgens het principe van \nvraag en aanbod, zullen \nde prijzen voortdurend veranderen.\nWanneer er in een interval veel van een\nspecifiek drankje verkocht wordt,\nzal de prijs van dit drankje stijgen.\nOmgekeerd ook: wanneer een drankje\neven minder verkocht wordt,\nzal de prijs van dit drankje dalen.\nDit zorgt ervoor dat u sowieso\neens uw favoriete drankje aan een\nspotprijs kan verkrijgen.\n\nGedurende de hele avond,\nworden de prijzen live getoond.\nZo kunt u steeds\nde beste keuze maken.\nDeze app helpt u bij\nhet bijhouden van de prijzen.</string>
     <string name="hint_password">Wachtwoord</string>
     <string name="invalid_max">Max groter dan prijs</string>
     <string name="invalid_min">Min kleiner dan prijs</string>
@@ -31,7 +31,7 @@
     <string name="new_all_time_wolf">Nieuwe all time wolf van Capital Booze!</string>
     <string name="new_wolf">Nieuwe wolf van Capital Booze!</string>
     <string name="no_data_yet">Nog geen data</string>
-    <string name="no_wolf">Nader te bepalen...</string>
+    <string name="no_wolf">Onbekend</string>
     <string name="not_connected_error">Error: niet verbonden!\nVerbind met internet en herstart de app.</string>
     <string name="nothing_to_order">Niets om te bestllen.</string>
     <string name="order">Bestel</string>
@@ -47,6 +47,10 @@
     <string name="total_squares">Totaal vakjes</string>
     <string name="type_allTimeWolf_here">Nieuwe all time wolf</string>
     <string name="type_wolf_here">Nieuwe wolf</string>
-    <string name="updated">geüpdatet om %s</string>
-    <string name="wolf">Wolf van Capital Booze: %1$s %2$d drankjes</string>
+    <string name="updated">geüpdatet om\n%s</string>
+    <string name="wolf">Wolf van Capital Booze: \n%1$s\n%2$d drankjes</string>
+    <string name="nav_graph">Grafiek</string>
+    <string name="time">Tijd</string>
+    <string name="drink">Drankje</string>
+    <string name="starting_price">Startprijs</string>
 </resources>

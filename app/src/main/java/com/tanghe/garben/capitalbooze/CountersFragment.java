@@ -61,17 +61,6 @@ public class CountersFragment extends Fragment {
             }
         }
 
-        // TODO: when drink is empty, long press price to set to zero or unpressable?
-        // TODO: when drink is wrong, long press name to delete
-
-        final Button back = (Button) view.findViewById(R.id.counters_back);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mListener.onCountersBackPressed();
-            }
-        });
-
         mUpdated = (TextView) view.findViewById(R.id.mCountersUpdated);
         if (updated == null) {
             mUpdated.setText(getContext().getString(R.string.no_data_yet));
@@ -128,7 +117,6 @@ public class CountersFragment extends Fragment {
     }
 
     public interface OnCountersFragmentInteractionListener {
-        void onCountersBackPressed();
         void onCountersNextPressed();
     }
 }

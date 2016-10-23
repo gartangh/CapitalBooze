@@ -9,7 +9,7 @@
     <ImageView
         android:layout_width="128dp"
         android:layout_height="128dp"
-        android:src="@mipmap/ic_launcher"
+        android:src="@drawable/web_hi_res_512"
         android:layout_gravity="center_horizontal"
         android:id="@+id/mLogo"
         android:contentDescription="@string/logo_of_MP" />
@@ -32,15 +32,10 @@
         android:id="@+id/mVersion"
         android:textStyle="bold" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        tools:ignore="UselessLeaf"/>
-
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:id="@+id/scrollView" >
 
         <LinearLayout
@@ -69,30 +64,18 @@
         </LinearLayout>
     </ScrollView>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        tools:ignore="UselessLeaf"/>
-
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            tools:ignore="UselessLeaf"/>
+        android:layout_height="wrap_content"
+        android:gravity="end">
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/about_next"
             style="@style/Widget.AppCompat.Button.Colored"
-            android:text="@string/nav_next"
-            android:layout_gravity="right" />
+            android:text="@string/nav_next"/>
     </LinearLayout>
 
 </LinearLayout>

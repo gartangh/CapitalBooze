@@ -81,6 +81,10 @@ class Drink {
         return startPrice;
     }
 
+    public ArrayList<Double> getPrices() {
+        return prices;
+    }
+
     public double getPrice() {
         return price;
     }
