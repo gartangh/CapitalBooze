@@ -39,7 +39,7 @@
     <string name="updated">Updated at\n%s</string>
     <string name="no_data_yet">No data yet</string>
     <string name="wolf">Wolf of Capital Booze:\n%1$s\n%2$d drinks</string>
-    <string name="all_time_wolf" translatable="false">All time wolf:\n%1$s\n%2$d drinks</string>
+    <string name="all_time_wolf">All time wolf:\n%1$s\n%2$d drinks</string>
     <string name="no_wolf">Unknown</string>
     <string name="sold" translatable="false">SOLD</string>
     <string name="out" translatable="false">OUT</string>

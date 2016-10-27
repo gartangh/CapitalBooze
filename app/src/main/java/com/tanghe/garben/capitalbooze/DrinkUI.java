@@ -318,7 +318,6 @@ class DrinkUI extends Drink {
                 price = MainActivity.round(testPrice);
             }
             MainActivity.ref2.child("Drinks").child(name).child("price").setValue(price);
-            Log.d(TAG, prices.toString());
 
             // priceDifference
             priceDifference = price - priceLast;

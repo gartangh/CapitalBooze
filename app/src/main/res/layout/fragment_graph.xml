@@ -13,9 +13,13 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        ap:label="@string/drink"
         ap:rangeLabel="@string/price"
-        ap:domainLabel="@string/time" />
+        ap:domainLabel="@string/time"
+        ap:borderColor="@color/white"
+        ap:backgroundColor="@color/white"
+        ap:borderThickness="0dp"
+        ap:labelTextColor="@color/grey"
+        ap:markupEnabled="false" />
 
     <LinearLayout
         android:orientation="horizontal"
