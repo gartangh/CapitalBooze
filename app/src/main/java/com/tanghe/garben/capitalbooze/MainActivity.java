@@ -33,8 +33,8 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements
         AboutFragment.OnAboutFragmentInteractionListener,
-        PricesFragment.OnPricesFragmentInteractionListener,
-        GraphFragment.OnGraphFragmentInteractionListener,
+        //PricesFragment.OnPricesFragmentInteractionListener,
+        //GraphFragment.OnGraphFragmentInteractionListener,
         ExplanationFragment.OnExplanationFragmentInteractionListener,
         LogInFragment.OnLogInFragmentInteractionListener,
         DrinkFragment.OnDrinkFragmentInteractionListener,
@@ -145,9 +145,11 @@ public class MainActivity extends AppCompatActivity implements
             case R.id.nav_prices_fragment:
                 fragmentClass = PricesFragment.class;
                 break;
+            /*
             case R.id.nav_graph_fragment:
                 fragmentClass = GraphFragment.class;
                 break;
+            */
             case R.id.nav_explanation_fragment:
                 fragmentClass = ExplanationFragment.class;
                 break;
@@ -325,6 +327,7 @@ public class MainActivity extends AppCompatActivity implements
 
                     }
                 });
+                /*
                 ref2.child("Drinks").child(dataSnapshotDrink.child("name").getValue().toString()).child("prices").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -340,6 +343,7 @@ public class MainActivity extends AppCompatActivity implements
 
                     }
                 });
+                */
 
                 // TODO: reduce internet use
                 // Admin only
@@ -781,17 +785,21 @@ public class MainActivity extends AppCompatActivity implements
         setTitle(R.string.nav_prices);
     }
 
+    /*
     @Override
     public void onPricesNextPressed() {
         fragmentManager.beginTransaction().replace(R.id.container, new GraphFragment()).commit();
         setTitle(R.string.nav_graph);
     }
+    */
 
+    /*
     @Override
     public void onGraphBackPressed() {
         fragmentManager.beginTransaction().replace(R.id.container, new PricesFragment()).commit();
         setTitle(R.string.nav_prices);
     }
+    */
 
     @Override
     public void onLogInBackPressed() {

@@ -1,6 +1,6 @@
 package com.tanghe.garben.capitalbooze;
 
-import android.content.Context;
+//import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -8,21 +8,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+//import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import java.util.Date;
 import java.util.Locale;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link PricesFragment.OnPricesFragmentInteractionListener} interface
- * to handle interaction events.
- */
 public class PricesFragment extends Fragment {
 
-    private OnPricesFragmentInteractionListener mListener;
+    //private OnPricesFragmentInteractionListener mListener;
     private final static String TAG = "Prices";
 
     static boolean seen = false;
@@ -90,6 +84,7 @@ public class PricesFragment extends Fragment {
             }
         });
 
+        /*
         final Button next = (Button) view.findViewById(R.id.prices_next);
         next.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,10 +92,12 @@ public class PricesFragment extends Fragment {
                 mListener.onPricesNextPressed();
             }
         });
+        */
 
         return view;
     }
 
+    /*
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -116,6 +113,7 @@ public class PricesFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
+    */
 
     @Override
     public void onDestroyView() {
@@ -153,7 +151,9 @@ public class PricesFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
+
+    /*
     public interface OnPricesFragmentInteractionListener {
         void onPricesNextPressed();
-    }
+    }*/
 }

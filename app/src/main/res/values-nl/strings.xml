@@ -53,5 +53,5 @@
     <string name="time">Tijd</string>
     <string name="drink">Drankje</string>
     <string name="starting_price">Startprijs</string>
-    <string name="all_time_wolf" translatable="false">All time wolf:\n%1$s\n%2$d drankjes</string>
+    <string name="all_time_wolf">All time wolf:\n%1$s\n%2$d drankjes</string>
 </resources>

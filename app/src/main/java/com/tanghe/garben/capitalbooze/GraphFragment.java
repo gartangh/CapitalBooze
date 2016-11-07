@@ -7,11 +7,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+/*
 import com.androidplot.xy.LineAndPointFormatter;
 import com.androidplot.xy.PointLabelFormatter;
 import com.androidplot.xy.SimpleXYSeries;
 import com.androidplot.xy.XYPlot;
 import com.androidplot.xy.XYSeries;
+*/
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,6 +31,7 @@ public class GraphFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_graph, container, false);
 
+        /*
         XYPlot plot = (XYPlot) view.findViewById(R.id.plot);
         plot.setDomainLeftMin(0);
         plot.setDomainLeftMax(0);
@@ -50,6 +53,7 @@ public class GraphFragment extends Fragment {
                 plot.addSeries(series, seriesFormat);
             }
         }
+        */
 
         Button back = (Button) view.findViewById(R.id.graph_back);
         back.setOnClickListener(new View.OnClickListener() {
