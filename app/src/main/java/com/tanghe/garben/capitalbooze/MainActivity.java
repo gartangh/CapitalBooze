@@ -518,6 +518,10 @@ public class MainActivity extends AppCompatActivity implements
                         }
                     });
                 //}
+
+                if (fragmentManager.findFragmentByTag("Prices") != null) {
+                    fragmentManager.beginTransaction().replace(R.id.container, new PricesFragment(), "Prices").commit();
+                }
             }
 
             @Override
@@ -781,7 +785,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onExplanationNextPressed() {
-        fragmentManager.beginTransaction().replace(R.id.container, new PricesFragment()).commit();
+        fragmentManager.beginTransaction().replace(R.id.container, new PricesFragment(), "Prices").commit();
         setTitle(R.string.nav_prices);
     }
 
@@ -796,14 +800,14 @@ public class MainActivity extends AppCompatActivity implements
     /*
     @Override
     public void onGraphBackPressed() {
-        fragmentManager.beginTransaction().replace(R.id.container, new PricesFragment()).commit();
+        fragmentManager.beginTransaction().replace(R.id.container, new PricesFragment(), "Prices").commit();
         setTitle(R.string.nav_prices);
     }
     */
 
     @Override
     public void onLogInBackPressed() {
-        fragmentManager.beginTransaction().replace(R.id.container, new PricesFragment()).commit();
+        fragmentManager.beginTransaction().replace(R.id.container, new PricesFragment(), "Prices").commit();
         setTitle(getString(R.string.nav_prices));
     }
 
@@ -821,7 +825,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onAdminOnlyNextPressed() {
-        fragmentManager.beginTransaction().replace(R.id.container, new PricesFragment()).commit();
+        fragmentManager.beginTransaction().replace(R.id.container, new PricesFragment(), "Prices").commit();
         setTitle(getString(R.string.nav_prices));
     }
 

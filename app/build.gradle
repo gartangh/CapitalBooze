@@ -8,7 +8,7 @@ android {
         applicationId "com.tanghe.garben.capitalbooze"
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 18
+        versionCode 19
         versionName "2017/09/30"
         multiDexEnabled true
     }
