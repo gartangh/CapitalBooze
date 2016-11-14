@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8>
+		<title>Capital Booze</title>
+	</head>
+	<body>
+		<img src="https://lh3.googleusercontent.com/-5HDMs_z6oYo/WCj_4GV89QI/AAAAAAAAUpo/YxG5Ygoox-QXZmcxgybpwZ40zHHjZeVewCL0B/w548-d-h747-p-rw/moeder%2Bpeerdevisser%2Blogo.png" alt="Logo Moeder Peerdevisscher Oostduinkerke">
+		<h1><strong>Capital Booze</strong></h1>
+		<h2><strong>2017/09/30</strong></h2>
+		<p>A Moeder Peerdevisscher initiative</p>
+
+		<h3>Prices</h3>
+		<ul>
+			<li>Stella</li>
+			<li>Water</li>
+		</ul>
+
+		<p>Developer<br>g-tanghe<br>garben.tanghe@gmail.com</p>
+	</body>
+</html>
