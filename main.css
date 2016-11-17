@@ -1,6 +1,7 @@
 body {
 	margin: 0%;
 	color: #757575;
+	font-size: 16px;
 }
 header, footer {
 	background: #3853A3;
@@ -8,18 +9,8 @@ header, footer {
 	padding: 2%;
 	margin: 0%;
 }
-header img {
-	float: left;
-}
-header div {
-	margin: 2%;
-}
 .wolf {
 	margin: 2%;
-}
-.wolf p {
-	float: left;
-	width: 50%;
 }
 .prices {
 	margin: 2%;
