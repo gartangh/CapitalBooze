@@ -4,6 +4,7 @@
 		<meta charset="utf-8">
 		<title>Capital Booze</title>
 		<link href="main.css" rel="stylesheet" type="text/css">
+		<script type='text/javascript' language='javascript' src="main.js"></script>
 
 		<!-- Add to homescreen for Chrome on Android -->
   		<meta name="mobile-web-app-capable" content="yes">
@@ -16,15 +17,17 @@
   		<meta name="apple-mobile-web-app-title" content="Capital Booze">
   		<meta name="apple-mobile-web-app-status-bar-style" content="#3853A3">
 
-  		<script src="https://www.gstatic.com/firebasejs/3.5.2/firebase-app.js"></script>
-  		<script src="https://www.gstatic.com/firebasejs/3.5.2/firebase-database.js"></script>
+  		<!-- Firebase initialisation-->
+		<script src="https://www.gstatic.com/firebasejs/3.6.1/firebase.js"></script>
 
-		<script src="https://www.gstatic.com/firebasejs/3.6.0/firebase.js"></script>
+  		<script src="https://www.gstatic.com/firebasejs/3.6.1/firebase-app.js"></script>
+  		<script src="https://www.gstatic.com/firebasejs/3.6.1/firebase-database.js"></script>
+
 		<script>
   			// Initialize Firebase
   			var config = {
     			apiKey: "AIzaSyBWkTRrufKd4SJbC4NV-iHKEL__1TEA4uc",
-    			authDomain: "capital-booze.firebaseapp.com",
+		    	authDomain: "capital-booze.firebaseapp.com",
     			databaseURL: "https://capital-booze.firebaseio.com",
     			storageBucket: "capital-booze.appspot.com",
     			messagingSenderId: "305330370121"
@@ -44,31 +47,37 @@
 		</header>
 
 		<div class="wolf">
-			<p>Wolf of Capital Booze:<br><strong>UNKNOWN</strong><br>0 drinks</p>
-			<p>All time wolf:<br><strong>SCOUTS INGELMUNSTER</strong><br>300 drinks</p>
+			<p id="mWolf">Wolf of Capital Booze:<br><strong>UNKNOWN</strong><br>0 drinks</p>
+			<p id="mAllTimeWolf">All time wolf:<br><strong>UNKNOWN</strong><br>0 drinks</p>
 		</div>
 
 		<div class="prices">
 			<h3>Prices</h3>
-			<ul>
-				<li>Duvel €2.90 +0.00</li>
-				<li><strong>Stella €1.90 +0.00</strong></li>
-				<li>Water €1.50 +0.00</li>
-			</ul>
+
+			<table id="mPrices">
+				<tr>
+					<th>Name</th>
+					<th>Price</th>
+					<th>Price Difference</th>
+				</tr>
+			</table>
 		</div>
 
 		<div class="links">
 			<a href="https://www.facebook.com/MoederPeerdevisscher">
-				<img src="http://www.kepfeltoltes.hu/160129/face_www.kepfeltoltes.hu_.png" alt="facebook logo" width="64px">
+				<img src="http://www.kepfeltoltes.hu/160129/face_www.kepfeltoltes.hu_.png" alt="Like us on facebook" width="64px">
 			</a>
 			<a href="https://play.google.com/store/apps/details?id=com.tanghe.garben.capitalbooze&hl=en">
-				<img src="https://www.ascian.in/creatives/wp-content/uploads/google-play-store-logo.jpg" alt="Get it on google play store" width="96px">
+				<img src="http://switzerland.tasis.com/uploaded/images2/appstore_button_google.png" alt="Get it on google play store" width="128px">
 			</a>
 		</div>
 
 		<footer>
 			<p>Developer<br>g-tanghe<br></p>
 			<a href="mailto:garben.tanghe@gmail.com">garben.tanghe@gmail.com</a>
-		</footer> 
+		</footer>
+
+		<script>myJavaScript()</script>
+
 	</body>
 </html>

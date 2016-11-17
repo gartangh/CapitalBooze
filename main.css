@@ -27,6 +27,12 @@ header div {
 .prices h3 {
 	margin: 0%;
 }
+th {
+	text-align: center;
+}
+th, td {
+	padding: 5px;
+}
 .prices ul {
 	margin: 0%;
 }

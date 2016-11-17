@@ -113,7 +113,7 @@ public class AdminOnlyFragment extends Fragment {
                     OrderFragment.maxOrder = 0L;
                     MainActivity.ref2.child("maxOrder").setValue(OrderFragment.maxOrder);
                     PricesFragment.maxOrderName = "";
-                    MainActivity.ref2.child("maxOrderName").setValue("");
+                    MainActivity.ref2.child("maxOrderName").setValue(getString(R.string.no_wolf));
 
                     for (DrinkUI i : DrinkUI.uidrinks) {
                         i.prices = new ArrayList<>();
