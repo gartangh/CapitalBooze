@@ -33,7 +33,12 @@ function myJavaScript() {
 
         // Name
         var name = drinkSnapshot.child("name").val();
-        mName.innerHTML = name;
+        if (name == "Stella") {
+            mName.innerHTML = name.bold();
+        }
+        else {
+            mName.innerHTML = name;
+        }
     
         // PriceDifference
         database.ref("Drinks/" + name + "/priceDifference").on("value", function(snapshot) {
@@ -77,24 +82,24 @@ function myJavaScript() {
     // maxOrder
     database.ref("maxOrder").on("value", function(snapshot) {
         maxOrder = snapshot.val();
-        mWolf.innerHTML = "Wolf of Capital Booze:\n" + maxOrderName + "\n" + maxOrder + " drinks";
+        mWolf.innerHTML = "Wolf of Capital Booze:\n" + maxOrderName.bold() + "\n" + maxOrder + " drinks";
     });
 
     // maxOrderName
     database.ref("maxOrderName").on("value", function(snapshot) {
         maxOrderName = snapshot.val();
-        mWolf.innerHTML = "Wolf of Capital Booze:\n" + maxOrderName + "\n" + maxOrder + " drinks";
+        mWolf.innerHTML = "Wolf of Capital Booze:\n" + maxOrderName.bold() + "\n" + maxOrder + " drinks";
     });
 
     // allTimeWolf
     database.ref("allTimeWolf").on("value", function(snapshot) {
         allTimeWolf = snapshot.val();
-        mAllTimeWolf.innerHTML = "All time wolf:\n" + allTimeWolfName + "\n" + allTimeWolf + " drinks";
+        mAllTimeWolf.innerHTML = "All time wolf:\n" + allTimeWolfName.bold() + "\n" + allTimeWolf + " drinks";
     });
 
     // allTimeWolfName
     database.ref("allTimeWolfName").on("value", function(snapshot) {
         allTimeWolfName = snapshot.val();
-        mAllTimeWolf.innerHTML = "All time wolf:\n" + allTimeWolfName + "\n" + allTimeWolf + " drinks";
+        mAllTimeWolf.innerHTML = "All time wolf:\n" + allTimeWolfName.bold() + "\n" + allTimeWolf + " drinks";
     });
 }

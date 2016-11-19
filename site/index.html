@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Capital Booze</title>
+
+		<!-- Firebase initialisation-->
+		<script src="https://www.gstatic.com/firebasejs/3.6.1/firebase.js"></script>
+  		<script src="https://www.gstatic.com/firebasejs/3.6.1/firebase-app.js"></script>
+  		<script src="https://www.gstatic.com/firebasejs/3.6.1/firebase-database.js"></script>
+		<script>
+  			// Initialize Firebase
+  			var config = {
+    			apiKey: "AIzaSyBWkTRrufKd4SJbC4NV-iHKEL__1TEA4uc",
+    			authDomain: "capital-booze.firebaseapp.com",
+		    	databaseURL: "https://capital-booze.firebaseio.com",
+    			storageBucket: "capital-booze.appspot.com",
+    			messagingSenderId: "305330370121"
+			};	
+  			firebase.initializeApp(config);
+		</script>
+
+		<!-- Other documents
+		<link href="styles.css" rel="stylesheet" type="text/css">
+		<script async type="text/javascript" language="javascript" src="compressed.js"></script>
+		-->
+		
+		<!-- Other documents for developing-->
+		<link rel="stylesheet" type="text/css" href="main.css">
+		<script async type="text/javascript" language="javascript" src="main.js"></script>
+		
+
+		<!-- Google roboto font-->
+		<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+
+		<!-- Verifying ownership-->
+		<meta name="google-site-verification" content="OJ6gh1BgT4WjT_6nGTMeKkSsVFXPTK7X_a3UDDQSsi4" />
+
+		<!-- Viewport for mobile readebility-->
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<!-- Add to homescreen for Chrome on Android -->
+  		<meta name="mobile-web-app-capable" content="yes">
+  		<meta name="application-name" content="Capital Booze">
+  		<meta name="theme-color" content="#3853A3">
+
+  		<!-- Add to homescreen for Safari on iOS -->
+  		<meta name="apple-mobile-web-app-capable" content="yes">
+  		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  		<meta name="apple-mobile-web-app-title" content="Capital Booze">
+  		<meta name="apple-mobile-web-app-status-bar-style" content="#3853A3">
+
+  		<!-- Favicon icon for browsers-->
+  		<link rel="apple-touch-icon" sizes="57x57" href="apple-icon-57x57.png">
+		<link rel="apple-touch-icon" sizes="60x60" href="apple-icon-60x60.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="apple-icon-72x72.png">
+		<link rel="apple-touch-icon" sizes="76x76" href="apple-icon-76x76.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="apple-icon-114x114.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="apple-icon-120x120.png">
+		<link rel="apple-touch-icon" sizes="144x144" href="apple-icon-144x144.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="apple-icon-152x152.png">
+		<link rel="apple-touch-icon" sizes="180x180" href="apple-icon-180x180.png">
+		<link rel="icon" type="image/png" sizes="192x192"  href="res/android-icon-192x192.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="res/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="96x96" href="res/favicon-96x96.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="res/favicon-16x16.png">
+		<link rel="manifest" href="res/manifest.json">
+		<meta name="msapplication-TileColor" content="#ffffff">
+		<meta name="msapplication-TileImage" content="res/ms-icon-144x144.png">
+		<meta name="theme-color" content="#ffffff">
+	</head>
+
+	<body>
+		<header>
+			<p style="text-align:center;"><img src="https://lh3.googleusercontent.com/-azMnQLV4Zr4/WCoSkV8Y-AI/AAAAAAAAUsg/3KZNJuA5CncMUDwIXTyCGEm50nwGq2AagCL0B/s768-d-p-rw/web_hi_res_512.png" alt="Logo Moeder Peerdevisscher Oostduinkerke" width="196px"></p>
+			<div>
+				<h1 style="text-align:center;"><strong>Capital Booze</strong></h1>
+				<h2 style="text-align:center;"><strong>2017/09/30</strong></h2>
+				<p style="text-align:center;">A Moeder Peerdevisscher initiative</p>
+			</div>
+		</header>
+
+		<div class="wolf">
+			<p id="mWolf" style="text-align:center;">Wolf of Capital Booze:<strong>UNKNOWN</strong>0 drinks</p>
+			<p id="mAllTimeWolf" style="text-align:center;">All time wolf:<strong>UNKNOWN</strong>0 drinks</p>
+		</div>
+
+		<div class="prices">
+			<h3>Prices</h3>
+
+			<table id="mPrices">
+				<tr>
+					<th>Name</th>
+					<th>Price</th>
+					<th>Price Difference</th>
+				</tr>
+			</table>
+		</div>
+
+		<div class="links" style="text-align:center;">
+			<a href="https://www.facebook.com/MoederPeerdevisscher">
+				<img src="http://www.kepfeltoltes.hu/160129/face_www.kepfeltoltes.hu_.png" alt="Like us on facebook" width="64px">
+			</a>
+			<a href="https://play.google.com/store/apps/details?id=com.tanghe.garben.capitalbooze&hl=en">
+				<img src="http://switzerland.tasis.com/uploaded/images2/appstore_button_google.png" alt="Get it on google play store" width="128px">
+			</a>
+			<!--
+			<a href="link apple app store">
+				<img src="http://i1.wp.com/www.digitopoly.org/wp-content/uploads/2016/06/app-store-logo.png?fit=4491%2C1552" alt="Get it on Aple app store" width="128px">
+			</a>
+			-->
+			<a href="https://www.amazon.com/g-tanghe-Capital-Booze/dp/B01LXS3RKA">
+				<img src="http://static1.businessinsider.com/image/539f3ffbecad044276726c01-960/amazon-com-logo.jpg" alt="Get it on Amazon app store" width="128px">
+			</a>
+		</div>
+
+		<footer>
+			<p>Developer<br>g-tanghe<br></p>
+			<a href="mailto:garben.tanghe@gmail.com">garben.tanghe@gmail.com</a>
+		</footer>
+
+		<script>myJavaScript()</script>
+
+	</body>
+</html>
