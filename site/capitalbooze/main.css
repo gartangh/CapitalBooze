@@ -7,39 +7,39 @@ body {
 header, footer {
 	background: #3853A3;
 	color: #FFFFFF;
-	padding: 2%;
+	padding: 1%;
+	margin: 0%;
+}
+header h1, h2, p {
+	padding: 0%;
 	margin: 0%;
 }
 .wolf {
-	margin: 2%;
+	margin: 1%;
 }
 .prices {
-	margin: 2%;
+	margin: 1%;
 }
-.prices h3 {
+.prices h2 {
 	margin: 0%;
-}
-th {
-	text-align: center;
 }
 th, td {
-	padding: 5px;
+	padding:12px;
 }
-.prices ul {
+iframe {
+	float: right;
+}
+
+/* Footer */
+footer {
+	float: clear;
+	background: #3853A3;
+	color: #FFFFFF;
+	padding: 1%;
 	margin: 0%;
-}
-ul li {
-	margin: 0%;
-	list-style-type: none;
-}
-.links a {
-	margin: 2%;
-	display: inline;
-}
-footer p {
-	margin: 0%;
+	text-align: center;
+	font-size: 12px;
 }
 footer a {
 	color:#FFFFFF;
-	margin: 0%;
 }
