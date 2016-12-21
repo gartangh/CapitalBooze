@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import java.util.Date;
 import java.util.Locale;
 
@@ -55,8 +56,7 @@ public class CountersFragment extends Fragment {
         for (DrinkUI i : DrinkUI.uidrinks) {
             try {
                 verticalLayoutCounters.addView(i.horizontalLayoutCounters);
-            }
-            catch (IllegalStateException e) {
+            } catch (IllegalStateException e) {
                 Log.d(TAG, "DrinkUI " + i.name + " already in verticalLayoutCounters");
             }
         }
@@ -64,14 +64,12 @@ public class CountersFragment extends Fragment {
         mUpdated = (TextView) view.findViewById(R.id.mCountersUpdated);
         if (updated == null) {
             mUpdated.setText(getContext().getString(R.string.no_data_yet));
-        }
-        else {
+        } else {
             mUpdated.setText(getContext().getString(R.string.updated, MainActivity.sdf.format(updated)));
         }
         if (seen) {
             mUpdated.setTextColor(ContextCompat.getColor(getContext(), R.color.grey));
-        }
-        else {
+        } else {
             mUpdated.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
         }
         mUpdated.setOnClickListener(new View.OnClickListener() {
@@ -98,8 +96,7 @@ public class CountersFragment extends Fragment {
         super.onAttach(context);
         if (context instanceof OnCountersFragmentInteractionListener) {
             mListener = (OnCountersFragmentInteractionListener) context;
-        }
-        else {
+        } else {
             throw new RuntimeException(context.toString() + " must implement OnCountersFragmentInteractionListener");
         }
     }

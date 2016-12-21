@@ -71,8 +71,7 @@ public class GraphFragment extends Fragment {
         super.onAttach(context);
         if (context instanceof AboutFragment.OnAboutFragmentInteractionListener) {
             mListener = (OnGraphFragmentInteractionListener) context;
-        }
-        else {
+        } else {
             throw new RuntimeException(context.toString() + " must implement OnGraphFragmentInteractionListener");
         }
     }

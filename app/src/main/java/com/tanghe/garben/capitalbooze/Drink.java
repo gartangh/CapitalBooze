@@ -2,12 +2,9 @@ package com.tanghe.garben.capitalbooze;
 
 import android.util.Log;
 
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -56,18 +53,19 @@ class Drink {
         this.min = min;
         this.max = max;
 
-        MainActivity.ref2.child("Drinks").addListenerForSingleValueEvent(new ValueEventListener() {
+        MainActivity.myRef.child("Drinks").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.child(name).getValue() == null) {
-                    MainActivity.ref2.child("Drinks").child(name).setValue(Drink.this);
+                    MainActivity.myRef.child("Drinks").child(name).setValue(Drink.this);
                     Log.d("Drink", "Wrote " + name + " to database");
                 }
             }
 
             @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", error.toException());
             }
         });
     }

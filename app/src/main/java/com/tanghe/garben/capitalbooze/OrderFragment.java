@@ -10,11 +10,9 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import java.util.Locale;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class OrderFragment extends Fragment {
 
     private final static String TAG = "Order";
@@ -54,8 +52,7 @@ public class OrderFragment extends Fragment {
         for (DrinkUI i : DrinkUI.uidrinks) {
             try {
                 verticalLayoutOrders.addView(i.horizontalLayoutOrders);
-            }
-            catch (IllegalStateException e) {
+            } catch (IllegalStateException e) {
                 Log.d(TAG, "DrinkUI " + i.name + " already in verticalLayoutOrders");
             }
         }
@@ -77,25 +74,25 @@ public class OrderFragment extends Fragment {
                 if (totalCount > 0) {
                     for (DrinkUI i : DrinkUI.uidrinks) {
                         i.countCurrent += i.orderCount;
-                        MainActivity.ref2.child("Drinks").child(i.name).child("countCurrent").setValue(i.countCurrent);
+                        MainActivity.myRef.child("Drinks").child(i.name).child("countCurrent").setValue(i.countCurrent);
 
                         i.partyCount += i.orderCount;
-                        MainActivity.ref2.child("Drinks").child(i.name).child("partyCount").setValue(i.partyCount);
+                        MainActivity.myRef.child("Drinks").child(i.name).child("partyCount").setValue(i.partyCount);
 
                         i.partyRevenue += i.orderCount * i.price;
-                        MainActivity.ref2.child("Drinks").child(i.name).child("partyRevenue").setValue(i.partyRevenue);
+                        MainActivity.myRef.child("Drinks").child(i.name).child("partyRevenue").setValue(i.partyRevenue);
 
                         Drink.partyRevenueTotal += i.orderCount * i.price;
-                        MainActivity.ref2.child("partyRevenueTotal").setValue(Drink.partyRevenueTotal);
+                        MainActivity.myRef.child("partyRevenueTotal").setValue(Drink.partyRevenueTotal);
 
                         i.orderCount = 0;
                         i.mDrinkCountOrders.setText(String.format(Locale.getDefault(), "%1d", i.orderCount));
                     }
 
                     Drink.countTotalCurrent += totalCount;
-                    MainActivity.ref2.child("countTotalCurrent").setValue(Drink.countTotalCurrent);
+                    MainActivity.myRef.child("countTotalCurrent").setValue(Drink.countTotalCurrent);
                     Drink.partyCountTotal += totalCount;
-                    MainActivity.ref2.child("partyCountTotal").setValue(Drink.partyCountTotal);
+                    MainActivity.myRef.child("partyCountTotal").setValue(Drink.partyCountTotal);
 
                     totalPriceLast = totalPrice;
                     totalPrice = 0.00;
@@ -103,9 +100,9 @@ public class OrderFragment extends Fragment {
                     totalSquares = 0;
                     totalCountLast = totalCount;
                     if (totalCount > maxOrder) {
-                        MainActivity.ref2.child("maxOrder").setValue(totalCount);
+                        MainActivity.myRef.child("maxOrder").setValue(totalCount);
                         if (totalCount > allTimeWolf) {
-                            MainActivity.ref2.child("allTimeWolf").setValue(totalCount);
+                            MainActivity.myRef.child("allTimeWolf").setValue(totalCount);
                             Toast.makeText(getContext(), getString(R.string.new_all_time_wolf), Toast.LENGTH_LONG).show();
                             Log.d(TAG, getString(R.string.new_all_time_wolf));
                         } else {
@@ -117,8 +114,7 @@ public class OrderFragment extends Fragment {
 
                     setTotals();
                     setTotalsLast();
-                }
-                else {
+                } else {
                     Toast.makeText(getContext(), getString(R.string.nothing_to_order), Toast.LENGTH_LONG).show();
                     Log.d(TAG, getString(R.string.nothing_to_order));
                 }
@@ -137,8 +133,7 @@ public class OrderFragment extends Fragment {
     public static void setTotals() {
         if (totalPrice > 0.00) {
             mTotalPrice.setText(String.format(Locale.getDefault(), "€%.2f", totalPrice));
-        }
-        else {
+        } else {
             totalPrice = 0.00;
             mTotalPrice.setText(String.format(Locale.getDefault(), "€%.2f", totalPrice));
         }

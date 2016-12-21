@@ -1,6 +1,7 @@
 package com.tanghe.garben.capitalbooze;
 
 //import android.content.Context;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 //import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import java.util.Date;
 import java.util.Locale;
 
@@ -46,8 +48,7 @@ public class PricesFragment extends Fragment {
             public void onClick(View v) {
                 if (wolf.equals("Wolf")) {
                     setWolf();
-                }
-                else {
+                } else {
                     setAlltimeWolf();
                 }
             }
@@ -57,8 +58,7 @@ public class PricesFragment extends Fragment {
         for (DrinkUI i : DrinkUI.uidrinks) {
             try {
                 verticalLayoutPrices.addView(i.horizontalLayoutPrices);
-            }
-            catch (IllegalStateException e) {
+            } catch (IllegalStateException e) {
                 Log.d(TAG, "DrinkUI " + i.name + " already in verticalLayoutPrices");
             }
         }
@@ -66,14 +66,12 @@ public class PricesFragment extends Fragment {
         mUpdated = (TextView) view.findViewById(R.id.mPricesUpdated);
         if (updated == null) {
             mUpdated.setText(getContext().getString(R.string.no_data_yet));
-        }
-        else {
+        } else {
             mUpdated.setText(getContext().getString(R.string.updated, MainActivity.sdf.format(updated)));
         }
         if (seen) {
             mUpdated.setTextColor(ContextCompat.getColor(getContext(), R.color.grey));
-        }
-        else {
+        } else {
             mUpdated.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
         }
         mUpdated.setOnClickListener(new View.OnClickListener() {
@@ -124,8 +122,7 @@ public class PricesFragment extends Fragment {
     public void setWolf() {
         if (maxOrderName.equals("")) {
             mWolf.setText(String.format(Locale.getDefault(), getString(R.string.wolf), getString(R.string.no_wolf), OrderFragment.maxOrder));
-        }
-        else {
+        } else {
             mWolf.setText(String.format(Locale.getDefault(), getString(R.string.wolf), maxOrderName, OrderFragment.maxOrder));
         }
         wolf = "";
@@ -134,8 +131,7 @@ public class PricesFragment extends Fragment {
     public void setAlltimeWolf() {
         if (allTimeWolfName.equals("")) {
             mWolf.setText(String.format(Locale.getDefault(), getString(R.string.all_time_wolf), getString(R.string.no_wolf), OrderFragment.allTimeWolf));
-        }
-        else {
+        } else {
             mWolf.setText(String.format(Locale.getDefault(), getString(R.string.all_time_wolf), allTimeWolfName, OrderFragment.allTimeWolf));
         }
         wolf = "Wolf";

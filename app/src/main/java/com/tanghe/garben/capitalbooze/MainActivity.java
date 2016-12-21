@@ -19,17 +19,21 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
-import com.firebase.client.ChildEventListener;
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+
+import static com.tanghe.garben.capitalbooze.R.string.price;
 
 public class MainActivity extends AppCompatActivity implements
         AboutFragment.OnAboutFragmentInteractionListener,
@@ -42,17 +46,18 @@ public class MainActivity extends AppCompatActivity implements
         AdminOnlyFragment.OnAdminOnlyFragmentInteractionListener {
 
     private final static String TAG = "MainActivity";
-    private final static String FIREBASE = "Firebase";
 
     static SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
 
     private DrawerLayout mDrawer;
     private ActionBarDrawerToggle drawerToggle;
-    FragmentManager fragmentManager = getSupportFragmentManager();
+    private FragmentManager fragmentManager = getSupportFragmentManager();
     private static ProgressDialog mProgressDialog;
 
     static Long accountType = 0L;
-    static Firebase ref2;
+
+    static FirebaseDatabase database = FirebaseDatabase.getInstance();
+    static DatabaseReference myRef = database.getReference();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,8 +79,6 @@ public class MainActivity extends AppCompatActivity implements
         DrinkUI.setArgument(MainActivity.this);
         AdminOnlyFragment.setArgument(MainActivity.this);
 
-        Firebase.setAndroidContext(this);
-        ref2 = new Firebase(getString(R.string.url));
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
 
@@ -84,23 +87,23 @@ public class MainActivity extends AppCompatActivity implements
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         if (activeNetwork != null) {
             if (user != null) {
-                ref2.child("Users").child(user.getUid()).child("accountType").addValueEventListener(new ValueEventListener() {
+                myRef.child("Users").child(user.getUid()).child("accountType").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot snapshot) {
-                        accountType = (Long) snapshot.getValue();
-                        Log.d(FIREBASE, "Data changed: accountType = " + accountType);
+                        accountType = snapshot.getValue(Long.class);
+                        Log.d(TAG, "Data changed: accountType = " + accountType);
                     }
 
                     @Override
-                    public void onCancelled(FirebaseError firebaseError) {
-                        Log.d(FIREBASE, "The read failed: " + firebaseError.getMessage());
+                    public void onCancelled(DatabaseError error) {
+                        // Failed to read value
+                        Log.w(TAG, "Failed to read value.", error.toException());
                     }
                 });
             }
 
             setValueEventListeners();
-        }
-        else {
+        } else {
             Toast.makeText(getApplicationContext(), getString(R.string.not_connected_error), Toast.LENGTH_LONG).show();
             Log.d(TAG, getString(R.string.not_connected_error));
         }
@@ -117,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements
         NavigationView nvDrawer = (NavigationView) findViewById(R.id.nvView);
         // Setup drawer view
         setupDrawerContent(nvDrawer);
-        drawerToggle = new ActionBarDrawerToggle(this, mDrawer, R.string.drawer_open,  R.string.drawer_close);
+        drawerToggle = new ActionBarDrawerToggle(this, mDrawer, R.string.drawer_open, R.string.drawer_close);
         // Tie DrawerLayout events to the ActionBarToggle
         mDrawer.addDrawerListener(drawerToggle);
 
@@ -141,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements
         Fragment fragment = null;
         Class fragmentClass;
 
-        switch(menuItem.getItemId()) {
+        switch (menuItem.getItemId()) {
             case R.id.nav_prices_fragment:
                 fragmentClass = PricesFragment.class;
                 break;
@@ -166,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements
                 fragmentClass = CountersFragment.class;
                 break;
             case R.id.nav_admin_only_fragment:
-                fragmentClass  = AdminOnlyFragment.class;
+                fragmentClass = AdminOnlyFragment.class;
                 break;
             case R.id.nav_drink_fragment:
                 fragmentClass = DrinkFragment.class;
@@ -220,7 +223,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     public static double round(double d) {
-        return Math.round(d*10)/10.0;
+        return Math.round(d * 10) / 10.0;
     }
 
     @Override
@@ -244,37 +247,36 @@ public class MainActivity extends AppCompatActivity implements
     void setValueEventListeners() {
 
         // Drinks
-        ref2.child("Drinks").addChildEventListener(new ChildEventListener() {
-            @Override public void onChildAdded(final DataSnapshot dataSnapshotDrink, String s) {
+        myRef.child("Drinks").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(final DataSnapshot dataSnapshotDrink, String s) {
                 boolean valid = true;
                 for (DrinkUI i : DrinkUI.uidrinks) {
-                    if (dataSnapshotDrink.child("name").getValue().equals(i.name)) {
+                    if (dataSnapshotDrink.child("name").getValue(String.class).equals(i.name)) {
                         valid = false;
                     }
                 }
                 if (valid) {
-                    new DrinkUI((String) dataSnapshotDrink.child("name").getValue(), (double) dataSnapshotDrink.child("price").getValue(), (double) dataSnapshotDrink.child("min").getValue(), (double) dataSnapshotDrink.child("max").getValue());
-                    Log.d(FIREBASE, "new Drink: " + dataSnapshotDrink.child("name").getValue() + " added");
+                    new DrinkUI(dataSnapshotDrink.child("name").getValue(String.class), round(dataSnapshotDrink.child("price").getValue(Double.class)), round(dataSnapshotDrink.child("min").getValue(Double.class)), round(dataSnapshotDrink.child("max").getValue(Double.class)));
+                    Log.d(TAG, "new Drink: " + dataSnapshotDrink.child("name").getValue(String.class) + " added");
                 } else {
-                    Log.d(FIREBASE,"new Drink: " + dataSnapshotDrink.child("name").getValue() + " already in DrinkUI.uidrinks");
+                    Log.d(TAG, "new Drink: " + dataSnapshotDrink.child("name").getValue(String.class) + " already in DrinkUI.uidrinks");
                 }
 
                 // Public
-                ref2.child("Drinks").child(dataSnapshotDrink.child("name").getValue().toString()).child("priceDifference").addValueEventListener(new ValueEventListener() {
+                myRef.child("Drinks").child(dataSnapshotDrink.child("name").getValue(String.class)).child("priceDifference").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for (DrinkUI i : DrinkUI.uidrinks) {
-                            if (dataSnapshotDrink.child("name").getValue().toString().equals(i.getName())) {
-                                i.priceDifference = round((double) dataSnapshot.getValue());
+                            if (dataSnapshotDrink.child("name").getValue(String.class).equals(i.getName())) {
+                                i.priceDifference = round(dataSnapshot.getValue(Double.class));
                                 if (i.priceDifference < 0) {
                                     i.mPriceDifference.setText(String.format(Locale.getDefault(), "%.2f", i.priceDifference));
                                     i.mPriceDifference.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.green));
-                                }
-                                else if (i.priceDifference > 0) {
+                                } else if (i.priceDifference > 0) {
                                     i.mPriceDifference.setText(String.format(Locale.getDefault(), "+%.2f", i.priceDifference));
                                     i.mPriceDifference.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.red));
-                                }
-                                else {
+                                } else {
                                     i.mPriceDifference.setText(String.format(Locale.getDefault(), "+%.2f", i.priceDifference));
                                     i.mPriceDifference.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.grey));
                                 }
@@ -284,16 +286,17 @@ public class MainActivity extends AppCompatActivity implements
                     }
 
                     @Override
-                    public void onCancelled(FirebaseError firebaseError) {
-
+                    public void onCancelled(DatabaseError error) {
+                        // Failed to read value
+                        Log.w(TAG, "Failed to read value.", error.toException());
                     }
                 });
-                ref2.child("Drinks").child(dataSnapshotDrink.child("name").getValue().toString()).child("price").addValueEventListener(new ValueEventListener() {
+                myRef.child("Drinks").child(dataSnapshotDrink.child("name").getValue(String.class).toString()).child("price").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for (DrinkUI i : DrinkUI.uidrinks) {
-                            if (dataSnapshotDrink.child("name").getValue().toString().equals(i.getName())) {
-                                i.price = round((double) dataSnapshot.getValue());
+                            if (dataSnapshotDrink.child("name").getValue(String.class).equals(i.getName())) {
+                                i.price = round(dataSnapshot.getValue(Double.class));
                                 if (i.price > 0.00) {
                                     i.mPrice.setText(String.format(Locale.getDefault(), "€%.2f", i.price));
                                     i.prices.add(i.price);
@@ -301,12 +304,10 @@ public class MainActivity extends AppCompatActivity implements
                                     if (i.priceDifference < 0) {
                                         i.mPriceDifference.setText(String.format(Locale.getDefault(), "%.2f", i.priceDifference));
                                         i.mPriceDifference.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.green));
-                                    }
-                                    else if (i.priceDifference > 0) {
+                                    } else if (i.priceDifference > 0) {
                                         i.mPriceDifference.setText(String.format(Locale.getDefault(), "+%.2f", i.priceDifference));
                                         i.mPriceDifference.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.red));
-                                    }
-                                    else {
+                                    } else {
                                         i.mPriceDifference.setText(String.format(Locale.getDefault(), "+%.2f", i.priceDifference));
                                         i.mPriceDifference.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.grey));
                                     }
@@ -323,24 +324,26 @@ public class MainActivity extends AppCompatActivity implements
                     }
 
                     @Override
-                    public void onCancelled(FirebaseError firebaseError) {
-
+                    public void onCancelled(DatabaseError error) {
+                        // Failed to read value
+                        Log.w(TAG, "Failed to read value.", error.toException());
                     }
                 });
                 /*
-                ref2.child("Drinks").child(dataSnapshotDrink.child("name").getValue().toString()).child("prices").addValueEventListener(new ValueEventListener() {
+                myRef.child("Drinks").child(dataSnapshotDrink.child("name").getValue(String.class)).child("prices").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for (DrinkUI i : DrinkUI.uidrinks) {
-                            if (i.name.equals(dataSnapshotDrink.child("name").getValue().toString())) {
+                            if (i.name.equals(dataSnapshotDrink.child("name").getValue(String.class))) {
                                 i.prices = (ArrayList<Double>) dataSnapshot.getValue();
                             }
                         }
                     }
 
                     @Override
-                    public void onCancelled(FirebaseError firebaseError) {
-
+                    public void onCancelled(DatabaseError error) {
+                        // Failed to read value
+                        Log.w(TAG, "Failed to read value.", error.toException());
                     }
                 });
                 */
@@ -348,175 +351,183 @@ public class MainActivity extends AppCompatActivity implements
                 // TODO: reduce internet use
                 // Admin only
                 //if (accountType == 2) {
-                    ref2.child("Drinks").child(dataSnapshotDrink.child("name").getValue().toString()).child("startPrice").addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            for (DrinkUI i : DrinkUI.uidrinks) {
-                                if (dataSnapshotDrink.child("name").getValue().toString().equals(i.getName())) {
-                                    try {
-                                        i.startPrice = (double) dataSnapshot.getValue();
-                                    }
-                                    catch (NullPointerException e) {
-                                        Log.d(TAG, "" + e);
-                                    }
+                myRef.child("Drinks").child(dataSnapshotDrink.child("name").getValue(String.class)).child("startPrice").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DrinkUI i : DrinkUI.uidrinks) {
+                            if (dataSnapshotDrink.child("name").getValue(String.class).equals(i.getName())) {
+                                try {
+                                    i.startPrice = dataSnapshot.getValue(Double.class);
+                                } catch (NullPointerException e) {
+                                    Log.d(TAG, "" + e);
                                 }
                             }
                         }
+                    }
 
-                        @Override
-                        public void onCancelled(FirebaseError firebaseError) {
-
-                        }
-                    });
-                    ref2.child("Drinks").child(dataSnapshotDrink.child("name").getValue().toString()).child("countCurrent").addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            for (DrinkUI i : DrinkUI.uidrinks) {
-                                if (dataSnapshotDrink.child("name").getValue().toString().equals(i.getName())) {
-                                    try {
-                                        i.countCurrent = (long) dataSnapshot.getValue();
-                                        i.mCountCurrent.setText(String.format(Locale.getDefault(), "%1d", i.countCurrent));
-                                    }
-                                    catch (NullPointerException e) {
-                                        Log.d(TAG, e.toString());
-                                    }
-                                    updateCounters();
-                                }
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(FirebaseError firebaseError) {
-
-                        }
-                    });
-                    ref2.child("Drinks").child(dataSnapshotDrink.child("name").getValue().toString()).child("countDifference").addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            for (DrinkUI i : DrinkUI.uidrinks) {
-                                if (dataSnapshotDrink.child("name").getValue().toString().equals(i.getName())) {
-                                    i.countDifference = (long) dataSnapshot.getValue();
-                                }
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(FirebaseError firebaseError) {
-
-                        }
-                    });
-                    ref2.child("Drinks").child(dataSnapshotDrink.child("name").getValue().toString()).child("countLast").addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            for (DrinkUI i : DrinkUI.uidrinks) {
-                                if (dataSnapshotDrink.child("name").getValue().toString().equals(i.getName())) {
-                                    i.countLast = (long) dataSnapshot.getValue();
-                                    i.mCountLast.setText(String.format(Locale.getDefault(), "(%1d)", i.countLast));
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                        // Failed to read value
+                        Log.w(TAG, "Failed to read value.", error.toException());
+                    }
+                });
+                myRef.child("Drinks").child(dataSnapshotDrink.child("name").getValue(String.class)).child("countCurrent").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DrinkUI i : DrinkUI.uidrinks) {
+                            if (dataSnapshotDrink.child("name").getValue(String.class).equals(i.getName())) {
+                                try {
+                                    i.countCurrent = dataSnapshot.getValue(Long.class);
+                                    i.mCountCurrent.setText(String.format(Locale.getDefault(), "%1d", i.countCurrent));
+                                } catch (NullPointerException e) {
+                                    Log.d(TAG, e.toString());
                                 }
                                 updateCounters();
                             }
                         }
+                    }
 
-                        @Override
-                        public void onCancelled(FirebaseError firebaseError) {
-
-                        }
-                    });
-                    ref2.child("Drinks").child(dataSnapshotDrink.child("name").getValue().toString()).child("countSecondLast").addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            for (DrinkUI i : DrinkUI.uidrinks) {
-                                if (dataSnapshotDrink.child("name").getValue().toString().equals(i.getName())) {
-                                    i.countSecondLast = (long) dataSnapshot.getValue();
-                                }
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                        // Failed to read value
+                        Log.w(TAG, "Failed to read value.", error.toException());
+                    }
+                });
+                myRef.child("Drinks").child(dataSnapshotDrink.child("name").getValue(String.class)).child("countDifference").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DrinkUI i : DrinkUI.uidrinks) {
+                            if (dataSnapshotDrink.child("name").getValue(String.class).equals(i.getName())) {
+                                i.countDifference = dataSnapshot.getValue(Long.class);
                             }
                         }
+                    }
 
-                        @Override
-                        public void onCancelled(FirebaseError firebaseError) {
-
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                        // Failed to read value
+                        Log.w(TAG, "Failed to read value.", error.toException());
+                    }
+                });
+                myRef.child("Drinks").child(dataSnapshotDrink.child("name").getValue(String.class)).child("countLast").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DrinkUI i : DrinkUI.uidrinks) {
+                            if (dataSnapshotDrink.child("name").getValue(String.class).equals(i.getName())) {
+                                i.countLast = (long) dataSnapshot.getValue(Long.class);
+                                i.mCountLast.setText(String.format(Locale.getDefault(), "(%1d)", i.countLast));
+                            }
+                            updateCounters();
                         }
-                    });
-                    ref2.child("Drinks").child(dataSnapshotDrink.child("name").getValue().toString()).child("min").addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            for (DrinkUI i : DrinkUI.uidrinks) {
-                                if (dataSnapshotDrink.child("name").getValue().toString().equals(i.getName())) {
-                                    i.min = round((double) dataSnapshot.getValue());
-                                }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                        // Failed to read value
+                        Log.w(TAG, "Failed to read value.", error.toException());
+                    }
+                });
+                myRef.child("Drinks").child(dataSnapshotDrink.child("name").getValue(String.class)).child("countSecondLast").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DrinkUI i : DrinkUI.uidrinks) {
+                            if (dataSnapshotDrink.child("name").getValue(String.class).equals(i.getName())) {
+                                i.countSecondLast = dataSnapshot.getValue(Long.class);
                             }
                         }
+                    }
 
-                        @Override
-                        public void onCancelled(FirebaseError firebaseError) {
-
-                        }
-                    });
-                    ref2.child("Drinks").child(dataSnapshotDrink.child("name").getValue().toString()).child("max").addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            for (DrinkUI i : DrinkUI.uidrinks) {
-                                if (dataSnapshotDrink.child("name").getValue().toString().equals(i.getName())) {
-                                    i.max = round((double) dataSnapshot.getValue());
-                                }
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                        // Failed to read value
+                        Log.w(TAG, "Failed to read value.", error.toException());
+                    }
+                });
+                myRef.child("Drinks").child(dataSnapshotDrink.child("name").getValue(String.class)).child("min").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DrinkUI i : DrinkUI.uidrinks) {
+                            if (dataSnapshotDrink.child("name").getValue(String.class).equals(i.getName())) {
+                                i.min = round(dataSnapshot.getValue(Double.class));
                             }
                         }
+                    }
 
-                        @Override
-                        public void onCancelled(FirebaseError firebaseError) {
-
-                        }
-                    });
-                    // Can't change the name
-                    ref2.child("Drinks").child(dataSnapshotDrink.child("name").getValue().toString()).child("partyCount").addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            for (DrinkUI i : DrinkUI.uidrinks) {
-                                if (dataSnapshotDrink.child("name").getValue().toString().equals(i.getName())) {
-                                    i.partyCount = (long) dataSnapshot.getValue();
-                                    i.mPartyCount.setText(String.format(Locale.getDefault(), "%1d", i.partyCount));
-                                }
-                                updateCounters();
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                        // Failed to read value
+                        Log.w(TAG, "Failed to read value.", error.toException());
+                    }
+                });
+                myRef.child("Drinks").child(dataSnapshotDrink.child("name").getValue(String.class)).child("max").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DrinkUI i : DrinkUI.uidrinks) {
+                            if (dataSnapshotDrink.child("name").getValue(String.class).equals(i.getName())) {
+                                i.max = round(dataSnapshot.getValue(Double.class));
                             }
                         }
+                    }
 
-                        @Override
-                        public void onCancelled(FirebaseError firebaseError) {
-
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                        // Failed to read value
+                        Log.w(TAG, "Failed to read value.", error.toException());
+                    }
+                });
+                // Can't change the name
+                myRef.child("Drinks").child(dataSnapshotDrink.child("name").getValue(String.class)).child("partyCount").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DrinkUI i : DrinkUI.uidrinks) {
+                            if (dataSnapshotDrink.child("name").getValue(String.class).equals(i.getName())) {
+                                i.partyCount = dataSnapshot.getValue(Long.class);
+                                i.mPartyCount.setText(String.format(Locale.getDefault(), "%1d", i.partyCount));
+                            }
+                            updateCounters();
                         }
-                    });
-                    ref2.child("Drinks").child(dataSnapshotDrink.child("name").getValue().toString()).child("partyRevenue").addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            for (DrinkUI i : DrinkUI.uidrinks) {
-                                if (dataSnapshotDrink.child("name").getValue().toString().equals(i.getName())) {
-                                    i.partyRevenue = round((double) dataSnapshot.getValue());
-                                    i.mPartyRevenue.setText(String.format(Locale.getDefault(), "€%.2f", i.partyRevenue));
-                                }
-                                updateCounters();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                        // Failed to read value
+                        Log.w(TAG, "Failed to read value.", error.toException());
+                    }
+                });
+                myRef.child("Drinks").child(dataSnapshotDrink.child("name").getValue(String.class)).child("partyRevenue").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DrinkUI i : DrinkUI.uidrinks) {
+                            if (dataSnapshotDrink.child("name").getValue(String.class).equals(i.getName())) {
+                                i.partyRevenue = round(dataSnapshot.getValue(Double.class));
+                                i.mPartyRevenue.setText(String.format(Locale.getDefault(), "€%.2f", i.partyRevenue));
+                            }
+                            updateCounters();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                        // Failed to read value
+                        Log.w(TAG, "Failed to read value.", error.toException());
+                    }
+                });
+                myRef.child("Drinks").child(dataSnapshotDrink.child("name").getValue(String.class)).child("priceLast").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DrinkUI i : DrinkUI.uidrinks) {
+                            if (dataSnapshotDrink.child("name").getValue(String.class).equals(i.getName())) {
+                                i.priceLast = round(dataSnapshot.getValue(Double.class));
                             }
                         }
+                    }
 
-                        @Override
-                        public void onCancelled(FirebaseError firebaseError) {
-
-                        }
-                    });
-                    ref2.child("Drinks").child(dataSnapshotDrink.child("name").getValue().toString()).child("priceLast").addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            for (DrinkUI i : DrinkUI.uidrinks) {
-                                if (dataSnapshotDrink.child("name").getValue().toString().equals(i.getName())) {
-                                    i.priceLast = round((double) dataSnapshot.getValue());
-                                }
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(FirebaseError firebaseError) {
-
-                        }
-                    });
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                        // Failed to read value
+                        Log.w(TAG, "Failed to read value.", error.toException());
+                    }
+                });
                 //}
 
                 if (fragmentManager.findFragmentByTag("Prices") != null) {
@@ -532,7 +543,7 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 for (DrinkUI i : DrinkUI.uidrinks) {
-                    if (dataSnapshot.child("name").getValue().equals(i.name)) {
+                    if (dataSnapshot.child("name").getValue(String.class).equals(i.name)) {
                         // TODO: make this work
                         //DrinkUI.uidrinks.remove(i);
 
@@ -561,198 +572,208 @@ public class MainActivity extends AppCompatActivity implements
             }
 
             @Override
-            public void onCancelled(FirebaseError firebaseError) {
-                Log.d("FireBase", "The read failed: " + firebaseError.getMessage());
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", error.toException());
             }
         });
 
         // TODO: reduce internet use
         // Admin only
         //if (accountType == 2) {
-            ref2.child("countTotalCurrent").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    Drink.countTotalCurrent = (long) dataSnapshot.getValue();
-                    if (CountersFragment.mCountTotalCurrent != null) {
-                        CountersFragment.mCountTotalCurrent.setText(String.format(Locale.getDefault(), "%1d", Drink.countTotalCurrent));
+        myRef.child("countTotalCurrent").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Drink.countTotalCurrent = dataSnapshot.getValue(Long.class);
+                if (CountersFragment.mCountTotalCurrent != null) {
+                    CountersFragment.mCountTotalCurrent.setText(String.format(Locale.getDefault(), "%1d", Drink.countTotalCurrent));
+                }
+                updateCounters();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
+        myRef.child("countTotalDifference").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Drink.countTotalDifference = dataSnapshot.getValue(Long.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
+        myRef.child("countTotalLast").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Drink.countTotalLast = dataSnapshot.getValue(Long.class);
+                if (CountersFragment.mCountTotalLast != null) {
+                    CountersFragment.mCountTotalLast.setText(String.format(Locale.getDefault(), "(%1d)", Drink.countTotalLast));
+                }
+                updateCounters();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
+        myRef.child("countTotalSecondLast").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Drink.countTotalSecondLast = dataSnapshot.getValue(Long.class);
+            }
+
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
+        myRef.child("partyCountTotal").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Drink.partyCountTotal = dataSnapshot.getValue(Long.class);
+                if (CountersFragment.mPartyCountTotal != null) {
+                    CountersFragment.mPartyCountTotal.setText(String.format(Locale.getDefault(), "%1d", Drink.partyCountTotal));
+                }
+                updateCounters();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
+        myRef.child("partyRevenueTotal").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Drink.partyRevenueTotal = round(dataSnapshot.getValue(Double.class));
+                if (CountersFragment.mPartyRevenueTotal != null) {
+                    CountersFragment.mPartyRevenueTotal.setText(String.format(Locale.getDefault(), "€%.2f", Drink.partyRevenueTotal));
+                }
+                updateCounters();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
+        myRef.child("partyStarted").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                AdminOnlyFragment.partyStarted = dataSnapshot.getValue(Boolean.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
+        myRef.child("timeCrashLast").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                DrinkUI.timeCrashLast = dataSnapshot.getValue(Long.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
+        myRef.child("maxOrder").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                OrderFragment.maxOrder = dataSnapshot.getValue(Long.class);
+                if (PricesFragment.maxOrderName.equals("")) {
+                    if (PricesFragment.mWolf != null) {
+                        PricesFragment.mWolf.setText(String.format(Locale.getDefault(), getString(R.string.wolf), getString(R.string.no_wolf), OrderFragment.maxOrder));
                     }
-                    updateCounters();
-                }
-
-                @Override
-                public void onCancelled(FirebaseError firebaseError) {
-
-                }
-            });
-            ref2.child("countTotalDifference").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    Drink.countTotalDifference = (long) dataSnapshot.getValue();
-                }
-
-                @Override
-                public void onCancelled(FirebaseError firebaseError) {
-
-                }
-            });
-            ref2.child("countTotalLast").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    Drink.countTotalLast = (long) dataSnapshot.getValue();
-                    if (CountersFragment.mCountTotalLast != null) {
-                        CountersFragment.mCountTotalLast.setText(String.format(Locale.getDefault(), "(%1d)", Drink.countTotalLast));
+                } else {
+                    if (PricesFragment.mWolf != null) {
+                        PricesFragment.mWolf.setText(String.format(Locale.getDefault(), getString(R.string.wolf), PricesFragment.maxOrderName, OrderFragment.maxOrder));
                     }
-                    updateCounters();
                 }
 
-                @Override
-                public void onCancelled(FirebaseError firebaseError) {
+                updatePrices();
+            }
 
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
+        myRef.child("maxOrderName").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue(String.class) == null) {
+                    PricesFragment.maxOrderName = "";
+                } else {
+                    PricesFragment.maxOrderName = dataSnapshot.getValue(String.class);
                 }
-            });
-            ref2.child("countTotalSecondLast").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    Drink.countTotalSecondLast = (long) dataSnapshot.getValue();
-                }
-
-                @Override
-                public void onCancelled(FirebaseError firebaseError) {
-
-                }
-            });
-            ref2.child("partyCountTotal").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    Drink.partyCountTotal = (long) dataSnapshot.getValue();
-                    if (CountersFragment.mPartyCountTotal != null) {
-                        CountersFragment.mPartyCountTotal.setText(String.format(Locale.getDefault(), "%1d", Drink.partyCountTotal));
+                if (PricesFragment.maxOrderName.equals("")) {
+                    if (PricesFragment.mWolf != null) {
+                        PricesFragment.mWolf.setText(String.format(Locale.getDefault(), getString(R.string.wolf), getString(R.string.no_wolf), OrderFragment.maxOrder));
                     }
-                    updateCounters();
-                }
-
-                @Override
-                public void onCancelled(FirebaseError firebaseError) {
-
-                }
-            });
-            ref2.child("partyRevenueTotal").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    Drink.partyRevenueTotal = round((double) dataSnapshot.getValue());
-                    if (CountersFragment.mPartyRevenueTotal != null) {
-                        CountersFragment.mPartyRevenueTotal.setText(String.format(Locale.getDefault(), "€%.2f", Drink.partyRevenueTotal));
+                } else {
+                    if (PricesFragment.mWolf != null) {
+                        PricesFragment.mWolf.setText(String.format(Locale.getDefault(), getString(R.string.wolf), PricesFragment.maxOrderName, OrderFragment.maxOrder));
                     }
-                    updateCounters();
                 }
 
-                @Override
-                public void onCancelled(FirebaseError firebaseError) {
+                updatePrices();
+            }
 
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
+        myRef.child("allTimeWolf").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                OrderFragment.allTimeWolf = dataSnapshot.getValue(Long.class);
+                updatePrices();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
+        myRef.child("allTimeWolfName").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue(String.class) == null) {
+                    PricesFragment.allTimeWolfName = "";
+                } else {
+                    PricesFragment.allTimeWolfName = dataSnapshot.getValue(String.class);
                 }
-            });
-            ref2.child("partyStarted").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    AdminOnlyFragment.partyStarted = (boolean) dataSnapshot.getValue();
-                }
+                updatePrices();
+            }
 
-                @Override
-                public void onCancelled(FirebaseError firebaseError) {
-
-                }
-            });
-            ref2.child("timeCrashLast").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    DrinkUI.timeCrashLast = (long) dataSnapshot.getValue();
-                }
-
-                @Override
-                public void onCancelled(FirebaseError firebaseError) {
-
-                }
-            });
-            ref2.child("maxOrder").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    OrderFragment.maxOrder = (long) dataSnapshot.getValue();
-                    if (PricesFragment.maxOrderName.equals("")) {
-                        if (PricesFragment.mWolf != null) {
-                            PricesFragment.mWolf.setText(String.format(Locale.getDefault(), getString(R.string.wolf), getString(R.string.no_wolf), OrderFragment.maxOrder));
-                        }
-                    }
-                    else {
-                        if (PricesFragment.mWolf != null) {
-                            PricesFragment.mWolf.setText(String.format(Locale.getDefault(), getString(R.string.wolf), PricesFragment.maxOrderName, OrderFragment.maxOrder));
-                        }
-                    }
-
-                    updatePrices();
-                }
-
-                @Override
-                public void onCancelled(FirebaseError firebaseError) {
-
-                }
-            });
-            ref2.child("maxOrderName").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.getValue() == null) {
-                        PricesFragment.maxOrderName = "";
-                    }
-                    else {
-                        PricesFragment.maxOrderName = (String) dataSnapshot.getValue();
-                    }
-                    if (PricesFragment.maxOrderName.equals("")) {
-                        if (PricesFragment.mWolf != null) {
-                            PricesFragment.mWolf.setText(String.format(Locale.getDefault(), getString(R.string.wolf), getString(R.string.no_wolf), OrderFragment.maxOrder));
-                        }
-                    }
-                    else {
-                        if (PricesFragment.mWolf != null) {
-                            PricesFragment.mWolf.setText(String.format(Locale.getDefault(), getString(R.string.wolf), PricesFragment.maxOrderName, OrderFragment.maxOrder));
-                        }
-                    }
-
-                    updatePrices();
-                }
-
-                @Override
-                public void onCancelled(FirebaseError firebaseError) {
-
-                }
-            });
-            ref2.child("allTimeWolf").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    OrderFragment.allTimeWolf = (long) dataSnapshot.getValue();
-                    updatePrices();
-                }
-
-                @Override
-                public void onCancelled(FirebaseError firebaseError) {
-
-                }
-            });
-            ref2.child("allTimeWolfName").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.getValue() == null) {
-                        PricesFragment.allTimeWolfName = "";
-                    }
-                    else {
-                        PricesFragment.allTimeWolfName = (String) dataSnapshot.getValue();
-                    }
-                    updatePrices();
-                }
-
-                @Override
-                public void onCancelled(FirebaseError firebaseError) {
-
-                }
-            });
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
         //}
     }
 
@@ -789,22 +810,6 @@ public class MainActivity extends AppCompatActivity implements
         setTitle(R.string.nav_prices);
     }
 
-    /*
-    @Override
-    public void onPricesNextPressed() {
-        fragmentManager.beginTransaction().replace(R.id.container, new GraphFragment()).commit();
-        setTitle(R.string.nav_graph);
-    }
-    */
-
-    /*
-    @Override
-    public void onGraphBackPressed() {
-        fragmentManager.beginTransaction().replace(R.id.container, new PricesFragment(), "Prices").commit();
-        setTitle(R.string.nav_prices);
-    }
-    */
-
     @Override
     public void onLogInBackPressed() {
         fragmentManager.beginTransaction().replace(R.id.container, new PricesFragment(), "Prices").commit();
@@ -821,12 +826,6 @@ public class MainActivity extends AppCompatActivity implements
     public void onAdminOnlyBackPressed() {
         fragmentManager.beginTransaction().replace(R.id.container, new CountersFragment()).commit();
         setTitle(getString(R.string.nav_counters));
-    }
-
-    @Override
-    public void onAdminOnlyNextPressed() {
-        fragmentManager.beginTransaction().replace(R.id.container, new PricesFragment(), "Prices").commit();
-        setTitle(getString(R.string.nav_prices));
     }
 
     @Override

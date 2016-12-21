@@ -14,15 +14,15 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -63,8 +63,6 @@ public class LogInFragment extends Fragment {
         if (mAuthListener != null) {
             mAuth.removeAuthStateListener(mAuthListener);
         }
-
-        mListener.hideProgressDialog();
     }
 
     @Override
@@ -78,7 +76,7 @@ public class LogInFragment extends Fragment {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     // User is signed in
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid() + ": "+ user.getEmail());
+                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
@@ -171,23 +169,23 @@ public class LogInFragment extends Fragment {
                 // signed in user can be handled in the listener.
                 if (!task.isSuccessful()) {
                     Toast.makeText(getContext(), R.string.auth_failed_error, Toast.LENGTH_LONG).show();
-                }
-                else {
+                } else {
                     final FirebaseUser user = mAuth.getCurrentUser();
                     if (user != null) {
-                        MainActivity.ref2.child("Users").child(user.getUid()).setValue(user);
-                        MainActivity.ref2.child("Users").child(user.getUid()).child("accountType").setValue(0L);
-                        MainActivity.ref2.child("Users").child(user.getUid()).child("accountType").addValueEventListener(new ValueEventListener() {
+                        MainActivity.myRef.child("Users").child(user.getUid()).setValue(user);
+                        MainActivity.myRef.child("Users").child(user.getUid()).child("accountType").setValue(0L);
+                        MainActivity.myRef.child("Users").child(user.getUid()).child("accountType").addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot snapshot) {
-                                MainActivity.accountType = (Long) snapshot.getValue();
+                                MainActivity.accountType = snapshot.getValue(Long.class);
                                 Log.d("FireBase", "Data changed: set accountType to " + MainActivity.accountType);
                                 updateUI(user);
                             }
 
                             @Override
-                            public void onCancelled(FirebaseError firebaseError) {
-                                Log.d("Firebas", "The read failed: " + firebaseError.getMessage());
+                            public void onCancelled(DatabaseError error) {
+                                // Failed to read value
+                                Log.w(TAG, "Failed to read value.", error.toException());
                             }
                         });
                         Log.d("Log in", "Wrote " + user.getEmail() + ": " + user.getUid() + " to database");
@@ -219,20 +217,21 @@ public class LogInFragment extends Fragment {
                     Log.w(TAG, "signInWithEmail:failed", task.getException());
                     Toast.makeText(getContext(), R.string.auth_failed_error, Toast.LENGTH_LONG).show();
                     mStatus.setText(R.string.auth_failed_error);
-                }
-                else {
+                } else {
                     final FirebaseUser user = mAuth.getCurrentUser();
                     if (user != null) {
-                        MainActivity.ref2.child("Users").child(user.getUid()).child("accountType").addValueEventListener(new ValueEventListener() {
+                        MainActivity.myRef.child("Users").child(user.getUid()).child("accountType").addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot snapshot) {
-                                MainActivity.accountType = (Long) snapshot.getValue();
+                                MainActivity.accountType = snapshot.getValue(Long.class);
                                 Log.d("FireBase", "Data changed: set accountType to " + MainActivity.accountType);
                                 updateUI(user);
                             }
+
                             @Override
-                            public void onCancelled(FirebaseError firebaseError) {
-                                Log.d("FireBase", "The read failed: " + firebaseError.getMessage());
+                            public void onCancelled(DatabaseError error) {
+                                // Failed to read value
+                                Log.w(TAG, "Failed to read value.", error.toException());
                             }
                         });
                     }
@@ -274,8 +273,7 @@ public class LogInFragment extends Fragment {
             mButtons.setVisibility(View.GONE);
             mFields.setVisibility(View.GONE);
             mSignOut.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             mStatus.setText(R.string.logged_out);
             mDetail.setText(null);
 
@@ -287,7 +285,9 @@ public class LogInFragment extends Fragment {
 
     public interface OnLogInFragmentInteractionListener {
         void onLogInBackPressed();
+
         void showProgressDialog();
+
         void hideProgressDialog();
     }
 }

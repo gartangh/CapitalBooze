@@ -14,7 +14,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Timer;
@@ -54,10 +53,10 @@ public class AdminOnlyFragment extends Fragment {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (mTypeWolfHere.getText().toString().equals("")) {
-                    MainActivity.ref2.child("maxOrderName").setValue("");
+                    MainActivity.myRef.child("maxOrderName").setValue("");
                 }
                 else if (mTypeWolfHere.getText().length() > 1) {
-                    MainActivity.ref2.child("maxOrderName").setValue(mTypeWolfHere.getText().toString().toUpperCase(Locale.getDefault()));
+                    MainActivity.myRef.child("maxOrderName").setValue(mTypeWolfHere.getText().toString().toUpperCase(Locale.getDefault()));
                 }
                 else {
                     Toast.makeText(getContext(), getString(R.string.invalid_length), Toast.LENGTH_LONG).show();
@@ -78,10 +77,10 @@ public class AdminOnlyFragment extends Fragment {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (mTypeAllTimeWolfHere.getText().toString().equals("")) {
-                    MainActivity.ref2.child("allTimeWolfName").setValue("");
+                    MainActivity.myRef.child("allTimeWolfName").setValue("");
                 }
                 else if (mTypeAllTimeWolfHere.getText().length() > 1) {
-                    MainActivity.ref2.child("allTimeWolfName").setValue(mTypeAllTimeWolfHere.getText().toString().toUpperCase(Locale.getDefault()));
+                    MainActivity.myRef.child("allTimeWolfName").setValue(mTypeAllTimeWolfHere.getText().toString().toUpperCase(Locale.getDefault()));
                 }
                 else {
                     Toast.makeText(getContext(), getString(R.string.invalid_length), Toast.LENGTH_LONG).show();
@@ -99,43 +98,43 @@ public class AdminOnlyFragment extends Fragment {
                     v.vibrate(PATTERN, -1);
 
                     Drink.countTotalCurrent = 0;
-                    MainActivity.ref2.child("countTotalCurrent").setValue(Drink.countTotalCurrent);
+                    MainActivity.myRef.child("countTotalCurrent").setValue(Drink.countTotalCurrent);
                     Drink.countTotalLast = 0;
-                    MainActivity.ref2.child("countTotalLast").setValue(Drink.countTotalLast);
+                    MainActivity.myRef.child("countTotalLast").setValue(Drink.countTotalLast);
                     Drink.countTotalSecondLast = 0;
-                    MainActivity.ref2.child("countTotalSecondLast").setValue(Drink.countTotalSecondLast);
+                    MainActivity.myRef.child("countTotalSecondLast").setValue(Drink.countTotalSecondLast);
                     Drink.countTotalDifference = 0;
-                    MainActivity.ref2.child("countTotalDifference").setValue(Drink.countTotalDifference);
+                    MainActivity.myRef.child("countTotalDifference").setValue(Drink.countTotalDifference);
                     Drink.partyCountTotal = 0;
-                    MainActivity.ref2.child("partyCountTotal").setValue(Drink.partyCountTotal);
+                    MainActivity.myRef.child("partyCountTotal").setValue(Drink.partyCountTotal);
                     Drink.partyRevenueTotal = 0.00;
-                    MainActivity.ref2.child("partyRevenueTotal").setValue(Drink.partyRevenueTotal);
+                    MainActivity.myRef.child("partyRevenueTotal").setValue(Drink.partyRevenueTotal);
                     OrderFragment.maxOrder = 0L;
-                    MainActivity.ref2.child("maxOrder").setValue(OrderFragment.maxOrder);
+                    MainActivity.myRef.child("maxOrder").setValue(OrderFragment.maxOrder);
                     PricesFragment.maxOrderName = "";
-                    MainActivity.ref2.child("maxOrderName").setValue(getString(R.string.no_wolf));
+                    MainActivity.myRef.child("maxOrderName").setValue(getString(R.string.no_wolf));
 
                     for (DrinkUI i : DrinkUI.uidrinks) {
                         i.prices = new ArrayList<>();
 
                         i.price = i.startPrice;
-                        MainActivity.ref2.child("Drinks").child(i.name).child("price").setValue(i.startPrice);
+                        MainActivity.myRef.child("Drinks").child(i.name).child("price").setValue(i.startPrice);
                         i.countCurrent = 0L;
-                        MainActivity.ref2.child("Drinks").child(i.name).child("countCurrent").setValue(i.countCurrent);
+                        MainActivity.myRef.child("Drinks").child(i.name).child("countCurrent").setValue(i.countCurrent);
                         i.partyRevenue = 0.00;
-                        MainActivity.ref2.child("Drinks").child(i.name).child("partyRevenue").setValue(i.partyRevenue);
+                        MainActivity.myRef.child("Drinks").child(i.name).child("partyRevenue").setValue(i.partyRevenue);
                         i.countLast = 0L;
-                        MainActivity.ref2.child("Drinks").child(i.name).child("countLast").setValue(i.countLast);
+                        MainActivity.myRef.child("Drinks").child(i.name).child("countLast").setValue(i.countLast);
                         i.countDifference = 0L;
-                        MainActivity.ref2.child("Drinks").child(i.name).child("countDifference").setValue(i.countDifference);
+                        MainActivity.myRef.child("Drinks").child(i.name).child("countDifference").setValue(i.countDifference);
                         i.countSecondLast = 0L;
-                        MainActivity.ref2.child("Drinks").child(i.name).child("countSecondLast").setValue(i.countSecondLast);
+                        MainActivity.myRef.child("Drinks").child(i.name).child("countSecondLast").setValue(i.countSecondLast);
                         i.partyCount = 0L;
-                        MainActivity.ref2.child("Drinks").child(i.name).child("partyCount").setValue(i.partyCount);
+                        MainActivity.myRef.child("Drinks").child(i.name).child("partyCount").setValue(i.partyCount);
                         i.priceDifference = 0.00;
-                        MainActivity.ref2.child("Drinks").child(i.name).child("priceDifference").setValue(i.priceDifference);
+                        MainActivity.myRef.child("Drinks").child(i.name).child("priceDifference").setValue(i.priceDifference);
                         i.priceLast = 0.00;
-                        MainActivity.ref2.child("Drinks").child(i.name).child("priceLast").setValue(i.priceLast);
+                        MainActivity.myRef.child("Drinks").child(i.name).child("priceLast").setValue(i.priceLast);
                     }
 
                     final Handler handler = new Handler();
@@ -168,7 +167,7 @@ public class AdminOnlyFragment extends Fragment {
                     timer.schedule(timerTask, INTERVAL, INTERVAL);
 
                     partyStarted = true;
-                    MainActivity.ref2.child("partyStarted").setValue(partyStarted);
+                    MainActivity.myRef.child("partyStarted").setValue(partyStarted);
                 }
                 else {
                     Toast.makeText(getContext(), getString(R.string.party_already_started_error), Toast.LENGTH_LONG).show();
@@ -224,7 +223,6 @@ public class AdminOnlyFragment extends Fragment {
 
     public interface OnAdminOnlyFragmentInteractionListener {
         void onAdminOnlyBackPressed();
-        void onAdminOnlyNextPressed();
     }
 
     public static void setArgument(Context context) {

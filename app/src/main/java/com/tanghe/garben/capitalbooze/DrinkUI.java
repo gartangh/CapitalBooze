@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -83,7 +84,7 @@ class DrinkUI extends Drink {
                 if (orderCount > 0) {
                     mDrinkCountOrders.setText(String.format(Locale.getDefault(), "%1d", --orderCount));
                     OrderFragment.totalPrice -= price;
-                    OrderFragment.totalSquares -= (int) (10*price);
+                    OrderFragment.totalSquares -= (int) (10 * price);
                     --OrderFragment.totalCount;
                     OrderFragment.setTotals();
                 }
@@ -107,7 +108,7 @@ class DrinkUI extends Drink {
             public void onClick(View view) {
                 mDrinkCountOrders.setText(String.format(Locale.getDefault(), "%1d", ++orderCount));
                 OrderFragment.totalPrice += price;
-                OrderFragment.totalSquares += (int) (10*price);
+                OrderFragment.totalSquares += (int) (10 * price);
                 ++OrderFragment.totalCount;
                 OrderFragment.setTotals();
             }
@@ -141,7 +142,7 @@ class DrinkUI extends Drink {
                 for (DrinkUI i : uidrinks) {
                     if (i.name.equals(mNameOrders.getText().toString())) {
                         DrinkUI.uidrinks.remove(i);
-                        MainActivity.ref2.child("Drinks").child(i.name).removeValue();
+                        MainActivity.myRef.child("Drinks").child(i.name).removeValue();
                         Log.d(TAG, "Drink " + i.name + " removed");
                         break;
                     }
@@ -175,7 +176,7 @@ class DrinkUI extends Drink {
                 v.vibrate(500L);
                 for (DrinkUI i : uidrinks) {
                     if (i.name.equals(mNameOrders.getText().toString())) {
-                        MainActivity.ref2.child("Drinks").child(i.name).child("price").setValue(0.00);
+                        MainActivity.myRef.child("Drinks").child(i.name).child("price").setValue(0.00);
                         Log.d(TAG, "Drink " + i.name + " SOLD OUT");
                         break;
                     }
@@ -214,8 +215,7 @@ class DrinkUI extends Drink {
         mPriceDifference.setTextColor(ContextCompat.getColor(context, R.color.grey));
         if (priceDifference >= 0) {
             mPriceDifference.setText(String.format(Locale.getDefault(), "+%.2f", priceDifference));
-        }
-        else {
+        } else {
             mPriceDifference.setText(String.format(Locale.getDefault(), "%.2f", priceDifference));
         }
         mPriceDifference.setTextSize(24);
@@ -233,29 +233,29 @@ class DrinkUI extends Drink {
         if (!crash) {
             for (DrinkUI i : uidrinks) {
                 i.countSecondLast = i.countLast;
-                MainActivity.ref2.child("Drinks").child(i.name).child("countSecondLast").setValue(i.countSecondLast);
+                MainActivity.myRef.child("Drinks").child(i.name).child("countSecondLast").setValue(i.countSecondLast);
 
                 i.countLast = i.countCurrent;
-                MainActivity.ref2.child("Drinks").child(i.name).child("countLast").setValue(i.countLast);
+                MainActivity.myRef.child("Drinks").child(i.name).child("countLast").setValue(i.countLast);
 
                 i.countCurrent = 0;
-                MainActivity.ref2.child("Drinks").child(i.name).child("countCurrent").setValue(i.countCurrent);
+                MainActivity.myRef.child("Drinks").child(i.name).child("countCurrent").setValue(i.countCurrent);
 
                 i.countDifference = i.countLast - i.countSecondLast;
-                MainActivity.ref2.child("Drinks").child(i.name).child("countDifference").setValue(i.countDifference);
+                MainActivity.myRef.child("Drinks").child(i.name).child("countDifference").setValue(i.countDifference);
             }
 
             countTotalSecondLast = countTotalLast;
-            MainActivity.ref2.child("countTotalSecondLast").setValue(countTotalSecondLast);
+            MainActivity.myRef.child("countTotalSecondLast").setValue(countTotalSecondLast);
 
             countTotalLast = countTotalCurrent;
-            MainActivity.ref2.child("countTotalLast").setValue(countTotalLast);
+            MainActivity.myRef.child("countTotalLast").setValue(countTotalLast);
 
             countTotalCurrent = 0;
-            MainActivity.ref2.child("countTotalCurrent").setValue(countTotalCurrent);
+            MainActivity.myRef.child("countTotalCurrent").setValue(countTotalCurrent);
 
             countTotalDifference = countTotalLast - countTotalSecondLast;
-            MainActivity.ref2.child("countTotalDifference").setValue(countTotalDifference);
+            MainActivity.myRef.child("countTotalDifference").setValue(countTotalDifference);
         }
 
         calcPrises();
@@ -265,29 +265,26 @@ class DrinkUI extends Drink {
         if (!crash) {
             for (DrinkUI i : uidrinks) {
                 try {
-                    double rate = i.countLast*1.0/countTotalLast - i.countSecondLast*1.0/countTotalSecondLast;
+                    double rate = i.countLast * 1.0 / countTotalLast - i.countSecondLast * 1.0 / countTotalSecondLast;
                     if (i.countLast == 0) {
                         // TODO: fix this bug in begin of party
                         i.testPrice(i.price - 0.20);
-                    }
-                    else {
+                    } else {
                         if (countTotalDifference >= 0) {
                             if (rate >= 0) {
-                                i.testPrice(BI *i.price);
+                                i.testPrice(BI * i.price);
                             } else {
-                                i.testPrice(SD *i.price);
+                                i.testPrice(SD * i.price);
                             }
-                        }
-                        else {
+                        } else {
                             if (rate > 0) {
-                                i.testPrice(SI *i.price);
+                                i.testPrice(SI * i.price);
                             } else {
-                                i.testPrice(BD *i.price);
+                                i.testPrice(BD * i.price);
                             }
                         }
                     }
-                }
-                catch (IllegalArgumentException e) {
+                } catch (IllegalArgumentException e) {
                     if (countTotalLast == 0) {
                         i.testPrice(i.price - 0.10);
                     } else {
@@ -295,8 +292,7 @@ class DrinkUI extends Drink {
                     }
                 }
             }
-        }
-        else {
+        } else {
             for (DrinkUI i : uidrinks) {
                 i.testPrice(i.startPrice + 0.30);
             }
@@ -307,7 +303,7 @@ class DrinkUI extends Drink {
     private void testPrice(double testPrice) {
         // price
         priceLast = price;
-        MainActivity.ref2.child("Drinks").child(name).child("priceLast").setValue(priceLast);
+        MainActivity.myRef.child("Drinks").child(name).child("priceLast").setValue(priceLast);
 
         if (price != 0.00) {
             if (testPrice > max) {
@@ -317,11 +313,11 @@ class DrinkUI extends Drink {
             } else {
                 price = MainActivity.round(testPrice);
             }
-            MainActivity.ref2.child("Drinks").child(name).child("price").setValue(price);
+            MainActivity.myRef.child("Drinks").child(name).child("price").setValue(price);
 
             // priceDifference
             priceDifference = price - priceLast;
-            MainActivity.ref2.child("Drinks").child(name).child("priceDifference").setValue(priceDifference);
+            MainActivity.myRef.child("Drinks").child(name).child("priceDifference").setValue(priceDifference);
         }
     }
 
@@ -329,24 +325,22 @@ class DrinkUI extends Drink {
         final Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         crash = true;
 
-        if (System.currentTimeMillis() - timeCrashLast >= 60*60*1000L) {
+        if (System.currentTimeMillis() - timeCrashLast >= 60 * 60 * 1000L) {
             for (DrinkUI i : uidrinks) {
                 if (i.name.equals("Stella") || i.name.equals("Water") || i.name.equals("Cola")) {
                     i.crashPrice(1.00);
-                }
-                else {
+                } else {
                     i.crashPrice(2.00);
                 }
             }
-            MainActivity.ref2.child("timeCrashLast").setValue(System.currentTimeMillis());
+            MainActivity.myRef.child("timeCrashLast").setValue(System.currentTimeMillis());
 
             v.vibrate(500L);
 
             Toast.makeText(context, context.getString(R.string.crash_executed), Toast.LENGTH_LONG).show();
             Log.d(TAG, context.getString(R.string.crash_executed));
-        }
-        else {
-            int min = (int) ((60*60*1000L - (System.currentTimeMillis() - timeCrashLast))/(60*1000L));
+        } else {
+            int min = (int) ((60 * 60 * 1000L - (System.currentTimeMillis() - timeCrashLast)) / (60 * 1000L));
             Toast.makeText(context, String.format(Locale.getDefault(), context.getString(R.string.crash_not_executed_error), min), Toast.LENGTH_LONG).show();
             Log.d(TAG, String.format(Locale.getDefault(), context.getString(R.string.crash_not_executed_error), min));
         }
@@ -355,15 +349,15 @@ class DrinkUI extends Drink {
     private void crashPrice(double crashPrice) {
         // price
         priceLast = price;
-        MainActivity.ref2.child("Drinks").child(name).child("priceLast").setValue(priceLast);
+        MainActivity.myRef.child("Drinks").child(name).child("priceLast").setValue(priceLast);
 
         if (price != 0.00) {
             price = MainActivity.round(crashPrice);
-            MainActivity.ref2.child("Drinks").child(name).child("price").setValue(price);
+            MainActivity.myRef.child("Drinks").child(name).child("price").setValue(price);
 
             // priceDifference
             priceDifference = price - priceLast;
-            MainActivity.ref2.child("Drinks").child(name).child("priceDifference").setValue(priceDifference);
+            MainActivity.myRef.child("Drinks").child(name).child("priceDifference").setValue(priceDifference);
         }
     }
 

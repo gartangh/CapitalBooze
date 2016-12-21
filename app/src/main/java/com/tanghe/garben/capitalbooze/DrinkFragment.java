@@ -52,7 +52,7 @@ public class DrinkFragment extends Fragment {
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 if (mName.getText().toString().length() > 1) {
                     String s = mName.getText().toString();
-                    s = s.substring(0,1).toUpperCase() + s.substring(1).toLowerCase();
+                    s = s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();
                     boolean geldig = true;
                     for (DrinkUI uidrink : DrinkUI.uidrinks) {
                         if (uidrink.getName().equals(s)) {
@@ -63,13 +63,11 @@ public class DrinkFragment extends Fragment {
                         name = s;
                         mName.setText(name);
                         mName.setHint(getString(R.string.name));
-                    }
-                    else {
+                    } else {
                         mName.setText("");
                         mName.setHint(getString(R.string.already_used));
                     }
-                }
-                else {
+                } else {
                     mName.setText("");
                     mName.setHint(getString(R.string.invalid_length));
                 }
@@ -91,18 +89,15 @@ public class DrinkFragment extends Fragment {
                     if (d > 60.00) {
                         mPrice.setText("");
                         mPrice.setHint(getString(R.string.invalid_max_price));
-                    }
-                    else if (d < 1.00) {
+                    } else if (d < 1.00) {
                         mPrice.setText("");
                         mPrice.setHint(getString(R.string.invalid_min_price));
-                    }
-                    else {
+                    } else {
                         price = d;
-                        mPrice.setText(String.format(Locale.getDefault(), "%.2f",d));
+                        mPrice.setText(String.format(Locale.getDefault(), "%.2f", d));
                         mPrice.setHint(getString(R.string.price));
                     }
-                }
-                catch (NumberFormatException e) {
+                } catch (NumberFormatException e) {
                     mPrice.setText("");
                     mPrice.setHint(getString(R.string.invalid_min_price));
                 }
@@ -125,18 +120,15 @@ public class DrinkFragment extends Fragment {
                     if (d < 1.00) {
                         mMin.setText("");
                         mMin.setHint(getString(R.string.invalid_min_price));
-                    }
-                    else if (d > price) {
+                    } else if (d > price) {
                         mMin.setText("");
                         mMin.setHint(getString(R.string.invalid_min));
-                    }
-                    else {
+                    } else {
                         min = d;
-                        mMin.setText(String.format(Locale.getDefault(), "%.2f",d));
+                        mMin.setText(String.format(Locale.getDefault(), "%.2f", d));
                         mMin.setHint(getString(R.string.min));
                     }
-                }
-                catch (NumberFormatException e) {
+                } catch (NumberFormatException e) {
                     mMin.setText("");
                     mMin.setHint(getString(R.string.invalid_min_price));
                 }
@@ -159,18 +151,15 @@ public class DrinkFragment extends Fragment {
                     if (d > 60.00) {
                         mMax.setText("");
                         mMax.setHint(getString(R.string.invalid_max_price));
-                    }
-                    else if (d < price) {
+                    } else if (d < price) {
                         mMax.setText("");
                         mMax.setHint(getString(R.string.invalid_max));
-                    }
-                    else {
+                    } else {
                         max = d;
-                        mMax.setText(String.format(Locale.getDefault(), "%.2f",d));
+                        mMax.setText(String.format(Locale.getDefault(), "%.2f", d));
                         mMax.setHint(getString(R.string.max));
                     }
-                }
-                catch (NumberFormatException e) {
+                } catch (NumberFormatException e) {
                     mMax.setText("");
                     mMax.setHint(getString(R.string.invalid_max_price));
                 }
@@ -183,8 +172,7 @@ public class DrinkFragment extends Fragment {
             public void onClick(View view) {
                 if (!name.equals("") && price >= 1.00 && min >= 1.00 && max >= price && min <= price && !AdminOnlyFragment.partyStarted) {
                     new DrinkUI(name, price, min, max);
-                }
-                else {
+                } else {
                     Toast.makeText(getContext(), getString(R.string.could_not_add_drink_error), Toast.LENGTH_LONG).show();
                     Log.d(TAG, getString(R.string.could_not_add_drink_error));
                 }
