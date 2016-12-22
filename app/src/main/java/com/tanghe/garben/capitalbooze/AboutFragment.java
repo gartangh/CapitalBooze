@@ -42,8 +42,7 @@ public class AboutFragment extends Fragment {
         super.onAttach(context);
         if (context instanceof OnAboutFragmentInteractionListener) {
             mListener = (OnAboutFragmentInteractionListener) context;
-        }
-        else {
+        } else {
             throw new RuntimeException(context.toString() + " must implement OnAboutFragmentInteractionListener");
         }
     }

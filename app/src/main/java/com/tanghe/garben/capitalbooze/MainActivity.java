@@ -33,12 +33,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import static com.tanghe.garben.capitalbooze.R.string.price;
-
 public class MainActivity extends AppCompatActivity implements
         AboutFragment.OnAboutFragmentInteractionListener,
-        //PricesFragment.OnPricesFragmentInteractionListener,
-        //GraphFragment.OnGraphFragmentInteractionListener,
         ExplanationFragment.OnExplanationFragmentInteractionListener,
         LogInFragment.OnLogInFragmentInteractionListener,
         DrinkFragment.OnDrinkFragmentInteractionListener,
@@ -77,7 +73,6 @@ public class MainActivity extends AppCompatActivity implements
         });
 
         DrinkUI.setArgument(MainActivity.this);
-        AdminOnlyFragment.setArgument(MainActivity.this);
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
@@ -104,13 +99,14 @@ public class MainActivity extends AppCompatActivity implements
 
             setValueEventListeners();
         } else {
-            Toast.makeText(getApplicationContext(), getString(R.string.not_connected_error), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.not_connected_error), Toast.LENGTH_LONG).show();
             Log.d(TAG, getString(R.string.not_connected_error));
         }
 
         // Set a Toolbar to replace the ActionBar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        //noinspection ConstantConditions
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
@@ -141,18 +137,13 @@ public class MainActivity extends AppCompatActivity implements
 
     private void selectDrawerItem(MenuItem menuItem) {
         // Create a new fragment and specify the fragment to show based on nav item clicked
-        Fragment fragment = null;
+        Fragment fragment;
         Class fragmentClass;
 
         switch (menuItem.getItemId()) {
             case R.id.nav_prices_fragment:
                 fragmentClass = PricesFragment.class;
                 break;
-            /*
-            case R.id.nav_graph_fragment:
-                fragmentClass = GraphFragment.class;
-                break;
-            */
             case R.id.nav_explanation_fragment:
                 fragmentClass = ExplanationFragment.class;
                 break;
@@ -185,12 +176,24 @@ public class MainActivity extends AppCompatActivity implements
             if (accountType == 1 && (fragmentClass == CountersFragment.class || fragmentClass == AdminOnlyFragment.class || fragmentClass == DrinkFragment.class)) {
                 fragmentClass = AboutFragment.class;
             }
+
+            if (PricesFragment.verticalLayoutPrices != null) {
+                PricesFragment.verticalLayoutPrices.removeAllViews();
+            }
+            if (OrderFragment.verticalLayoutOrders != null) {
+                OrderFragment.verticalLayoutOrders.removeAllViews();
+            }
+            if (CountersFragment.verticalLayoutCounters != null) {
+                CountersFragment.verticalLayoutCounters.removeAllViews();
+            }
+            // Create new fragment
             fragment = (Fragment) fragmentClass.newInstance();
         } catch (Exception e) {
             e.printStackTrace();
+            fragment = null;
         }
 
-        // Insert the fragment by replacing any existing fragment
+        // Replace the old fragment by the new one.
         fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
 
         // Highlight the selected item has been done by NavigationView
@@ -291,7 +294,7 @@ public class MainActivity extends AppCompatActivity implements
                         Log.w(TAG, "Failed to read value.", error.toException());
                     }
                 });
-                myRef.child("Drinks").child(dataSnapshotDrink.child("name").getValue(String.class).toString()).child("price").addValueEventListener(new ValueEventListener() {
+                myRef.child("Drinks").child(dataSnapshotDrink.child("name").getValue(String.class)).child("price").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for (DrinkUI i : DrinkUI.uidrinks) {
@@ -414,7 +417,7 @@ public class MainActivity extends AppCompatActivity implements
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for (DrinkUI i : DrinkUI.uidrinks) {
                             if (dataSnapshotDrink.child("name").getValue(String.class).equals(i.getName())) {
-                                i.countLast = (long) dataSnapshot.getValue(Long.class);
+                                i.countLast = dataSnapshot.getValue(Long.class);
                                 i.mCountLast.setText(String.format(Locale.getDefault(), "(%1d)", i.countLast));
                             }
                             updateCounters();
@@ -544,8 +547,16 @@ public class MainActivity extends AppCompatActivity implements
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 for (DrinkUI i : DrinkUI.uidrinks) {
                     if (dataSnapshot.child("name").getValue(String.class).equals(i.name)) {
-                        // TODO: make this work
-                        //DrinkUI.uidrinks.remove(i);
+                        if (CountersFragment.verticalLayoutCounters != null) {
+                            CountersFragment.verticalLayoutCounters.removeView(i.horizontalLayoutCounters);
+                        }
+                        if (OrderFragment.verticalLayoutOrders != null) {
+                            OrderFragment.verticalLayoutOrders.removeView(i.horizontalLayoutOrders);
+                        }
+                        if (PricesFragment.verticalLayoutPrices != null) {
+                            PricesFragment.verticalLayoutPrices.removeView(i.horizontalLayoutPrices);
+                        }
+                        DrinkUI.uidrinks.remove(i);
 
                         // Adjust time in mPricesUpdated
                         PricesFragment.updated = new Date();
@@ -783,7 +794,7 @@ public class MainActivity extends AppCompatActivity implements
         PricesFragment.seen = false;
         if (PricesFragment.mUpdated != null) {
             PricesFragment.mUpdated.setText(getString(R.string.updated, MainActivity.sdf.format(PricesFragment.updated)));
-            PricesFragment.mUpdated.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
+            PricesFragment.mUpdated.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
         }
     }
 
@@ -793,7 +804,7 @@ public class MainActivity extends AppCompatActivity implements
         CountersFragment.seen = false;
         if (CountersFragment.mUpdated != null) {
             CountersFragment.mUpdated.setText(getString(R.string.updated, MainActivity.sdf.format(CountersFragment.updated)));
-            CountersFragment.mUpdated.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
+            CountersFragment.mUpdated.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
         }
     }
 
@@ -801,13 +812,13 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onAboutNextPressed() {
         fragmentManager.beginTransaction().replace(R.id.container, new ExplanationFragment()).commit();
-        setTitle(R.string.nav_explanation);
+        setTitle(getString(R.string.nav_explanation));
     }
 
     @Override
     public void onExplanationNextPressed() {
         fragmentManager.beginTransaction().replace(R.id.container, new PricesFragment(), "Prices").commit();
-        setTitle(R.string.nav_prices);
+        setTitle(getString(R.string.nav_prices));
     }
 
     @Override
@@ -818,6 +829,9 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onCountersNextPressed() {
+        if (CountersFragment.verticalLayoutCounters != null) {
+            CountersFragment.verticalLayoutCounters.removeAllViews();
+        }
         fragmentManager.beginTransaction().replace(R.id.container, new AdminOnlyFragment()).commit();
         setTitle(getString(R.string.nav_admin_only));
     }
@@ -831,6 +845,6 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onDrinkBackPressed() {
         fragmentManager.beginTransaction().replace(R.id.container, new CountersFragment()).commit();
-        setTitle(R.string.nav_counters);
+        setTitle(getString(R.string.nav_counters));
     }
 }

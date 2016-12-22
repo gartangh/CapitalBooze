@@ -23,7 +23,7 @@ public class CountersFragment extends Fragment {
     static boolean seen = false;
     static Date updated;
 
-    private static LinearLayout verticalLayoutCounters;
+    static LinearLayout verticalLayoutCounters;
     static TextView mCountTotalCurrent;
     static TextView mCountTotalLast;
     static TextView mPartyCountTotal;
@@ -109,7 +109,6 @@ public class CountersFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
-        verticalLayoutCounters.removeAllViews();
         super.onDestroyView();
     }
 

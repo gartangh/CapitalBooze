@@ -1,7 +1,5 @@
 package com.tanghe.garben.capitalbooze;
 
-//import android.content.Context;
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -9,7 +7,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-//import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -18,7 +15,6 @@ import java.util.Locale;
 
 public class PricesFragment extends Fragment {
 
-    //private OnPricesFragmentInteractionListener mListener;
     private final static String TAG = "Prices";
 
     static boolean seen = false;
@@ -27,7 +23,7 @@ public class PricesFragment extends Fragment {
     static String allTimeWolfName = "";
 
     static TextView mWolf;
-    private LinearLayout verticalLayoutPrices;
+    static LinearLayout verticalLayoutPrices;
     static TextView mUpdated;
     static String wolf = "Wolf";
 
@@ -49,7 +45,7 @@ public class PricesFragment extends Fragment {
                 if (wolf.equals("Wolf")) {
                     setWolf();
                 } else {
-                    setAlltimeWolf();
+                    setAllTimeWolf();
                 }
             }
         });
@@ -82,40 +78,11 @@ public class PricesFragment extends Fragment {
             }
         });
 
-        /*
-        final Button next = (Button) view.findViewById(R.id.prices_next);
-        next.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mListener.onPricesNextPressed();
-            }
-        });
-        */
-
         return view;
     }
 
-    /*
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnPricesFragmentInteractionListener) {
-            mListener = (OnPricesFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString() + " must implement OnPricesFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-    */
-
     @Override
     public void onDestroyView() {
-        verticalLayoutPrices.removeAllViews();
         super.onDestroyView();
     }
 
@@ -128,7 +95,7 @@ public class PricesFragment extends Fragment {
         wolf = "";
     }
 
-    public void setAlltimeWolf() {
+    public void setAllTimeWolf() {
         if (allTimeWolfName.equals("")) {
             mWolf.setText(String.format(Locale.getDefault(), getString(R.string.all_time_wolf), getString(R.string.no_wolf), OrderFragment.allTimeWolf));
         } else {
@@ -136,20 +103,4 @@ public class PricesFragment extends Fragment {
         }
         wolf = "Wolf";
     }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-
-    /*
-    public interface OnPricesFragmentInteractionListener {
-        void onPricesNextPressed();
-    }*/
 }

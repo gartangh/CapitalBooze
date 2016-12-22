@@ -26,13 +26,13 @@ public class OrderFragment extends Fragment {
     protected static long maxOrder = 0L;
     protected static long allTimeWolf = 0l;
 
-    private static LinearLayout verticalLayoutOrders;
-    private static TextView mTotalPrice;
-    private static TextView mTotalPriceLast;
-    private static TextView mTotalSquares;
-    private static TextView mTotalSquaresLast;
-    private static TextView mTotalCount;
-    private static TextView mTotalCountLast;
+    static LinearLayout verticalLayoutOrders;
+    static TextView mTotalPrice;
+    static TextView mTotalPriceLast;
+    static TextView mTotalSquares;
+    static TextView mTotalSquaresLast;
+    static TextView mTotalCount;
+    static TextView mTotalCountLast;
 
     public OrderFragment() {
         // Required empty public constructor
@@ -71,7 +71,7 @@ public class OrderFragment extends Fragment {
         order.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (totalCount > 0) {
+                if (totalCount > 0 && AdminOnlyFragment.partyStarted) {
                     for (DrinkUI i : DrinkUI.uidrinks) {
                         i.countCurrent += i.orderCount;
                         MainActivity.myRef.child("Drinks").child(i.name).child("countCurrent").setValue(i.countCurrent);
@@ -126,7 +126,6 @@ public class OrderFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
-        verticalLayoutOrders.removeAllViews();
         super.onDestroyView();
     }
 

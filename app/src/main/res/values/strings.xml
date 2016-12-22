@@ -65,6 +65,8 @@
     <string name="auth_failed_error">Error: authentication failed!\nTry again.</string>
     <string name="emailpassword_status_fmt" translatable="false">E-mail: %s</string>
     <string name="emailpassword_title_text">E-mail and password</string>
+    <string name="get_accounts_granted">Permission to accounts granted.</string>
+    <string name="get_accounts_denied">Permission to accounts denied.</string>
 
     <!-- fragment_order-->
     <string name="total_price">Total price</string>
@@ -73,7 +75,7 @@
     <string name="order">Order</string>
     <string name="new_wolf">New wolf of Capital Booze!</string>
     <string name="new_all_time_wolf">New all time wolf of Capital Booze!</string>
-    <string name="nothing_to_order">Nothing to order.</string>
+    <string name="nothing_to_order">Nothing to order\nor the party has not started yet.</string>
 
     <!-- fragment_drink-->
     <string name="name">Name</string>
@@ -99,8 +101,8 @@
     <string name="crash" translatable="false">Crash</string>
     <string name="crash_executed">Crash executed!</string>
     <string name="crash_not_executed_error">Error: crash not executed!\nWait %d more minutes.</string>
-    <string name="party_already_started_error">Error: party already started!</string>
-    <string name="party_not_started_error">Error: party not started yet!</string>
+    <string name="party_already_started_error">Error: the party already started!</string>
+    <string name="party_not_started_error">Error: the party not started yet!</string>
     <string name="type_wolf_here">New wolf</string>
     <string name="type_allTimeWolf_here">New all time wolf</string>
 

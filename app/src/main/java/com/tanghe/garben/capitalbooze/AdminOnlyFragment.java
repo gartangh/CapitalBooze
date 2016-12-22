@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Timer;
@@ -22,13 +23,13 @@ import java.util.TimerTask;
 public class AdminOnlyFragment extends Fragment {
 
     private OnAdminOnlyFragmentInteractionListener mListener;
-    private static Context context;
+
     private final static String TAG = "AdminOnlyFragment";
 
     protected static boolean partyStarted = false;
     // TODO: set to 12 minutes
     // 2016: The first 2 intervals, there was a delay of 2 minutes and 40 seconds
-    private final static long INTERVAL = 1*60*1000L;
+    private final static long INTERVAL = 1 * 60 * 1000L;
     private final static long[] PATTERN = {0L, 100L, 100L, 50L};
 
     public AdminOnlyFragment() {
@@ -37,10 +38,12 @@ public class AdminOnlyFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
+        final Context context = container.getContext();
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_admin_only, container, false);
 
-        final Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        final Vibrator v = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
 
         final EditText mTypeWolfHere = (EditText) view.findViewById(R.id.mTypeWolfHere);
         mTypeWolfHere.setOnClickListener(new View.OnClickListener() {
@@ -54,11 +57,9 @@ public class AdminOnlyFragment extends Fragment {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (mTypeWolfHere.getText().toString().equals("")) {
                     MainActivity.myRef.child("maxOrderName").setValue("");
-                }
-                else if (mTypeWolfHere.getText().length() > 1) {
+                } else if (mTypeWolfHere.getText().length() > 1 && partyStarted) {
                     MainActivity.myRef.child("maxOrderName").setValue(mTypeWolfHere.getText().toString().toUpperCase(Locale.getDefault()));
-                }
-                else {
+                } else {
                     Toast.makeText(getContext(), getString(R.string.invalid_length), Toast.LENGTH_LONG).show();
                 }
                 mTypeWolfHere.setText("");
@@ -78,11 +79,9 @@ public class AdminOnlyFragment extends Fragment {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (mTypeAllTimeWolfHere.getText().toString().equals("")) {
                     MainActivity.myRef.child("allTimeWolfName").setValue("");
-                }
-                else if (mTypeAllTimeWolfHere.getText().length() > 1) {
+                } else if (mTypeAllTimeWolfHere.getText().length() > 1 && partyStarted) {
                     MainActivity.myRef.child("allTimeWolfName").setValue(mTypeAllTimeWolfHere.getText().toString().toUpperCase(Locale.getDefault()));
-                }
-                else {
+                } else {
                     Toast.makeText(getContext(), getString(R.string.invalid_length), Toast.LENGTH_LONG).show();
                 }
                 mTypeAllTimeWolfHere.setText("");
@@ -146,6 +145,7 @@ public class AdminOnlyFragment extends Fragment {
 
                                     DrinkUI.task();
 
+                                    // context needed, for when the fragment is not connected to the activity.
                                     Toast.makeText(context, context.getString(R.string.task_executed), Toast.LENGTH_LONG).show();
                                     Log.d(TAG, context.getString(R.string.task_executed));
                                 }
@@ -161,15 +161,14 @@ public class AdminOnlyFragment extends Fragment {
                         }
                     };
 
-                    final int min = (int) INTERVAL/1000/60;
-                    Toast.makeText(context, String.format(Locale.getDefault(), context.getString(R.string.timertask), min), Toast.LENGTH_LONG).show();
-                    Log.d(TAG, String.format(Locale.getDefault(), context.getString(R.string.timertask), min));
+                    final int min = (int) INTERVAL / 1000 / 60;
+                    Toast.makeText(getContext(), String.format(Locale.getDefault(), getString(R.string.timertask), min), Toast.LENGTH_LONG).show();
+                    Log.d(TAG, String.format(Locale.getDefault(), getString(R.string.timertask), min));
                     timer.schedule(timerTask, INTERVAL, INTERVAL);
 
                     partyStarted = true;
                     MainActivity.myRef.child("partyStarted").setValue(partyStarted);
-                }
-                else {
+                } else {
                     Toast.makeText(getContext(), getString(R.string.party_already_started_error), Toast.LENGTH_LONG).show();
                     Log.d(TAG, getString(R.string.party_already_started_error));
                 }
@@ -182,8 +181,7 @@ public class AdminOnlyFragment extends Fragment {
             public void onClick(View view) {
                 if (partyStarted) {
                     DrinkUI.crash();
-                }
-                else {
+                } else {
                     Toast.makeText(getContext(), getString(R.string.party_not_started_error), Toast.LENGTH_LONG).show();
                 }
             }
@@ -209,8 +207,7 @@ public class AdminOnlyFragment extends Fragment {
         super.onAttach(context);
         if (context instanceof OnAdminOnlyFragmentInteractionListener) {
             mListener = (OnAdminOnlyFragmentInteractionListener) context;
-        }
-        else {
+        } else {
             throw new RuntimeException(context.toString() + " must implement OnCountersFragmentInteractionListener");
         }
     }
@@ -223,9 +220,5 @@ public class AdminOnlyFragment extends Fragment {
 
     public interface OnAdminOnlyFragmentInteractionListener {
         void onAdminOnlyBackPressed();
-    }
-
-    public static void setArgument(Context context) {
-        AdminOnlyFragment.context = context;
     }
 }

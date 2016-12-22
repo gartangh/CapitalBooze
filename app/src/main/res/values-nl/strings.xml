@@ -4,7 +4,7 @@
     <string name="add">Voeg toe</string>
     <string name="already_used">Al in gebruik</string>
     <string name="auth_failed_error">Error: authenticatie mislukt!\nProbeer opnieuw.</string>
-    <string name="could_not_add_drink_error">Error: kon drank niet toevoegen!\nEnkele eigenschappen zijn verkeerd of de party is al bezig.</string>
+    <string name="could_not_add_drink_error">Error: kon drank niet toevoegen!\nEnkele eigenschappen zijn verkeerd\nof het feest is al bezig.</string>
     <string name="crash_executed">Crash uitgevoerd</string>
     <string name="crash_not_executed_error">Error: crash niet uitgevoerd!\nWacht nog %d minuten.</string>
     <string name="create_account">Creëer account</string>
@@ -33,10 +33,10 @@
     <string name="no_data_yet">Nog geen data</string>
     <string name="no_wolf">ONBEKEND</string>
     <string name="not_connected_error">Error: niet verbonden!\nVerbind met internet en herstart de app.</string>
-    <string name="nothing_to_order">Niets om te bestllen.</string>
+    <string name="nothing_to_order">Niets om te bestellen\nof het feest is nog niet begonnen.</string>
     <string name="order">Bestel</string>
-    <string name="party_already_started_error">Error: party is al begonnen!</string>
-    <string name="party_not_started_error">Error: party is nog niet begonnen!</string>
+    <string name="party_already_started_error">Error: het feest is al begonnen!</string>
+    <string name="party_not_started_error">Error: het feest is nog niet begonnen!</string>
     <string name="price">Prijs</string>
     <string name="start">Start</string>
     <string name="task_executed">Taak uitgevoerd.</string>
@@ -54,4 +54,6 @@
     <string name="drink">Drankje</string>
     <string name="starting_price">Startprijs</string>
     <string name="all_time_wolf">All time wolf:\n%1$s\n%2$d drankjes</string>
+    <string name="get_accounts_denied">Toegang tot accounts geweigerd.</string>
+    <string name="get_accounts_granted">Toegang tot accounts toegestaan.</string>
 </resources>
