@@ -14,7 +14,7 @@
     <string name="nav_prices">Prices</string>
     <string name="nav_graph">Graph</string>
     <string name="nav_explanation">Explanation</string>
-    <string name="nav_log_in">Log in/out</string>
+    <string name="nav_log_in">Log in / out</string>
     <string name="nav_exit">Exit app</string>
 
     <string name="crew_only" translatable="false">Crew only</string>
@@ -31,7 +31,7 @@
     <string name="url" translatable="false">https://capital-booze.firebaseio.com/</string>
 
     <!-- fragment_about-->
-    <string name="about">a\nMoeder\nPeerdevisscher\ninitiative</string>
+    <string name="about" translatable="false">by\nMoeder\nPeerdevisscher</string>
     <string name="developer" translatable="false">Developer\ng-tanghe\ngarben.tanghe@gmail.com</string>
     <string name="logo_of_MP">Logo of Moeder Peerdevisscher.</string>
 

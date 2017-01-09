@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="about">een initiatief\nvan\nMoeder\nPeerdevisscher</string>
     <string name="add">Voeg toe</string>
     <string name="already_used">Al in gebruik</string>
     <string name="auth_failed_error">Error: authenticatie mislukt!\nProbeer opnieuw.</string>
@@ -24,7 +23,7 @@
     <string name="nav_drink">Voeg dranken toe</string>
     <string name="nav_exit">Sluit app</string>
     <string name="nav_explanation">Uitleg</string>
-    <string name="nav_log_in">Log in/uit</string>
+    <string name="nav_log_in">Log in / uit</string>
     <string name="nav_next">Volgende</string>
     <string name="nav_order">Doe bestellingen</string>
     <string name="nav_prices">Prijzen</string>

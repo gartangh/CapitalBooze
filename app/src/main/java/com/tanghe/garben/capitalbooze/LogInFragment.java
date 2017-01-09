@@ -310,7 +310,6 @@ public class LogInFragment extends Fragment {
             return new ArrayAdapter<>(context, android.R.layout.simple_dropdown_item_1line, addresses);
         }
         // Permission GET_ACCOUNTS granted.
-        Toast.makeText(getContext(), getString(R.string.get_accounts_granted), Toast.LENGTH_LONG).show();
         Account[] accounts = AccountManager.get(context).getAccounts();
         String[] addresses = new String[accounts.length];
         for (int i = 0; i < accounts.length; i++) {
