@@ -3,10 +3,13 @@ package com.tanghe.garben.capitalbooze;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class AboutFragment extends Fragment {
 
@@ -25,6 +28,10 @@ public class AboutFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_about, container, false);
+
+        TextView mSite = (TextView) view.findViewById(R.id.mSite);
+        mSite.setText(Html.fromHtml("<a href='http://moederpeerdevisscher.com'>moederpeerdevisscher.com</a>"));
+        mSite.setMovementMethod(LinkMovementMethod.getInstance());
 
         Button next = (Button) view.findViewById(R.id.about_next);
         next.setOnClickListener(new View.OnClickListener() {

@@ -88,7 +88,7 @@ public class PricesFragment extends Fragment {
 
     public void setWolf() {
         if (maxOrderName.equals("")) {
-            mWolf.setText(String.format(Locale.getDefault(), getString(R.string.wolf), getString(R.string.no_wolf), OrderFragment.maxOrder));
+            mWolf.setText(String.format(Locale.getDefault(), getString(R.string.wolf), "", OrderFragment.maxOrder));
         } else {
             mWolf.setText(String.format(Locale.getDefault(), getString(R.string.wolf), maxOrderName, OrderFragment.maxOrder));
         }
@@ -97,7 +97,7 @@ public class PricesFragment extends Fragment {
 
     public void setAllTimeWolf() {
         if (allTimeWolfName.equals("")) {
-            mWolf.setText(String.format(Locale.getDefault(), getString(R.string.all_time_wolf), getString(R.string.no_wolf), OrderFragment.allTimeWolf));
+            mWolf.setText(String.format(Locale.getDefault(), getString(R.string.all_time_wolf), "", OrderFragment.allTimeWolf));
         } else {
             mWolf.setText(String.format(Locale.getDefault(), getString(R.string.all_time_wolf), allTimeWolfName, OrderFragment.allTimeWolf));
         }

@@ -12,15 +12,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.util.Locale;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link DrinkFragment.OnDrinkFragmentInteractionListener} interface
- * to handle interaction events.
- */
 public class DrinkFragment extends Fragment {
 
     private OnDrinkFragmentInteractionListener mListener;
