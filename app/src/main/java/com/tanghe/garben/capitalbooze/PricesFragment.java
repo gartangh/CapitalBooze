@@ -1,8 +1,7 @@
 package com.tanghe.garben.capitalbooze;
 
+import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +11,8 @@ import android.widget.TextView;
 
 import java.util.Date;
 import java.util.Locale;
+
+import static android.support.v4.content.ContextCompat.getColor;
 
 public class PricesFragment extends Fragment {
 
@@ -61,20 +62,20 @@ public class PricesFragment extends Fragment {
 
         mUpdated = (TextView) view.findViewById(R.id.mPricesUpdated);
         if (updated == null) {
-            mUpdated.setText(getContext().getString(R.string.no_data_yet));
+            mUpdated.setText(getString(R.string.no_data_yet));
         } else {
-            mUpdated.setText(getContext().getString(R.string.updated, MainActivity.sdf.format(updated)));
+            mUpdated.setText(getString(R.string.updated, MainActivity.sdf.format(updated)));
         }
         if (seen) {
-            mUpdated.setTextColor(ContextCompat.getColor(getContext(), R.color.grey));
+            mUpdated.setTextColor(getColor(getActivity(), R.color.grey));
         } else {
-            mUpdated.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+            mUpdated.setTextColor(getColor(getActivity(), R.color.colorPrimary));
         }
         mUpdated.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 seen = true;
-                mUpdated.setTextColor(ContextCompat.getColor(getContext(), R.color.grey));
+                mUpdated.setTextColor(getColor(getActivity(), R.color.grey));
             }
         });
 

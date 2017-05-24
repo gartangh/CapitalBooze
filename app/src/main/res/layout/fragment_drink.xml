@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center_horizontal"
-    tools:context=".DrinkFragment">
+    tools:context="com.tanghe.garben.capitalbooze.DrinkFragment">
 
     <EditText
         android:layout_width="wrap_content"

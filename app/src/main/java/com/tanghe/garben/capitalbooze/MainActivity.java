@@ -1,18 +1,18 @@
 package com.tanghe.garben.capitalbooze;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
-import android.os.Bundle;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements
 
     private DrawerLayout mDrawer;
     private ActionBarDrawerToggle drawerToggle;
-    private FragmentManager fragmentManager = getSupportFragmentManager();
+    private FragmentManager fragmentManager = getFragmentManager();
     private static ProgressDialog mProgressDialog;
 
     static Long accountType = 0L;
@@ -140,68 +140,75 @@ public class MainActivity extends AppCompatActivity implements
         Fragment fragment;
         Class fragmentClass;
 
+        if (PricesFragment.verticalLayoutPrices != null) {
+            PricesFragment.verticalLayoutPrices.removeAllViews();
+        }
+        if (OrderFragment.verticalLayoutOrders != null) {
+            OrderFragment.verticalLayoutOrders.removeAllViews();
+        }
+        if (CountersFragment.verticalLayoutCounters != null) {
+            CountersFragment.verticalLayoutCounters.removeAllViews();
+        }
+
         switch (menuItem.getItemId()) {
             case R.id.nav_prices_fragment:
+                fragment = new PricesFragment();
                 fragmentClass = PricesFragment.class;
                 break;
             case R.id.nav_explanation_fragment:
+                fragment = new ExplanationFragment();
                 fragmentClass = ExplanationFragment.class;
                 break;
             case R.id.nav_log_in_fragment:
+                fragment = new LogInFragment();
                 fragmentClass = LogInFragment.class;
                 break;
             case R.id.nav_exit:
                 finish();
                 System.exit(0);
             case R.id.nav_order_fragment:
+                fragment = new OrderFragment();
                 fragmentClass = OrderFragment.class;
                 break;
             case R.id.nav_counters_fragment:
+                fragment = new CountersFragment();
                 fragmentClass = CountersFragment.class;
                 break;
             case R.id.nav_admin_only_fragment:
+                fragment = new AdminOnlyFragment();
                 fragmentClass = AdminOnlyFragment.class;
                 break;
             case R.id.nav_drink_fragment:
+                fragment = new DrinkFragment();
                 fragmentClass = DrinkFragment.class;
                 break;
             default:
+                fragment = new AboutFragment();
                 fragmentClass = AboutFragment.class;
         }
 
         try {
             if (accountType == 0 && (fragmentClass == OrderFragment.class || fragmentClass == CountersFragment.class || fragmentClass == AdminOnlyFragment.class || fragmentClass == DrinkFragment.class)) {
+                fragment = new AboutFragment();
                 fragmentClass = AboutFragment.class;
             }
-            if (accountType == 1 && (fragmentClass == CountersFragment.class || fragmentClass == AdminOnlyFragment.class || fragmentClass == DrinkFragment.class)) {
+            else if (accountType == 1 && (fragmentClass == CountersFragment.class || fragmentClass == AdminOnlyFragment.class || fragmentClass == DrinkFragment.class)) {
+                fragment = new AboutFragment();
                 fragmentClass = AboutFragment.class;
             }
 
-            if (PricesFragment.verticalLayoutPrices != null) {
-                PricesFragment.verticalLayoutPrices.removeAllViews();
-            }
-            if (OrderFragment.verticalLayoutOrders != null) {
-                OrderFragment.verticalLayoutOrders.removeAllViews();
-            }
-            if (CountersFragment.verticalLayoutCounters != null) {
-                CountersFragment.verticalLayoutCounters.removeAllViews();
-            }
-            // Create new fragment
-            fragment = (Fragment) fragmentClass.newInstance();
+            // Replace the old fragment by the new one.
+            fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
+
+            // Highlight the selected item has been done by NavigationView
+            menuItem.setChecked(true);
+            // Set action bar title
+            setTitle(menuItem.getTitle());
+            // Close the navigation drawer
+            mDrawer.closeDrawers();
         } catch (Exception e) {
             e.printStackTrace();
-            fragment = null;
         }
-
-        // Replace the old fragment by the new one.
-        fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
-
-        // Highlight the selected item has been done by NavigationView
-        menuItem.setChecked(true);
-        // Set action bar title
-        setTitle(menuItem.getTitle());
-        // Close the navigation drawer
-        mDrawer.closeDrawers();
     }
 
     // `onPostCreate` called when activity start-up is complete after `onStart()`
@@ -248,7 +255,6 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     void setValueEventListeners() {
-
         // Drinks
         myRef.child("Drinks").addChildEventListener(new ChildEventListener() {
             @Override
@@ -275,10 +281,10 @@ public class MainActivity extends AppCompatActivity implements
                                 i.priceDifference = round(dataSnapshot.getValue(Double.class));
                                 if (i.priceDifference < 0) {
                                     i.mPriceDifference.setText(String.format(Locale.getDefault(), "%.2f", i.priceDifference));
-                                    i.mPriceDifference.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.green));
+                                    i.mPriceDifference.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.green));
                                 } else if (i.priceDifference > 0) {
                                     i.mPriceDifference.setText(String.format(Locale.getDefault(), "+%.2f", i.priceDifference));
-                                    i.mPriceDifference.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.red));
+                                    i.mPriceDifference.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.red));
                                 } else {
                                     i.mPriceDifference.setText(String.format(Locale.getDefault(), "+%.2f", i.priceDifference));
                                     i.mPriceDifference.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.grey));
@@ -711,7 +717,7 @@ public class MainActivity extends AppCompatActivity implements
                 OrderFragment.maxOrder = dataSnapshot.getValue(Long.class);
                 if (PricesFragment.maxOrderName.equals("")) {
                     if (PricesFragment.mWolf != null) {
-                        PricesFragment.mWolf.setText(String.format(Locale.getDefault(), getString(R.string.wolf), getString(R.string.no_wolf), OrderFragment.maxOrder));
+                        PricesFragment.mWolf.setText(String.format(Locale.getDefault(), getString(R.string.wolf), "", OrderFragment.maxOrder));
                     }
                 } else {
                     if (PricesFragment.mWolf != null) {
@@ -738,7 +744,7 @@ public class MainActivity extends AppCompatActivity implements
                 }
                 if (PricesFragment.maxOrderName.equals("")) {
                     if (PricesFragment.mWolf != null) {
-                        PricesFragment.mWolf.setText(String.format(Locale.getDefault(), getString(R.string.wolf), getString(R.string.no_wolf), OrderFragment.maxOrder));
+                        PricesFragment.mWolf.setText(String.format(Locale.getDefault(), getString(R.string.wolf), "", OrderFragment.maxOrder));
                     }
                 } else {
                     if (PricesFragment.mWolf != null) {

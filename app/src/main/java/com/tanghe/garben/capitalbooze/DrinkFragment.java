@@ -1,8 +1,8 @@
 package com.tanghe.garben.capitalbooze;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -166,7 +166,7 @@ public class DrinkFragment extends Fragment {
                 if (!name.equals("") && price >= 1.00 && min >= 1.00 && max >= price && min <= price && !AdminOnlyFragment.partyStarted) {
                     new DrinkUI(name, price, min, max);
                 } else {
-                    Toast.makeText(getContext(), getString(R.string.could_not_add_drink_error), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), getString(R.string.could_not_add_drink_error), Toast.LENGTH_LONG).show();
                     Log.d(TAG, getString(R.string.could_not_add_drink_error));
                 }
                 name = "";
@@ -207,17 +207,7 @@ public class DrinkFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnDrinkFragmentInteractionListener {
+    interface OnDrinkFragmentInteractionListener {
         void onDrinkBackPressed();
     }
 }

@@ -1,8 +1,8 @@
 package com.tanghe.garben.capitalbooze;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -82,7 +82,7 @@ public class GraphFragment extends Fragment {
         mListener = null;
     }
 
-    public interface OnGraphFragmentInteractionListener {
+    interface OnGraphFragmentInteractionListener {
         void onGraphBackPressed();
     }
 }

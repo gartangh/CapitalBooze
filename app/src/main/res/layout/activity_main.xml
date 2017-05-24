@@ -26,7 +26,6 @@
             android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-
     </LinearLayout>
 
     <!-- The navigation drawer that comes from the left -->
@@ -39,5 +38,18 @@
         android:background="@android:color/white"
         app:menu="@menu/drawer_layout"
         app:headerLayout="@layout/nav_header" />
+
+    <!-- The navigation drawer that comes from the left -->
+    <!-- Note that `android:layout_gravity` needs to be set to 'start' -->
+    <!--
+    <ListView android:id="@+id/left_drawer"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:choiceMode="singleChoice"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="0dp"
+        android:background="@android:color/white"/>
+    -->
 
 </android.support.v4.widget.DrawerLayout>

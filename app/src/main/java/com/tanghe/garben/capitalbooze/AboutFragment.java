@@ -1,8 +1,8 @@
 package com.tanghe.garben.capitalbooze;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
@@ -60,7 +60,7 @@ public class AboutFragment extends Fragment {
         mListener = null;
     }
 
-    public interface OnAboutFragmentInteractionListener {
+    interface OnAboutFragmentInteractionListener {
         void onAboutNextPressed();
     }
 }

@@ -1,10 +1,10 @@
 package com.tanghe.garben.capitalbooze;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -23,7 +23,6 @@ import java.util.TimerTask;
 public class AdminOnlyFragment extends Fragment {
 
     private OnAdminOnlyFragmentInteractionListener mListener;
-
     private final static String TAG = "AdminOnlyFragment";
 
     protected static boolean partyStarted = false;
@@ -38,12 +37,10 @@ public class AdminOnlyFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
-        final Context context = container.getContext();
-
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_admin_only, container, false);
 
-        final Vibrator v = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
+        final Vibrator v = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
 
         final EditText mTypeWolfHere = (EditText) view.findViewById(R.id.mTypeWolfHere);
         mTypeWolfHere.setOnClickListener(new View.OnClickListener() {
@@ -60,7 +57,7 @@ public class AdminOnlyFragment extends Fragment {
                 } else if (mTypeWolfHere.getText().length() > 1 && partyStarted) {
                     MainActivity.myRef.child("maxOrderName").setValue(mTypeWolfHere.getText().toString().toUpperCase(Locale.getDefault()));
                 } else {
-                    Toast.makeText(getContext(), getString(R.string.invalid_length), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), getString(R.string.invalid_length), Toast.LENGTH_LONG).show();
                 }
                 mTypeWolfHere.setText("");
                 return false;
@@ -82,7 +79,7 @@ public class AdminOnlyFragment extends Fragment {
                 } else if (mTypeAllTimeWolfHere.getText().length() > 1 && partyStarted) {
                     MainActivity.myRef.child("allTimeWolfName").setValue(mTypeAllTimeWolfHere.getText().toString().toUpperCase(Locale.getDefault()));
                 } else {
-                    Toast.makeText(getContext(), getString(R.string.invalid_length), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), getString(R.string.invalid_length), Toast.LENGTH_LONG).show();
                 }
                 mTypeAllTimeWolfHere.setText("");
                 return false;
@@ -111,7 +108,7 @@ public class AdminOnlyFragment extends Fragment {
                     OrderFragment.maxOrder = 0L;
                     MainActivity.myRef.child("maxOrder").setValue(OrderFragment.maxOrder);
                     PricesFragment.maxOrderName = "";
-                    MainActivity.myRef.child("maxOrderName").setValue(getString(R.string.no_wolf));
+                    MainActivity.myRef.child("maxOrderName").setValue("");
 
                     for (DrinkUI i : DrinkUI.uidrinks) {
                         i.prices = new ArrayList<>();
@@ -146,8 +143,8 @@ public class AdminOnlyFragment extends Fragment {
                                     DrinkUI.task();
 
                                     // context needed, for when the fragment is not connected to the activity.
-                                    Toast.makeText(context, context.getString(R.string.task_executed), Toast.LENGTH_LONG).show();
-                                    Log.d(TAG, context.getString(R.string.task_executed));
+                                    Toast.makeText(getActivity(), getString(R.string.task_executed), Toast.LENGTH_LONG).show();
+                                    Log.d(TAG, getString(R.string.task_executed));
                                 }
                             });
                         }
@@ -162,16 +159,25 @@ public class AdminOnlyFragment extends Fragment {
                     };
 
                     final int min = (int) INTERVAL / 1000 / 60;
-                    Toast.makeText(getContext(), String.format(Locale.getDefault(), getString(R.string.timertask), min), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), String.format(Locale.getDefault(), getString(R.string.timertask), min), Toast.LENGTH_LONG).show();
                     Log.d(TAG, String.format(Locale.getDefault(), getString(R.string.timertask), min));
                     timer.schedule(timerTask, INTERVAL, INTERVAL);
 
                     partyStarted = true;
                     MainActivity.myRef.child("partyStarted").setValue(partyStarted);
                 } else {
-                    Toast.makeText(getContext(), getString(R.string.party_already_started_error), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), getString(R.string.party_already_started_error), Toast.LENGTH_LONG).show();
                     Log.d(TAG, getString(R.string.party_already_started_error));
                 }
+            }
+        });
+        mStart.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                partyStarted = false;
+                MainActivity.myRef.child("partyStarted").setValue(partyStarted);
+
+                return false;
             }
         });
 
@@ -182,7 +188,7 @@ public class AdminOnlyFragment extends Fragment {
                 if (partyStarted) {
                     DrinkUI.crash();
                 } else {
-                    Toast.makeText(getContext(), getString(R.string.party_not_started_error), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), getString(R.string.party_not_started_error), Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -218,7 +224,7 @@ public class AdminOnlyFragment extends Fragment {
         mListener = null;
     }
 
-    public interface OnAdminOnlyFragmentInteractionListener {
+    interface OnAdminOnlyFragmentInteractionListener {
         void onAdminOnlyBackPressed();
     }
 }

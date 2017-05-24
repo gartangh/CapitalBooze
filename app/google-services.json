@@ -19,7 +19,7 @@
           "client_type": 1,
           "android_info": {
             "package_name": "com.tanghe.garben.capitalbooze",
-            "certificate_hash": "E15E848D557D0C45155EE5E01E2C87DE38C5BD94"
+            "certificate_hash": "e15e848d557d0c45155ee5e01e2c87de38c5bd94"
           }
         },
         {
@@ -27,7 +27,7 @@
           "client_type": 1,
           "android_info": {
             "package_name": "com.tanghe.garben.capitalbooze",
-            "certificate_hash": "D80BBA9B5057B90F62CDF9FF262BC5821906B0C8"
+            "certificate_hash": "d80bba9b5057b90f62cdf9ff262bc5821906b0c8"
           }
         },
         {

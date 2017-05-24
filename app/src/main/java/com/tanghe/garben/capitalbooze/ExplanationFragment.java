@@ -1,8 +1,8 @@
 package com.tanghe.garben.capitalbooze;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,7 +58,7 @@ public class ExplanationFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnExplanationFragmentInteractionListener {
+    interface OnExplanationFragmentInteractionListener {
         void onExplanationNextPressed();
     }
 }

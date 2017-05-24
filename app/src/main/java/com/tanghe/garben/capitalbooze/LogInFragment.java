@@ -2,15 +2,16 @@ package com.tanghe.garben.capitalbooze;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.ArrayAdapter;
@@ -97,7 +98,7 @@ public class LogInFragment extends Fragment {
         mDetail = (TextView) view.findViewById(R.id.mDetail);
         mFields = (LinearLayout) view.findViewById(R.id.mFields);
         mEmail = (AutoCompleteTextView) view.findViewById(R.id.mEmail);
-        mEmail.setAdapter(getEmailAddressAdapter(this.getContext()));
+        mEmail.setAdapter(getEmailAddressAdapter(getActivity()));
         mPassword = (AutoCompleteTextView) view.findViewById(R.id.mPassword);
         mButtons = (LinearLayout) view.findViewById(R.id.mButtons);
         Button mSignIn = (Button) view.findViewById(R.id.mSignIn);
@@ -168,7 +169,7 @@ public class LogInFragment extends Fragment {
                 // the auth state listener will be notified and logic to handle the
                 // signed in user can be handled in the listener.
                 if (!task.isSuccessful()) {
-                    Toast.makeText(getContext(), getString(R.string.auth_failed_error), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), getString(R.string.auth_failed_error), Toast.LENGTH_LONG).show();
                 } else {
                     final FirebaseUser user = mAuth.getCurrentUser();
                     if (user != null) {
@@ -215,7 +216,7 @@ public class LogInFragment extends Fragment {
                 // signed in user can be handled in the listener.
                 if (!task.isSuccessful()) {
                     Log.w(TAG, "signInWithEmail:failed", task.getException());
-                    Toast.makeText(getContext(), getString(R.string.auth_failed_error), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), getString(R.string.auth_failed_error), Toast.LENGTH_LONG).show();
                     mStatus.setText(getString(R.string.auth_failed_error));
                 } else {
                     final FirebaseUser user = mAuth.getCurrentUser();
@@ -293,7 +294,7 @@ public class LogInFragment extends Fragment {
         }
     }
 
-    public interface OnLogInFragmentInteractionListener {
+    interface OnLogInFragmentInteractionListener {
         void onLogInBackPressed();
 
         void showProgressDialog();
@@ -302,10 +303,10 @@ public class LogInFragment extends Fragment {
     }
 
     private ArrayAdapter<String> getEmailAddressAdapter(Context context) {
-        if (ActivityCompat.checkSelfPermission(this.getActivity(), android.Manifest.permission.GET_ACCOUNTS) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.GET_ACCOUNTS) != PackageManager.PERMISSION_GRANTED) {
             // Permission GET_ACCOUNTS denied.
-            Toast.makeText(getContext(), getString(R.string.get_accounts_denied), Toast.LENGTH_LONG).show();
-            ActivityCompat.requestPermissions(this.getActivity(), new String[]{android.Manifest.permission.GET_ACCOUNTS}, MY_PERMISSIONS_REQUEST_GET_ACCOUNTS);
+            Toast.makeText(getActivity(), getString(R.string.get_accounts_denied), Toast.LENGTH_LONG).show();
+            ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.GET_ACCOUNTS}, MY_PERMISSIONS_REQUEST_GET_ACCOUNTS);
             String[] addresses = new String[0];
             return new ArrayAdapter<>(context, android.R.layout.simple_dropdown_item_1line, addresses);
         }
@@ -328,14 +329,14 @@ public class LogInFragment extends Fragment {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // Permission GET_ACCOUNTS granted.
                     if (mEmail != null) {
-                        mEmail.setAdapter(getEmailAddressAdapter(this.getContext()));
+                        mEmail.setAdapter(getEmailAddressAdapter(getActivity()));
                         Log.d(TAG, "Adapter set!");
                     }
-                    getEmailAddressAdapter(this.getContext());
+                    getEmailAddressAdapter(getActivity());
                     Log.d(TAG, "mEmail was not defined!");
                 } else {
                     // Permission GET_ACCOUNTS denied.
-                    Toast.makeText(getContext(), getString(R.string.get_accounts_denied), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), getString(R.string.get_accounts_denied), Toast.LENGTH_LONG).show();
                 }
                 break;
             }

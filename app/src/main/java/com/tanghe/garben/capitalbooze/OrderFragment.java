@@ -1,7 +1,7 @@
 package com.tanghe.garben.capitalbooze;
 
+import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +24,7 @@ public class OrderFragment extends Fragment {
     protected static int totalCount = 0;
     protected static int totalCountLast = 0;
     protected static long maxOrder = 0L;
-    protected static long allTimeWolf = 0l;
+    protected static long allTimeWolf = 0L;
 
     static LinearLayout verticalLayoutOrders;
     static TextView mTotalPrice;
@@ -103,10 +103,10 @@ public class OrderFragment extends Fragment {
                         MainActivity.myRef.child("maxOrder").setValue(totalCount);
                         if (totalCount > allTimeWolf) {
                             MainActivity.myRef.child("allTimeWolf").setValue(totalCount);
-                            Toast.makeText(getContext(), getString(R.string.new_all_time_wolf), Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(), getString(R.string.new_all_time_wolf), Toast.LENGTH_LONG).show();
                             Log.d(TAG, getString(R.string.new_all_time_wolf));
                         } else {
-                            Toast.makeText(getContext(), getString(R.string.new_wolf), Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(), getString(R.string.new_wolf), Toast.LENGTH_LONG).show();
                             Log.d(TAG, getString(R.string.new_wolf));
                         }
                     }
@@ -115,7 +115,7 @@ public class OrderFragment extends Fragment {
                     setTotals();
                     setTotalsLast();
                 } else {
-                    Toast.makeText(getContext(), getString(R.string.nothing_to_order), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), getString(R.string.nothing_to_order), Toast.LENGTH_LONG).show();
                     Log.d(TAG, getString(R.string.nothing_to_order));
                 }
             }
