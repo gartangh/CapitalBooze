@@ -4,9 +4,11 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -123,6 +125,11 @@ public class MainActivity extends AppCompatActivity implements
         // Default fragment
         fragmentManager.beginTransaction().replace(R.id.container, new AboutFragment()).commit();
         setTitle(getString(R.string.nav_about));
+
+        // ATTENTION: This was auto-generated to handle app links.
+        Intent appLinkIntent = getIntent();
+        String appLinkAction = appLinkIntent.getAction();
+        Uri appLinkData = appLinkIntent.getData();
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
@@ -190,11 +197,9 @@ public class MainActivity extends AppCompatActivity implements
         try {
             if (accountType == 0 && (fragmentClass == OrderFragment.class || fragmentClass == CountersFragment.class || fragmentClass == AdminOnlyFragment.class || fragmentClass == DrinkFragment.class)) {
                 fragment = new AboutFragment();
-                fragmentClass = AboutFragment.class;
             }
             else if (accountType == 1 && (fragmentClass == CountersFragment.class || fragmentClass == AdminOnlyFragment.class || fragmentClass == DrinkFragment.class)) {
                 fragment = new AboutFragment();
-                fragmentClass = AboutFragment.class;
             }
 
             // Replace the old fragment by the new one.
@@ -308,8 +313,8 @@ public class MainActivity extends AppCompatActivity implements
                                 i.price = round(dataSnapshot.getValue(Double.class));
                                 if (i.price > 0.00) {
                                     i.mPrice.setText(String.format(Locale.getDefault(), "€%.2f", i.price));
-                                    i.prices.add(i.price);
-                                    Log.d(TAG, i.name + ": " + i.prices.toString());
+                                    //i.prices.add(i.price);
+                                    //Log.d(TAG, i.name + ": " + i.prices.toString());
                                     if (i.priceDifference < 0) {
                                         i.mPriceDifference.setText(String.format(Locale.getDefault(), "%.2f", i.priceDifference));
                                         i.mPriceDifference.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.green));

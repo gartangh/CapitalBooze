@@ -39,6 +39,7 @@ public class AdminOnlyFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_admin_only, container, false);
+        final Context context = this.getActivity();
 
         final Vibrator v = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
 
@@ -111,7 +112,7 @@ public class AdminOnlyFragment extends Fragment {
                     MainActivity.myRef.child("maxOrderName").setValue("");
 
                     for (DrinkUI i : DrinkUI.uidrinks) {
-                        i.prices = new ArrayList<>();
+                        //i.prices = new ArrayList<>();
 
                         i.price = i.startPrice;
                         MainActivity.myRef.child("Drinks").child(i.name).child("price").setValue(i.startPrice);
@@ -143,8 +144,8 @@ public class AdminOnlyFragment extends Fragment {
                                     DrinkUI.task();
 
                                     // context needed, for when the fragment is not connected to the activity.
-                                    Toast.makeText(getActivity(), getString(R.string.task_executed), Toast.LENGTH_LONG).show();
-                                    Log.d(TAG, getString(R.string.task_executed));
+                                    //Toast.makeText(context, getString(R.string.task_executed), Toast.LENGTH_LONG).show();
+                                    //Log.d(TAG, getString(R.string.task_executed));
                                 }
                             });
                         }

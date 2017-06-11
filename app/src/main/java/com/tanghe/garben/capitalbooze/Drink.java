@@ -29,7 +29,7 @@ class Drink {
     // drinks
     String name;
     double startPrice;
-    ArrayList<Double> prices = new ArrayList<>();
+    //ArrayList<Double> prices = new ArrayList<>();
     double price;
     double min;
     double max;
@@ -53,6 +53,7 @@ class Drink {
         this.min = min;
         this.max = max;
 
+        // TODO: check if this is correct
         MainActivity.myRef.child("Drinks").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -74,7 +75,7 @@ class Drink {
         return name;
     }
 
-    // Not used, but necessary for Firebase
+    // Not used, but necessary for Firebase, only argument with a puplic getter will be written to firebase
     public double getStartPrice() {
         return startPrice;
     }
