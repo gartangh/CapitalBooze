@@ -20,23 +20,23 @@
             android:layout_margin="2dp"
             android:layout_weight="1"
             android:text="@string/total_price"
-            android:textSize="24sp" />
+            android:textSize="36sp" />
 
         <TextView
             android:id="@+id/mTotalPrice"
-            android:layout_width="96dp"
+            android:layout_width="128dp"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:layout_margin="2dp"
-            android:textSize="24sp" />
+            android:textSize="36sp" />
 
         <TextView
             android:id="@+id/mTotalPriceLast"
-            android:layout_width="96dp"
+            android:layout_width="160dp"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:layout_margin="2dp"
-            android:textSize="24sp" />
+            android:textSize="36sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -53,25 +53,25 @@
             android:layout_margin="2dp"
             android:layout_weight="1"
             android:text="@string/total_squares"
-            android:textSize="24sp"
+            android:textSize="36sp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/mTotalSquares"
-            android:layout_width="96dp"
+            android:layout_width="128dp"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:layout_margin="2dp"
-            android:textSize="24sp"
+            android:textSize="36sp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/mTotalSquaresLast"
-            android:layout_width="96dp"
+            android:layout_width="160dp"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:layout_margin="2dp"
-            android:textSize="24sp"
+            android:textSize="36sp"
             android:textStyle="bold" />
     </LinearLayout>
 
@@ -89,23 +89,23 @@
             android:layout_margin="2dp"
             android:layout_weight="1"
             android:text="@string/total_count"
-            android:textSize="24sp" />
+            android:textSize="36sp" />
 
         <TextView
             android:id="@+id/mTotalCount"
-            android:layout_width="96dp"
+            android:layout_width="128dp"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:layout_margin="2dp"
-            android:textSize="24sp" />
+            android:textSize="36sp" />
 
         <TextView
             android:id="@+id/mTotalCountLast"
-            android:layout_width="96dp"
+            android:layout_width="160dp"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:layout_margin="2dp"
-            android:textSize="24sp" />
+            android:textSize="36sp" />
     </LinearLayout>
 
     <ScrollView
@@ -134,7 +134,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="@string/order" />
+            android:text="@string/order"
+            android:textSize="30sp" />
 
     </LinearLayout>
 
