@@ -18,7 +18,7 @@ class Drink {
     final static double SI = 1.15;
     final static double SD = 0.9;
 
-    // party
+    // Party
     static long countTotalCurrent;
     static long countTotalLast;
     static long countTotalSecondLast;
@@ -27,19 +27,19 @@ class Drink {
     static double partyRevenueTotal;
 
     // drinks
-    String name;
-    double startPrice;
+    String name = "";
+    double startPrice = 0.0;
     //ArrayList<Double> prices = new ArrayList<>();
-    double price;
-    double min;
-    double max;
-    double priceLast;
-    double priceDifference;
-    long countCurrent = 0;
-    long countLast;
-    long countSecondLast;
-    long countDifference;
-    long partyCount = 0;
+    double price = 0.00;
+    double min = 0.00;
+    double max = 0.00;
+    double priceLast = 0.00;
+    double priceDifference = 0.00;
+    long countCurrent = 0L;
+    long countLast = 0L;
+    long countSecondLast = 0L;
+    long countDifference = 0L;
+    long partyCount = 0L;
     double partyRevenue = 0.00;
 
     public Drink() {
@@ -53,11 +53,12 @@ class Drink {
         this.min = min;
         this.max = max;
 
-        // TODO: check if this is correct
+        // TODO: make setVelue() work
         MainActivity.myRef.child("Drinks").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.child(name).getValue() == null) {
+                    // Not yet in database
                     MainActivity.myRef.child("Drinks").child(name).setValue(Drink.this);
                     Log.d("Drink", "Wrote " + name + " to database");
                 }

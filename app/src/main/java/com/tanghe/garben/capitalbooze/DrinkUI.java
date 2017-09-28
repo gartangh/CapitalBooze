@@ -265,20 +265,32 @@ class DrinkUI extends Drink {
             for (DrinkUI i : uidrinks) {
                 try {
                     double rate = i.countLast * 1.0 / countTotalLast - i.countSecondLast * 1.0 / countTotalSecondLast;
-                    if (i.countLast == 0) {
-                        // TODO: fix this bug in begin of party
+                    if (i.countLast == 0 && i.countSecondLast == 0) {
+                        // Nothing of this drink was sold in the last 2 intervals
+                        // Also in the beginning of the party!
                         i.testPrice(i.price - 0.20);
+                    }
+                    else if (i.countLast == 0) {
+                        // Nothing of this drink was sold in the last interval
+                        i.testPrice(i.price - 0.10);
                     } else {
+                        // Something of this drink was sold in the last interval
                         if (countTotalDifference >= 0) {
+                            // More of this drink was sold than in the last interval
                             if (rate >= 0) {
+                                // Percentage of sales of this drink raised or stayed equal
                                 i.testPrice(BI * i.price);
                             } else {
+                                // Percentage of sales of this drink fell
                                 i.testPrice(SD * i.price);
                             }
                         } else {
+                            // Less of this drink was sold than in the last interval
                             if (rate > 0) {
+                                // Percentage of sales of this drink raised
                                 i.testPrice(SI * i.price);
                             } else {
+                                // Percentage of sales of this drink fell or stayed equal
                                 i.testPrice(BD * i.price);
                             }
                         }
