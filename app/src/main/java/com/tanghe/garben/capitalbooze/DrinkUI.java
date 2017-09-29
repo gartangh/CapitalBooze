@@ -13,6 +13,11 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -336,13 +341,28 @@ class DrinkUI extends Drink {
         final Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         crash = true;
 
-        if (System.currentTimeMillis() - timeCrashLast >= 60 * 60 * 1000L) {
-            for (DrinkUI i : uidrinks) {
+        // Minimum 10 minutes between 2 crashes
+        if (System.currentTimeMillis() - timeCrashLast >= 10 * 60 * 1000L) {
+            for (final DrinkUI i : uidrinks) {
+                /*
                 if (i.name.equals("Stella") || i.name.equals("Water") || i.name.equals("Cola")) {
                     i.crashPrice(1.00);
                 } else {
                     i.crashPrice(2.00);
                 }
+                */
+                MainActivity.myRef.child("Drinks").child(i.name).child("crashPrice").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        i.crashPrice(dataSnapshot.getValue(Double.class));
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        // Failed to read value
+                        Log.w(TAG, "Failed to read value.", databaseError.toException());
+                    }
+                });
             }
             MainActivity.myRef.child("timeCrashLast").setValue(System.currentTimeMillis());
 

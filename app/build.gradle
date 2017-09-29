@@ -8,7 +8,7 @@ android {
         applicationId "com.tanghe.garben.capitalbooze"
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 24
+        versionCode 26
         versionName "30/09/2017"
     }
     buildTypes {

@@ -385,6 +385,24 @@ public class MainActivity extends AppCompatActivity implements
                         Log.w(TAG, "Failed to read value.", error.toException());
                     }
                 });
+                myRef.child("Drinks").child(dataSnapshotDrink.child("name").getValue(String.class)).child("crashPrice").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DrinkUI i : DrinkUI.uidrinks) {
+                            try {
+                                i.crashPrice = dataSnapshot.getValue(Double.class);
+                            } catch (NullPointerException e) {
+                                Log.d(TAG, "" + e);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                        // Failed to read value
+                        Log.w(TAG, "Failed to read value.", error.toException());
+                    }
+                });
                 myRef.child("Drinks").child(dataSnapshotDrink.child("name").getValue(String.class)).child("countCurrent").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {

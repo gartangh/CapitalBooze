@@ -31,6 +31,7 @@ class Drink {
     double startPrice = 0.0;
     //ArrayList<Double> prices = new ArrayList<>();
     double price = 0.00;
+    double crashPrice = 0.00;
     double min = 0.00;
     double max = 0.00;
     double priceLast = 0.00;
@@ -52,8 +53,10 @@ class Drink {
         this.price = price;
         this.min = min;
         this.max = max;
+        // Todo: change this property according to input
+        this.crashPrice = 2;
 
-        // TODO: make setVelue() work
+        // TODO: make setValue() work
         MainActivity.myRef.child("Drinks").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -89,6 +92,10 @@ class Drink {
 
     public double getPrice() {
         return price;
+    }
+
+    public double getCrashPrice() {
+        return crashPrice;
     }
 
     public double getMin() {
