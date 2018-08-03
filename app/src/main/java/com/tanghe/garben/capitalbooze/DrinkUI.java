@@ -371,7 +371,7 @@ class DrinkUI extends Drink {
             Toast.makeText(context, context.getString(R.string.crash_executed), Toast.LENGTH_LONG).show();
             Log.d(TAG, context.getString(R.string.crash_executed));
         } else {
-            int min = (int) ((60 * 60 * 1000L - (System.currentTimeMillis() - timeCrashLast)) / (60 * 1000L));
+            int min = (int) ((10 * 60 * 1000L - (System.currentTimeMillis() - timeCrashLast)) / (60 * 1000L));
             Toast.makeText(context, String.format(Locale.getDefault(), context.getString(R.string.crash_not_executed_error), min), Toast.LENGTH_LONG).show();
             Log.d(TAG, String.format(Locale.getDefault(), context.getString(R.string.crash_not_executed_error), min));
         }

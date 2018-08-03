@@ -81,7 +81,9 @@ public class MainActivity extends AppCompatActivity implements
 
         // if internet, set valueEvenListeners
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        NetworkInfo activeNetwork = null;
+        if (cm != null)
+            activeNetwork = cm.getActiveNetworkInfo();
         if (activeNetwork != null) {
             if (user != null) {
                 myRef.child("Users").child(user.getUid()).child("accountType").addValueEventListener(new ValueEventListener() {
@@ -106,16 +108,16 @@ public class MainActivity extends AppCompatActivity implements
         }
 
         // Set a Toolbar to replace the ActionBar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         //noinspection ConstantConditions
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
         // Find drawer view
-        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawer = findViewById(R.id.drawer_layout);
         // Find our drawer view
-        NavigationView nvDrawer = (NavigationView) findViewById(R.id.nvView);
+        NavigationView nvDrawer = findViewById(R.id.nvView);
         // Setup drawer view
         setupDrawerContent(nvDrawer);
         drawerToggle = new ActionBarDrawerToggle(this, mDrawer, R.string.drawer_open, R.string.drawer_close);

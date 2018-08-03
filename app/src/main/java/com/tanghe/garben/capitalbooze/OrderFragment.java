@@ -72,7 +72,7 @@ public class OrderFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (totalCount > 0 && AdminOnlyFragment.partyStarted) {
-                    for (DrinkUI i : DrinkUI.uidrinks) {
+                        for (DrinkUI i : DrinkUI.uidrinks) {
                         i.countCurrent += i.orderCount;
                         MainActivity.myRef.child("Drinks").child(i.name).child("countCurrent").setValue(i.countCurrent);
 

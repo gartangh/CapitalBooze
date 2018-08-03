@@ -1,7 +1,7 @@
 <resources>
     <!-- App-->
     <string name="app_name" translatable="false">Capital Booze</string>
-    <string name="version_name" translatable="false">30/09/2017</string>
+    <string name="version_name" translatable="false">29/09/2018</string>
 
     <!-- Navigation (drawer and toolbar)-->
     <string name="drawer_open" translatable="false">Open fragment navigation drawer.</string>

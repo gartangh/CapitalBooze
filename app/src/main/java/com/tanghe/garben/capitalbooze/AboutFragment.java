@@ -30,7 +30,7 @@ public class AboutFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_about, container, false);
 
         TextView mSite = (TextView) view.findViewById(R.id.mSite);
-        mSite.setText(Html.fromHtml("<a href='http://moederpeerdevisscher.com'>moederpeerdevisscher.com</a>"));
+        mSite.setText(Html.fromHtml("<a href='http://moederpeerdevisscher.be'>moederpeerdevisscher.be</a>"));
         mSite.setMovementMethod(LinkMovementMethod.getInstance());
 
         Button next = (Button) view.findViewById(R.id.about_next);

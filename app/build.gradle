@@ -1,45 +1,42 @@
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion '26.0.0'
+    compileSdkVersion 27
 
     defaultConfig {
         applicationId "com.tanghe.garben.capitalbooze"
-        minSdkVersion 21
-        targetSdkVersion 26
+        minSdkVersion 25
+        targetSdkVersion 27
         versionCode 26
-        versionName "30/09/2017"
+        versionName "29/09/2018"
     }
     buildTypes {
-        debug {
+        release {
             minifyEnabled true
-            useProguard false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-        release {
-            shrinkResources true
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+        debug {
+            debuggable true
         }
     }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    compile 'com.android.support:appcompat-v7:26.1.0' // For action bar
-    compile 'com.android.support:support-v4:26.1.0' // For navigation drawer
-    compile 'com.android.support:design:26.1.0' // For navigation drawer
+    implementation 'com.android.support:appcompat-v7:27.1.1' // For action bar
+    implementation 'com.android.support:support-v4:27.1.1' // For navigation drawer
+    implementation 'com.android.support:design:27.1.1' // For navigation drawer
 
+    implementation 'com.google.firebase:firebase-core:16.0.0' // For Firebase Analytics
+    implementation 'com.google.firebase:firebase-auth:16.0.1' // For Firebase Authentication
+    implementation 'com.google.firebase:firebase-database:16.0.1' // For Firebase Realtime Database
 
-    compile 'com.google.firebase:firebase-core:11.4.0' // For Firebase analytics
-    compile 'com.google.firebase:firebase-auth:11.4.0' // For Firebase authentication
-    compile 'com.google.firebase:firebase-database:11.4.0' // For Firebase realtime database
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.3' // For Firebase Crashlytics
 
-    //compile 'com.androidplot:androidplot-core:0.9.8' // For graphs
-
-    testCompile 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.12'
 }
 
 apply plugin: 'com.google.gms.google-services'
