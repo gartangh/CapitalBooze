@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.tanghe.garben.capitalbooze"
-        minSdkVersion 25
+        minSdkVersion 24
         targetSdkVersion 27
         versionCode 26
         versionName "29/09/2018"
