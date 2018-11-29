@@ -30,11 +30,11 @@ dependencies {
     implementation 'com.android.support:support-v4:27.1.1' // For navigation drawer
     implementation 'com.android.support:design:27.1.1' // For navigation drawer
 
-    implementation 'com.google.firebase:firebase-core:16.0.0' // For Firebase Analytics
-    implementation 'com.google.firebase:firebase-auth:16.0.1' // For Firebase Authentication
-    implementation 'com.google.firebase:firebase-database:16.0.1' // For Firebase Realtime Database
+    implementation 'com.google.firebase:firebase-core:16.0.5' // For Firebase Analytics
+    implementation 'com.google.firebase:firebase-auth:16.0.5' // For Firebase Authentication
+    implementation 'com.google.firebase:firebase-database:16.0.5' // For Firebase Realtime Database
 
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.3' // For Firebase Crashlytics
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.6' // For Firebase Crashlytics
 
     testImplementation 'junit:junit:4.12'
 }
