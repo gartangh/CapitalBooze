@@ -6,9 +6,9 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -94,28 +94,28 @@ public class LogInFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_log_in, container, false);
 
         // Views
-        mStatus = (TextView) view.findViewById(R.id.mStatus);
-        mDetail = (TextView) view.findViewById(R.id.mDetail);
-        mFields = (LinearLayout) view.findViewById(R.id.mFields);
-        mEmail = (AutoCompleteTextView) view.findViewById(R.id.mEmail);
+        mStatus = view.findViewById(R.id.mStatus);
+        mDetail = view.findViewById(R.id.mDetail);
+        mFields = view.findViewById(R.id.mFields);
+        mEmail = view.findViewById(R.id.mEmail);
         mEmail.setAdapter(getEmailAddressAdapter(getActivity()));
-        mPassword = (AutoCompleteTextView) view.findViewById(R.id.mPassword);
-        mButtons = (LinearLayout) view.findViewById(R.id.mButtons);
-        Button mSignIn = (Button) view.findViewById(R.id.mSignIn);
+        mPassword = view.findViewById(R.id.mPassword);
+        mButtons = view.findViewById(R.id.mButtons);
+        Button mSignIn = view.findViewById(R.id.mSignIn);
         mSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 signIn(mEmail.getText().toString(), mPassword.getText().toString());
             }
         });
-        Button mCreatAccount = (Button) view.findViewById(R.id.mCreateAccount);
+        Button mCreatAccount = view.findViewById(R.id.mCreateAccount);
         mCreatAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 createAccount(mEmail.getText().toString(), mPassword.getText().toString());
             }
         });
-        mSignOut = (Button) view.findViewById(R.id.mSignOut);
+        mSignOut = view.findViewById(R.id.mSignOut);
         mSignOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -124,7 +124,7 @@ public class LogInFragment extends Fragment {
             }
         });
 
-        final Button back = (Button) view.findViewById(R.id.log_in_back);
+        final Button back = view.findViewById(R.id.log_in_back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -264,13 +264,11 @@ public class LogInFragment extends Fragment {
         }
 
         // Check for valid address.
-        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(address).matches()) {
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(address).matches())
             valid = false;
-        }
 
-        if (code.length() < 4 || code.length() > 10) {
+        if (code.length() < 4 || code.length() > 10)
             valid = false;
-        }
 
         return valid;
     }
@@ -320,28 +318,25 @@ public class LogInFragment extends Fragment {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         Log.d(TAG, "Got " + requestCode);
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_GET_ACCOUNTS: {
-                Log.d(TAG, "" + MY_PERMISSIONS_REQUEST_GET_ACCOUNTS);
-                // If request is cancelled, grantResults is an empty array (length = 0).
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // Permission GET_ACCOUNTS granted.
-                    if (mEmail != null) {
-                        mEmail.setAdapter(getEmailAddressAdapter(getActivity()));
-                        Log.d(TAG, "Adapter set!");
-                    }
-                    getEmailAddressAdapter(getActivity());
-                    Log.d(TAG, "mEmail was not defined!");
-                } else {
-                    // Permission GET_ACCOUNTS denied.
-                    Toast.makeText(getActivity(), getString(R.string.get_accounts_denied), Toast.LENGTH_LONG).show();
+        if (requestCode == MY_PERMISSIONS_REQUEST_GET_ACCOUNTS) {
+            Log.d(TAG, "" + MY_PERMISSIONS_REQUEST_GET_ACCOUNTS);
+            // If request is cancelled, grantResults is an empty array (length = 0).
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission GET_ACCOUNTS granted.
+                if (mEmail != null) {
+                    mEmail.setAdapter(getEmailAddressAdapter(getActivity()));
+                    Log.d(TAG, "Adapter set!");
                 }
-                break;
+                getEmailAddressAdapter(getActivity());
+                Log.d(TAG, "mEmail was not defined!");
+            } else {
+                // Permission GET_ACCOUNTS denied.
+                Toast.makeText(getActivity(), getString(R.string.get_accounts_denied), Toast.LENGTH_LONG).show();
             }
-            default:
-                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        } else {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
 }

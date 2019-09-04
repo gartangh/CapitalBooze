@@ -20,10 +20,12 @@
             android:id="@+id/nav_log_in_fragment"
             android:title="@string/nav_log_in"
             android:icon="@drawable/ic_account_circle_black_24dp" />
+        <!--
         <item
             android:id="@+id/nav_exit"
             android:title="@string/nav_exit"
             android:icon="@drawable/ic_highlight_off_black_24dp"/>
+        -->
     </group>
 
     <item android:title="@string/crew_only">

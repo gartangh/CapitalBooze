@@ -1,7 +1,7 @@
 <resources>
     <!-- App-->
     <string name="app_name" translatable="false">Capital Booze</string>
-    <string name="version_name" translatable="false">29/09/2018</string>
+    <string name="version_name" translatable="false">05/10/2019</string>
 
     <!-- Navigation (drawer and toolbar)-->
     <string name="drawer_open" translatable="false">Open fragment navigation drawer.</string>
@@ -15,7 +15,7 @@
     <string name="nav_graph">Graph</string>
     <string name="nav_explanation">Explanation</string>
     <string name="nav_log_in">Log in / out</string>
-    <string name="nav_exit">Exit app</string>
+    <!--<string name="nav_exit">Exit app</string>-->
 
     <string name="crew_only" translatable="false">Crew only</string>
     <string name="nav_order">Place orders</string>
@@ -32,7 +32,7 @@
 
     <!-- fragment_about-->
     <string name="about" translatable="false">by\nMoeder\nPeerdevisscher</string>
-    <string name="developer" translatable="false">Developer\ng-tanghe\ngarben.tanghe@gmail.com</string>
+    <string name="developer" translatable="false">Developer\ngartangh\ngarben.tanghe@gmail.com</string>
     <string name="logo_of_MP">Logo of Moeder Peerdevisscher.</string>
 
     <!-- fragment_prices-->
@@ -74,7 +74,9 @@
     <string name="order">Order</string>
     <string name="new_wolf">New wolf of Capital Booze!</string>
     <string name="new_all_time_wolf">New all time wolf of Capital Booze!</string>
-    <string name="nothing_to_order">Nothing to order\nor the party has not started yet.</string>
+    <string name="nothing_to_order_or_party_not_started">Nothing to order or the party has not started yet.</string>
+    <string name="nothing_to_order">Nothing to order.</string>
+    <string name="party_not_started">The party has not started yet.</string>
 
     <!-- fragment_drink-->
     <string name="name">Name</string>

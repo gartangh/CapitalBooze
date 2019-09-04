@@ -27,7 +27,6 @@ public class AdminOnlyFragment extends Fragment {
 
     protected static boolean partyStarted = false;
     // TODO: set to 12 minutes
-    // 2016: The first 2 intervals, there was a delay of 2 minutes and 40 seconds
     private final static long INTERVAL = 12 * 60 * 1000L;
     private final static long[] PATTERN = {0L, 100L, 100L, 50L};
 
@@ -42,7 +41,7 @@ public class AdminOnlyFragment extends Fragment {
 
         final Vibrator v = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
 
-        final EditText mTypeWolfHere = (EditText) view.findViewById(R.id.mTypeWolfHere);
+        final EditText mTypeWolfHere = view.findViewById(R.id.mTypeWolfHere);
         mTypeWolfHere.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,7 +63,7 @@ public class AdminOnlyFragment extends Fragment {
             }
         });
 
-        final EditText mTypeAllTimeWolfHere = (EditText) view.findViewById(R.id.mTypeAllTimeWolfHere);
+        final EditText mTypeAllTimeWolfHere = view.findViewById(R.id.mTypeAllTimeWolfHere);
         mTypeAllTimeWolfHere.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,12 +85,13 @@ public class AdminOnlyFragment extends Fragment {
             }
         });
 
-        final Button mStart = (Button) view.findViewById(R.id.mStart);
+        final Button mStart = view.findViewById(R.id.mStart);
         mStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!partyStarted) {
-                    v.vibrate(PATTERN, -1);
+                    if (v != null)
+                        v.vibrate(PATTERN, -1);
 
                     Drink.countTotalCurrent = 0;
                     MainActivity.myRef.child("countTotalCurrent").setValue(Drink.countTotalCurrent);
@@ -138,7 +138,8 @@ public class AdminOnlyFragment extends Fragment {
                         public void run() {
                             handler.post(new Runnable() {
                                 public void run() {
-                                    v.vibrate(PATTERN, -1);
+                                    if (v != null)
+                                        v.vibrate(PATTERN, -1);
 
                                     DrinkUI.task();
 
@@ -181,7 +182,7 @@ public class AdminOnlyFragment extends Fragment {
             }
         });
 
-        final Button mCrash = (Button) view.findViewById(R.id.mCrash);
+        final Button mCrash = view.findViewById(R.id.mCrash);
         mCrash.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -193,7 +194,7 @@ public class AdminOnlyFragment extends Fragment {
             }
         });
 
-        final Button back = (Button) view.findViewById(R.id.admin_only_back);
+        final Button back = view.findViewById(R.id.admin_only_back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

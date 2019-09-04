@@ -12,7 +12,7 @@ import android.widget.TextView;
 import java.util.Date;
 import java.util.Locale;
 
-import static android.support.v4.content.ContextCompat.getColor;
+import static androidx.core.content.ContextCompat.getColor;
 
 public class PricesFragment extends Fragment {
 
@@ -37,7 +37,7 @@ public class PricesFragment extends Fragment {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_prices, container, false);
 
-        mWolf = (TextView) view.findViewById(R.id.mWolf);
+        mWolf = view.findViewById(R.id.mWolf);
         setWolf();
 
         mWolf.setOnClickListener(new View.OnClickListener() {
@@ -51,7 +51,7 @@ public class PricesFragment extends Fragment {
             }
         });
 
-        verticalLayoutPrices = (LinearLayout) view.findViewById(R.id.verticalLayoutPrices);
+        verticalLayoutPrices = view.findViewById(R.id.verticalLayoutPrices);
         for (DrinkUI i : DrinkUI.uidrinks) {
             try {
                 verticalLayoutPrices.addView(i.horizontalLayoutPrices);
@@ -60,7 +60,7 @@ public class PricesFragment extends Fragment {
             }
         }
 
-        mUpdated = (TextView) view.findViewById(R.id.mPricesUpdated);
+        mUpdated = view.findViewById(R.id.mPricesUpdated);
         if (updated == null) {
             mUpdated.setText(getString(R.string.no_data_yet));
         } else {

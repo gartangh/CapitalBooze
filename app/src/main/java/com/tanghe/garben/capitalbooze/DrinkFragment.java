@@ -33,7 +33,7 @@ public class DrinkFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_drink, container, false);
 
-        final TextView mName = (TextView) view.findViewById(R.id.mName);
+        final TextView mName = view.findViewById(R.id.mName);
         mName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -67,7 +67,7 @@ public class DrinkFragment extends Fragment {
                 return false;
             }
         });
-        final EditText mPrice = (EditText) view.findViewById(R.id.mPrice);
+        final EditText mPrice = view.findViewById(R.id.mPrice);
         mPrice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -98,7 +98,7 @@ public class DrinkFragment extends Fragment {
                 return false;
             }
         });
-        final EditText mMin = (EditText) view.findViewById(R.id.mMin);
+        final EditText mMin = view.findViewById(R.id.mMin);
         mMin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -129,7 +129,7 @@ public class DrinkFragment extends Fragment {
 
             }
         });
-        final EditText mMax = (EditText) view.findViewById(R.id.mMax);
+        final EditText mMax = view.findViewById(R.id.mMax);
         mMax.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -159,7 +159,7 @@ public class DrinkFragment extends Fragment {
                 return false;
             }
         });
-        final Button add = (Button) view.findViewById(R.id.add);
+        final Button add = view.findViewById(R.id.add);
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -180,7 +180,7 @@ public class DrinkFragment extends Fragment {
             }
         });
 
-        final Button back = (Button) view.findViewById(R.id.drink_back);
+        final Button back = view.findViewById(R.id.drink_back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -21,7 +21,7 @@
     <string name="nav_back">Terug</string>
     <string name="nav_counters">Tellers en statistieken</string>
     <string name="nav_drink">Voeg dranken toe</string>
-    <string name="nav_exit">Sluit app</string>
+    <!--<string name="nav_exit">Sluit app</string>-->
     <string name="nav_explanation">Uitleg</string>
     <string name="nav_log_in">Log in / uit</string>
     <string name="nav_next">Volgende</string>
@@ -31,7 +31,9 @@
     <string name="new_wolf">Nieuwe wolf van Capital Booze!</string>
     <string name="no_data_yet">Nog geen data</string>
     <string name="not_connected_error">Error: niet verbonden!\nVerbind met internet en herstart de app.</string>
-    <string name="nothing_to_order">Niets om te bestellen\nof het feest is nog niet begonnen.</string>
+    <string name="nothing_to_order_or_party_not_started">Niets om te bestellen of het feest is nog niet begonnen.</string>
+    <string name="nothing_to_order">Niets om te bestellen.</string>
+    <string name="party_not_started">Het feest is nog niet begonnen.</string>
     <string name="order">Bestel</string>
     <string name="party_already_started_error">Error: het feest is al begonnen!</string>
     <string name="party_not_started_error">Error: het feest is nog niet begonnen!</string>

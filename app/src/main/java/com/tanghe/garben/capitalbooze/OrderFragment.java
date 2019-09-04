@@ -48,7 +48,7 @@ public class OrderFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_order, container, false);
 
-        verticalLayoutOrders = (LinearLayout) view.findViewById(R.id.verticalLayoutOrders);
+        verticalLayoutOrders = view.findViewById(R.id.verticalLayoutOrders);
         for (DrinkUI i : DrinkUI.uidrinks) {
             try {
                 verticalLayoutOrders.addView(i.horizontalLayoutOrders);
@@ -57,17 +57,17 @@ public class OrderFragment extends Fragment {
             }
         }
 
-        mTotalPrice = (TextView) view.findViewById(R.id.mTotalPrice);
-        mTotalPriceLast = (TextView) view.findViewById(R.id.mTotalPriceLast);
-        mTotalSquares = (TextView) view.findViewById(R.id.mTotalSquares);
-        mTotalSquaresLast = (TextView) view.findViewById(R.id.mTotalSquaresLast);
-        mTotalCount = (TextView) view.findViewById(R.id.mTotalCount);
-        mTotalCountLast = (TextView) view.findViewById(R.id.mTotalCountLast);
+        mTotalPrice = view.findViewById(R.id.mTotalPrice);
+        mTotalPriceLast = view.findViewById(R.id.mTotalPriceLast);
+        mTotalSquares = view.findViewById(R.id.mTotalSquares);
+        mTotalSquaresLast = view.findViewById(R.id.mTotalSquaresLast);
+        mTotalCount = view.findViewById(R.id.mTotalCount);
+        mTotalCountLast = view.findViewById(R.id.mTotalCountLast);
 
         setTotals();
         setTotalsLast();
 
-        final Button order = (Button) view.findViewById(R.id.order);
+        final Button order = view.findViewById(R.id.order);
         order.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -114,9 +114,16 @@ public class OrderFragment extends Fragment {
 
                     setTotals();
                     setTotalsLast();
-                } else {
+                } else if (totalCount == 0){
                     Toast.makeText(getActivity(), getString(R.string.nothing_to_order), Toast.LENGTH_LONG).show();
                     Log.d(TAG, getString(R.string.nothing_to_order));
+                } else if (!AdminOnlyFragment.partyStarted) {
+                    Toast.makeText(getActivity(), getString(R.string.party_not_started), Toast.LENGTH_LONG).show();
+                    Log.d(TAG, getString(R.string.party_not_started));
+                } else {
+                    // Should never come here
+                    Toast.makeText(getActivity(), getString(R.string.nothing_to_order_or_party_not_started), Toast.LENGTH_LONG).show();
+                    Log.d(TAG, getString(R.string.nothing_to_order_or_party_not_started));
                 }
             }
         });

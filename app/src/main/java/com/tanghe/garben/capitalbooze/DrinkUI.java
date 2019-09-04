@@ -3,7 +3,7 @@ package com.tanghe.garben.capitalbooze;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Vibrator;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -142,7 +142,8 @@ class DrinkUI extends Drink {
         mNameCounters.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                v.vibrate(500L);
+                if (v != null)
+                    v.vibrate(500L);
                 for (DrinkUI i : uidrinks) {
                     if (i.name.equals(mNameOrders.getText().toString())) {
                         DrinkUI.uidrinks.remove(i);
@@ -177,7 +178,8 @@ class DrinkUI extends Drink {
         mPartyRevenue.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                v.vibrate(500L);
+                if (v != null)
+                    v.vibrate(500L);
                 for (DrinkUI i : uidrinks) {
                     if (i.name.equals(mNameOrders.getText().toString())) {
                         MainActivity.myRef.child("Drinks").child(i.name).child("price").setValue(0.00);
@@ -366,7 +368,8 @@ class DrinkUI extends Drink {
             }
             MainActivity.myRef.child("timeCrashLast").setValue(System.currentTimeMillis());
 
-            v.vibrate(500L);
+            if (v != null)
+                v.vibrate(500L);
 
             Toast.makeText(context, context.getString(R.string.crash_executed), Toast.LENGTH_LONG).show();
             Log.d(TAG, context.getString(R.string.crash_executed));

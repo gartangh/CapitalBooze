@@ -14,7 +14,7 @@ import android.widget.TextView;
 import java.util.Date;
 import java.util.Locale;
 
-import static android.support.v4.content.ContextCompat.getColor;
+import static androidx.core.content.ContextCompat.getColor;
 
 public class CountersFragment extends Fragment {
 
@@ -44,16 +44,16 @@ public class CountersFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_counters, container, false);
 
-        mCountTotalCurrent = (TextView) view.findViewById(R.id.mCountTotalCurrent);
+        mCountTotalCurrent = view.findViewById(R.id.mCountTotalCurrent);
         CountersFragment.mCountTotalCurrent.setText(String.format(Locale.getDefault(), "%1d", Drink.countTotalCurrent));
-        mCountTotalLast = (TextView) view.findViewById(R.id.mCountTotalLast);
+        mCountTotalLast = view.findViewById(R.id.mCountTotalLast);
         CountersFragment.mCountTotalLast.setText(String.format(Locale.getDefault(), "(%1d)", Drink.countTotalLast));
-        mPartyCountTotal = (TextView) view.findViewById(R.id.mPartyCountTotal);
+        mPartyCountTotal = view.findViewById(R.id.mPartyCountTotal);
         CountersFragment.mPartyCountTotal.setText(String.format(Locale.getDefault(), "%1d", Drink.partyCountTotal));
-        mPartyRevenueTotal = (TextView) view.findViewById(R.id.mPartyRevenueTotal);
+        mPartyRevenueTotal = view.findViewById(R.id.mPartyRevenueTotal);
         CountersFragment.mPartyRevenueTotal.setText(String.format(Locale.getDefault(), "€%.2f", Drink.partyRevenueTotal));
 
-        verticalLayoutCounters = (LinearLayout) view.findViewById(R.id.verticalLayoutCounters);
+        verticalLayoutCounters = view.findViewById(R.id.verticalLayoutCounters);
         for (DrinkUI i : DrinkUI.uidrinks) {
             try {
                 verticalLayoutCounters.addView(i.horizontalLayoutCounters);
@@ -62,7 +62,7 @@ public class CountersFragment extends Fragment {
             }
         }
 
-        mUpdated = (TextView) view.findViewById(R.id.mCountersUpdated);
+        mUpdated = view.findViewById(R.id.mCountersUpdated);
         if (updated == null) {
             mUpdated.setText(getString(R.string.no_data_yet));
         } else {
@@ -81,7 +81,7 @@ public class CountersFragment extends Fragment {
             }
         });
 
-        final Button next = (Button) view.findViewById(R.id.counters_next);
+        final Button next = view.findViewById(R.id.counters_next);
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
