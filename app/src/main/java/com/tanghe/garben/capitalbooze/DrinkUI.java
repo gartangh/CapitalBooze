@@ -348,7 +348,7 @@ class DrinkUI extends Drink {
         // Minimum 10 minutes between 2 crashes
         if (System.currentTimeMillis() - timeCrashLast >= 10 * 60 * 1000L) {
             for (final DrinkUI i : uidrinks) {
-                 MainActivity.myRef.child("Drinks").child(i.name).child("crashPrice").addListenerForSingleValueEvent(new ValueEventListener() {
+                MainActivity.myRef.child("Drinks").child(i.name).child("crashPrice").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         i.crashPrice(dataSnapshot.getValue(Double.class));
