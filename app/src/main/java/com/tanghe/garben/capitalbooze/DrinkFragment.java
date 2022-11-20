@@ -160,6 +160,7 @@ public class DrinkFragment extends Fragment {
             }
         });
         final Button add = view.findViewById(R.id.add);
+        /*
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -179,6 +180,7 @@ public class DrinkFragment extends Fragment {
                 mMax.setText("");
             }
         });
+         */
 
         final Button back = view.findViewById(R.id.drink_back);
         back.setOnClickListener(new View.OnClickListener() {

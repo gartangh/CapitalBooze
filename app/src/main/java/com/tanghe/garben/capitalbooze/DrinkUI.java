@@ -139,6 +139,7 @@ class DrinkUI extends Drink {
             mNameCounters.setTypeface(Typeface.DEFAULT_BOLD);
         }
         mNameCounters.setLayoutParams(params2);
+        /*
         mNameCounters.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
@@ -155,6 +156,7 @@ class DrinkUI extends Drink {
                 return false;
             }
         });
+         */
 
         mCountCurrent = new TextView(context);
         mCountCurrent.setText(String.format(Locale.getDefault(), "%1d", countCurrent));
@@ -264,10 +266,10 @@ class DrinkUI extends Drink {
             MainActivity.myRef.child("countTotalDifference").setValue(countTotalDifference);
         }
 
-        calcPrises();
+        calcPrices();
     }
 
-    private static void calcPrises() throws IllegalArgumentException {
+    private static void calcPrices() throws IllegalArgumentException {
         if (!crash) {
             for (DrinkUI i : uidrinks) {
                 try {
@@ -346,14 +348,7 @@ class DrinkUI extends Drink {
         // Minimum 10 minutes between 2 crashes
         if (System.currentTimeMillis() - timeCrashLast >= 10 * 60 * 1000L) {
             for (final DrinkUI i : uidrinks) {
-                /*
-                if (i.name.equals("Stella") || i.name.equals("Water") || i.name.equals("Cola")) {
-                    i.crashPrice(1.00);
-                } else {
-                    i.crashPrice(2.00);
-                }
-                */
-                MainActivity.myRef.child("Drinks").child(i.name).child("crashPrice").addListenerForSingleValueEvent(new ValueEventListener() {
+                 MainActivity.myRef.child("Drinks").child(i.name).child("crashPrice").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         i.crashPrice(dataSnapshot.getValue(Double.class));

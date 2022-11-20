@@ -6,7 +6,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
 
 class Drink {
 
@@ -53,7 +52,7 @@ class Drink {
         this.price = price;
         this.min = min;
         this.max = max;
-        // Todo: change this property according to input
+        // TODO: change this property according to input
         this.crashPrice = 2;
 
         // TODO: make setValue() work
@@ -79,16 +78,10 @@ class Drink {
         return name;
     }
 
-    // Not used, but necessary for Firebase, only argument with a puplic getter will be written to firebase
+    // Not used, but necessary for Firebase, only argument with a public getter will be written to firebase
     public double getStartPrice() {
         return startPrice;
     }
-
-    /*
-    public ArrayList<Double> getPrices() {
-        return prices;
-    }
-    */
 
     public double getPrice() {
         return price;
