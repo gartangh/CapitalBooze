@@ -27,7 +27,7 @@ public class AdminOnlyFragment extends Fragment {
 
     protected static boolean partyStarted = false;
     // TODO: set to 12 minutes
-    private final static long INTERVAL = 12 * 60 * 1000L;
+    private final static long INTERVAL = 1 * 60 * 1000L;
     private final static long[] PATTERN = {0L, 100L, 100L, 50L};
 
     public AdminOnlyFragment() {

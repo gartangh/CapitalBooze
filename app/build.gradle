@@ -6,10 +6,10 @@ android {
 
     defaultConfig {
         applicationId "com.tanghe.garben.capitalbooze"
-        minSdkVersion 31
+        minSdkVersion 25
         targetSdkVersion 33
         versionCode 27
-        versionName "05/10/2019"
+        versionName "26/11/2022"
     }
     buildTypes {
         release {
@@ -34,7 +34,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:21.1.1' // For Firebase Analytics
     implementation 'com.google.firebase:firebase-auth:21.1.0' // For Firebase Authentication
     implementation 'com.google.firebase:firebase-database:20.1.0'
-    implementation 'com.google.firebase:firebase-crashlytics:18.3.1'
+    implementation 'com.google.firebase:firebase-crashlytics:18.3.2'
     implementation 'com.google.firebase:firebase-analytics:21.2.0'// For Firebase Realtime Database
 
     // For Firebase Crashlytics
